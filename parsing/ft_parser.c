@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:54:38 by thedon            #+#    #+#             */
-/*   Updated: 2024/04/21 19:41:17 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/04/23 14:47:33 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,36 +29,13 @@ void	clean_exit(void)
 	exit(0);
 }
 
-void	testing(void)
-{
-	int	i = 97;
-	t_histr	*hist;
-	
-	hist = NULL;
-	while (i <= 123)
-	{
-		ft_hist_addb(&hist, ft_hist_new(my_strdup(&i)));
-		i++;
-	}
-	ft_hist_rmvlast(&hist);
-	ft_hist_rmvlast(&hist);
-	ft_hist_rmvlast(&hist);
-	while (hist->next)
-	{
-		printf("%s|\n", hist->line);
-		hist = hist->next;
-	}
-	printf("-------------------\n");
-}
-
 t_sh	*ft_parser(char *input, t_parms *prms)
 {
 	t_sh	*res;
 	char	**prompt;
 	int		i;
-	char	**value;
+	char	*value;
 
-	// testing();
 	input = handle_quotes(&prms->histr, input);
 	printf("\n\tiput after handling: %s|\n", input);
 	prompt = my_split(input, ' ');
@@ -74,9 +51,9 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 			clean_exit();
 		if (ft_strchr(prompt[i], '$'))
 		{
-			value = (char **)ft_malloc(sizeof(char *), 0);
-			*value = ft_expand(prompt[i], prms);
-			ft_sh_addb(&res, ft_sh_new(value, check_quotes(prompt[i])));
+			// value = (char **)ft_malloc(sizeof(char *), 0);
+			value = ft_expand(prompt[i], prms);
+			ft_sh_addb(&res, ft_sh_new(&value, check_quotes(prompt[i])));
 		}
 		else if (!ft_strcmp(prompt[i], "<") || !ft_strcmp(prompt[i], ">"))
 		{

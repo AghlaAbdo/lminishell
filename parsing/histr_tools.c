@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 19:21:08 by aaghla            #+#    #+#             */
-/*   Updated: 2024/04/22 00:40:38 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/04/22 16:05:53 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ void	ft_add_histr(t_histr **histr)
 	head = *histr;
 	while (head->next)
 	{
-		printf("\tadded: %s|\n", head->line);
 		add_history(head->line);
 		head = head->next;
 	}

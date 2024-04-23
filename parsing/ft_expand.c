@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:29:54 by aaghla            #+#    #+#             */
-/*   Updated: 2024/04/18 06:40:49 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/04/23 23:21:49 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,16 @@ char	*ft_trim(char *prompt, int j)
 
 	i = j;
 	count = 0;
-	// printf("prompt in ft_trim = %s\tand start at %s\n", prompt, prompt +j);
-	while (prompt[i] && prompt[i] != ' ' && prompt[i] != 9
-			&& prompt[i] != '"' && prompt[i] != '\'' && prompt[i] != '$')
+	while (prompt[i] && (prompt[i] == '_' || (prompt[i] >= 'a' && prompt[i] <= 'z'))
+		|| (prompt[i] >= 'A' && prompt[i] <= 'Z'))
 	{
 		i++;
 		count++;
 	}
 	res = ft_malloc((count +1) * sizeof(char), 0);
 	i = 0;
-	while (prompt[j] && prompt[j] != ' ' && prompt[j] != 9
-			&& prompt[j] != '"' && prompt[j] != '\'' && prompt[j] != '$')
+	while (prompt[j] && (prompt[j] == '_' || (prompt[j] >= 'a' && prompt[j] <= 'z'))
+		|| (prompt[j] >= 'A' && prompt[j] <= 'Z'))
 	{
 		res[i] = prompt[j];
 		i++;
@@ -51,15 +50,10 @@ char	*get_rest(char *prompt, int i)
 	prompt = my_strdup(prompt);
 	while (prompt[i] && prompt[i] != ' ' && prompt[i] != 9 && prompt[i] != '$')
 		i++;
-	// while (prompt[i] && (prompt[i] == ' ' || prompt[i] == 9))
-	// 	i++;
 	while (prompt[j] && prompt[j] != '$')
 		j++;
 	prompt[j] = '\0';
 	res = my_strdup(prompt + i);
-	// free(prompt);
-	
-	// printf("res in get_rest = %s\n", res);
 	return (res);
 }
 
@@ -74,43 +68,41 @@ char	*expand_it(char *prompt, t_parms *prm, char c, int i)
 	if (c == '"')
 		rest = get_rest(prompt, i +1);
 	printf("\nvar = %s\n\n", var);
+	if (prompt[i +1] >= '0' && prompt[i +1] <= '9')
+		return (ft_strjoin(prompt + (i + 2), rest));
+	if (prompt[i +1] != '_' && !((prompt[i +1] >= 'a' && prompt[i +1] <= 'z')
+		|| (prompt[i +1] >= 'A' && prompt[i +1] <= 'Z')))
+		return (ft_strjoin(prompt +i, rest));
 	value = ft_env_srch(var, &prm->env);
 	if (value)
 	{
 		if (!*prompt)
 			return (value);
-		// printf("\tprompt = %s|\n\ti = %d|\n\tprompt + i= %s|\n", prompt, i, prompt +i);
 		return (ft_strtrim(ft_strjoin(value, rest), "\'\""));
 	}
 	if (c == '"')
 		return (ft_strtrim(rest, "\""));
-	return ("\n");
+	return ("");
 }
 
 // Get the characters before '$' if prompt is like (ggg$SHELL)
-char	*get_prev(char *prompt)
+char	*get_prev(char *prompt, int i)
 {
-	char	*prev;
-	int		i;
-
-	i = 0;
-	while (prompt[i] && prompt[i] != '$')
+	prompt = my_strdup(prompt);
+	prompt[i] = '\0';
+	if (i)
+		i--;
+	while (i > 0 && prompt[i] != ' ' && prompt[i] != 9 && prompt[i] != '\n'
+			&& prompt[i] != '$')
+		i--;
+	if (prompt[i] == '$')
+	{
 		i++;
-	prev = my_strdup(prompt);
-	prev[i] = '\0';
-	// printf("prev in get_prev = %s|\ni in get_prev = %d\n", prev, i);
-	return (ft_strtrim(prev, "\'\""));
-}
-
-char	last_char(char *prompt)
-{
-	int	i;
-
-	i = 0;
-	while(prompt[i])
-		i++;
-	printf("last_char: %c\n", prompt[i -1]);
-	return (prompt[i -1]);
+		while (prompt[i] && (prompt[i] == '_' || (prompt[i] >= 'a' && prompt[i] <= 'z') || (prompt[i] >= 'A'
+			&& prompt[i] <= 'Z') || (prompt[i] >= '0' && prompt[i] <= '9')))
+			i++;
+	}
+	return (prompt +i);
 }
 
 char	*ft_expand(char *prompt, t_parms *prm)
@@ -126,18 +118,16 @@ char	*ft_expand(char *prompt, t_parms *prm)
 	else
 		c = 0;
 	i = -1;
-	// if ((c == '\'' && last_char(prompt) != '\'') || (c == '"' && last_char(prompt) != '"'))
-	printf("is here in ft_expand\n");
 	if (c == '\'')
 		return (ft_strtrim(prompt, "\'\""));
-	prev = get_prev(prompt);
+	// prev = get_prev(prompt);
 	while (prompt[++i])
 	{
 		if (prompt[i] == '$')
 		{
-			res = ft_strjoin(res, expand_it(prompt, prm, c, i));
+			res = ft_strjoin(res, ft_strjoin(get_prev(prompt, i), expand_it(prompt, prm, c, i)));
 			// printf("\nprompt in ft_expand = %s$\nAnd res = %s$\n\n", prompt+i, res);
 		}
 	}
-	return (ft_strjoin(prev, res));
+	return (res);
 }
