@@ -6,12 +6,13 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:54:38 by thedon            #+#    #+#             */
-/*   Updated: 2024/04/23 14:47:33 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/04/24 22:16:02 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
+// Check the variable is inside which quotes
 char	*check_quotes(char *prompt)
 {
 	if (*prompt == '\'' || *prompt == '"')
@@ -29,6 +30,37 @@ void	clean_exit(void)
 	exit(0);
 }
 
+// As the name suggest
+int	is_quote_closed(char *input)
+{
+	char	c;
+	int	i;
+
+	i = 0;
+	while (input[i])
+	{
+		if (input[i] == '\'' || input[i] == '\"')
+		{
+			c = input[i++];
+			while (input[i] && input[i] != c)
+				i++;
+			if (input[i] != c)
+			{
+				printf("syntax error: unclosed quotes\n");
+				return (1);
+			}
+		}
+		i++;
+	}
+	return (0);
+}
+
+void	check_syntax(char *input, t_parms *prms)
+{
+	input = ft_strtrim(input, " \t");
+	
+}
+
 t_sh	*ft_parser(char *input, t_parms *prms)
 {
 	t_sh	*res;
@@ -36,7 +68,9 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 	int		i;
 	char	*value;
 
-	input = handle_quotes(&prms->histr, input);
+	// input = handle_quotes(&prms->histr, input);
+	if (is_quote_closed(input))
+		return (NULL);
 	printf("\n\tiput after handling: %s|\n", input);
 	prompt = my_split(input, ' ');
 	printf("\n\t----split result-----\n");
@@ -51,7 +85,6 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 			clean_exit();
 		if (ft_strchr(prompt[i], '$'))
 		{
-			// value = (char **)ft_malloc(sizeof(char *), 0);
 			value = ft_expand(prompt[i], prms);
 			ft_sh_addb(&res, ft_sh_new(&value, check_quotes(prompt[i])));
 		}

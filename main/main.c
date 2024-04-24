@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 02:15:05 by srachidi          #+#    #+#             */
-/*   Updated: 2024/04/22 16:04:22 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/04/24 22:13:43 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,7 @@ char	*ft_line(int ext_stts)
 	else
 		line = readline("\033[1;31m{🚫}==>\033[0m");
 	if (line)
-		;
-		// add_history(line);
+		add_history(line);
 	else
 	{
 		rl_on_new_line();

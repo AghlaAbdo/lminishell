@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:40:41 by srachidi          #+#    #+#             */
-/*   Updated: 2024/04/23 15:49:10 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/04/24 16:03:40 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	ft_add_histr(t_histr **histr);
 char	*ft_expand(char *prompt, t_parms *prm);
 char	*expand_it(char *prompt, t_parms *prm, char c, int i);
 char	*get_prev(char *prompt, int i);
-char	*get_rest(char *prompt, int i);
+char	*get_rest(char *prompt, char c, int i);
 char	*ft_trim(char *prompt, int j);
 
 //	Handle_quotes
