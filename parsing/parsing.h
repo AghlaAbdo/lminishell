@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:40:41 by srachidi          #+#    #+#             */
-/*   Updated: 2024/04/24 16:03:40 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/04/26 10:15:46 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,15 @@
 # include <stdio.h>
 # include <unistd.h>
 # include "get_next_line/get_next_line.h"
+
+//  For storing tokens
+typedef struct	s_token
+{
+	char			*token;
+	char			type;
+	struct s_token	*next;
+	struct s_token	*prev;
+}				t_token; 
 
 t_sh	*ft_parser(char *input, t_parms *prms);
 char	**my_split(char const *s, char c);
@@ -30,11 +39,18 @@ char	*my_strdup(const char *s1);
 
 void	clean_exit(void);
 
+//	Parsing input
+t_token	*parse_input(char **prompt, char *input, t_parms *prms);
+
 //	History funcs
 t_histr	*ft_hist_new(char *line);
 void	ft_hist_addb(t_histr **histr, t_histr *new);
 void	ft_hist_rmvlast(t_histr **histr);
 void	ft_add_histr(t_histr **histr);
+
+//	t_hoken tools
+t_token	*ft_token_new(char *word, char type);
+void	ft_token_addb(t_token **head, t_token *new);
 
 //	Expanding
 char	*ft_expand(char *prompt, t_parms *prm);

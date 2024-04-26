@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:53:36 by thedon            #+#    #+#             */
-/*   Updated: 2024/04/17 16:02:56 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/04/25 11:21:36 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,11 @@ static int	wordcount(char const *s, char c)
 			while (s[i] && s[i] != first_c)
 				i++;
 		}
-		// printf("i in the middle = %d\n", i);
 		if (s[i])
 			count++;
 		while (s[i] && s[i] != c && s[i] != 9)
-		{
-			// printf("s[%d] = |%c|\n", i, s[i]);
 			i++;
-		}
 	}
-	// printf("word count in split = %d| and c = |%c| and str = %s|\n", count, c, s);
 	return (count);
 }
 
