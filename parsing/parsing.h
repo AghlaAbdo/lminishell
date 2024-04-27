@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:40:41 by srachidi          #+#    #+#             */
-/*   Updated: 2024/04/26 10:15:46 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/04/27 22:51:16 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*my_strdup(const char *s1);
 void	clean_exit(void);
 
 //	Parsing input
-t_token	*parse_input(char **prompt, char *input, t_parms *prms);
+t_token	*parse_input(t_token *token, char *input, char *word, int i);
 
 //	History funcs
 t_histr	*ft_hist_new(char *line);

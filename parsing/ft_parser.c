@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:54:38 by thedon            #+#    #+#             */
-/*   Updated: 2024/04/26 07:03:02 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/04/27 22:50:58 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,12 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 	printf("\n\t----split result-----\n");
 	for(int i = 0; prompt[i]; i++)
 		printf("[%d]: %s\n", i, prompt[i]);
-	tokens = parse_input(prompt, input, prms);
+	tokens = parse_input(NULL, input, NULL, 0);
+	while (tokens)
+	{
+		printf("token: [%s]\ttype: %c%%\n", tokens->token, tokens->type);
+		tokens = tokens->next;
+	}
 	printf("\t----------------\n");
 	if (check_syntax(prompt, prms))
 		return (NULL);

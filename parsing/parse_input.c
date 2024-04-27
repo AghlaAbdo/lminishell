@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 06:44:23 by aaghla            #+#    #+#             */
-/*   Updated: 2024/04/26 20:06:04 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/04/27 22:53:17 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@
 	
 // }
 
-char	*get_word(char *str, int j)
+char	*get_token(char *str, int j)
 {
 	// int	i;
 
 	// i = 0;
-	// printf("str in get_word: %s|\tstr[%d]: %c\n", str, j, str[j]);
+	// printf("str in get_token: %s|\tstr[%d]: %c\n", str, j, str[j]);
 	str = my_strdup(str);
 	str[j] = '\0';
 	return (str);
@@ -39,88 +39,103 @@ char	check_word(char *word)
 	return ('0');
 }
 
-void	parse_word(t_token **token, char *prompt, char *word, int i)
+void	get_rest_word(char *input, int *i, int *j)
+{
+	char	c;
+	
+	while (input[*i] && input[*i] != ' ' && input[*i] != 9
+		&& input[*i] != '>' && input[*i] != '<' && input[*i] != '|')
+		{
+			(*i)++;
+			if (input[*i] == '"' || input[*i] == '\'')
+			{
+				c = input[(*i)++];
+				while (input[*i] && input[*i] != c)
+					(*i)++;
+			}
+		}
+	
+}
+
+void	get_word(t_token **token, char *input, int *i, int *j)
+{
+	char	c;
+	
+	while (input[*i] && input[*i] != '>' && input[*i] != '<'
+		&& input[*i] != '|' && input[*i] != ' ' && input[*i] != 9)
+	{
+		if (input[*i] == '\'' || input[*i] == '\"')
+		{
+			c = input[*i];
+			while (i && input[*i] != ' ' && input[*i] != 9
+				&& input[*i] != '>' && input[*i] != '<' && input[*i] != '|')
+				(*i)--;
+			(*i)++;
+			*j = *i;
+			while (input[*i] && input[*i] != c)
+				(*i)++;
+			while (input[++(*i)] && input[*i] != c)
+				;
+			get_rest_word(input, i, j);
+			ft_token_addb(token, ft_token_new(get_token(input +*j, *i -*j), 'w'));
+			*j = *i;
+			break ;
+		}
+		(*i)++;
+	}
+}
+
+// void	parse_word(t_token **token, char *input, char *word, int i)
+// {
+// 	char	c;
+// 	int		j;
+
+// 	while (input[i])
+// 	{
+// 		j = i;
+// 		get_word(token, input, &i, &j);
+// 		if (j != i)
+// 			ft_token_addb(token, ft_token_new(get_token(input +j, i -j), 'S'));
+// 		while (input[i] && (input[i] == ' ' || input[i] == 9))
+// 			i++;
+// 		c = input[i];
+// 		j = i;
+// 		if (c == '>' || c == '<' || c == '|')
+// 		{
+// 			while (input[i] && input[i] == c)
+// 				i++;
+// 			word = get_token(input + j, i -j);
+// 			ft_token_addb(token, ft_token_new(word, check_word(word)));
+// 		}
+// 		while (input[i] && (input[i] == ' ' || input[i] == 9))
+// 			i++;
+// 	}
+// }
+
+t_token	*parse_input(t_token *token, char *input, char *word, int i)
 {
 	char	c;
 	int		j;
 
-	while (prompt[i])
+	while (input[i])
 	{
 		j = i;
-		while (prompt[i] && prompt[i] != '>' && prompt[i] != '<'
-			&& prompt[i] != '|' && prompt[i] != ' ' && prompt[i] != 9)
-		{
-			if (prompt[i] == '\'' || prompt[i] == '\"')
-			{
-				c = prompt[i];
-				while (i && prompt[i] != ' ' && prompt[i] != 9
-					&& prompt[i] != '>' && prompt[i] != '<' && prompt[i] != '|')
-					i--;
-				i++;
-				j = i;
-				if (prompt[i] != c)
-					while (prompt[i] && prompt[i] != c)
-						i++;
-				while (prompt[++i] && prompt[i] != c)
-					;
-				if (prompt[i] == c)
-					while (prompt[i] && prompt[i] != ' ' && prompt[i] != 9
-						&& prompt[i] != '>' && prompt[i] != '<' && prompt[i] != '|')
-						i++;
-				ft_token_addb(token, ft_token_new(get_word(prompt +j, i -j), 'w'));
-				j = i;
-				break ;
-			}
-			i++;
-		}
+		get_word(&token, input, &i, &j);
 		if (j != i)
-			ft_token_addb(token, ft_token_new(get_word(prompt +j, i -j), 'S'));
-		while (prompt[i] && (prompt[i] == ' ' || prompt[i] == 9))
+			ft_token_addb(&token, ft_token_new(get_token(input +j, i -j), 'S'));
+		while (input[i] && (input[i] == ' ' || input[i] == 9))
 			i++;
-		c = prompt[i];
+		c = input[i];
 		j = i;
-		// if (c == '\'' || c == '"')
-		// {
-		// 	i++;
-		// 	while (prompt[i] && prompt[i] != c)
-		// 		i++;
-		// 	i++;
-		// 	ft_token_addb(token, ft_token_new(get_word(prompt +j, i -j), 's'));
-		// 	c = 0;
-		// }
-		
 		if (c == '>' || c == '<' || c == '|')
 		{
-			while (prompt[i] && prompt[i] == c)
+			while (input[i] && input[i] == c)
 				i++;
-			word = get_word(prompt + j, i -j);
-			if (*word)
-				ft_token_addb(token, ft_token_new(word, check_word(word)));
-			
+			word = get_token(input + j, i -j);
+			ft_token_addb(&token, ft_token_new(word, check_word(word)));
 		}
-		while (prompt[i] && (prompt[i] == ' ' || prompt[i] == 9))
+		while (input[i] && (input[i] == ' ' || input[i] == 9))
 			i++;
-			
 	}
-}
-
-t_token	*parse_input(char **prompt, char *input, t_parms *prms)
-{
-	t_token	*token;
-
-	token = NULL;
-	// while (*prompt)
-	// {
-		// if (**prompt == '"')
-		// 	ft_token_addb(&token, ft_token_new(*prompt, 'r'));
-		// else
-			parse_word(&token, input, NULL, 0);
-		*prompt++;
-	// }
-	while (token)
-	{
-		printf("token: [%s]\ttype: %c%%\n", token->token, token->type);
-		token = token->next;
-	}
-	return (NULL);
+	return (token);
 }
