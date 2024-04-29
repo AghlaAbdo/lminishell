@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:54:38 by thedon            #+#    #+#             */
-/*   Updated: 2024/04/27 22:50:58 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/04/28 19:22:15 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,60 +55,50 @@ int	is_quote_closed(char *input)
 	return (0);
 }
 
-int	special_chars(char **prompt)
+int	special_chars(t_token *tkn)
 {
-	int	i;
-	int	j;
-
-	if (prompt[0][0] == '|' && prompt[0][1] != '|' || !ft_strcmp(prompt[0], ">"))
+	if (*tkn->token == '|')
 	{
 		printf("lminishell: syntax error near unexpected token\n");
 		return (1);
 	}
-	// i = -1;
-	// while (prompt[++i])
-	// {
-	// 	j = -1;
-	// 	if (prompt[i][0] != '"' && prompt[i][0] != '\'')
-	// 	{
-	// 		while (prompt[i][++j])
-	// 		{
-	// 			if (prompt[i][j] == '(' || prompt[i][j] == ')' || prompt[i][j] == '`')
-	// 			{
-	// 				printf("lminishell: syntax error near unexpected token\n");
-	// 				return (1);
-	// 			}
-	// 		}
-	// 	}
-	// }
+	while (tkn)
+	{
+		if (!tkn->type
+			|| tkn->next && *tkn->next->token == '|' && (*tkn->token == '>'
+			|| *tkn->token == '<' || *tkn->token == '|'))
+		{
+			printf("lminishell: syntax error near unexpected token\n");
+			return (1);
+		}
+		if (!tkn->next)
+			break ;
+		tkn = tkn->next;
+	}
+	if (*tkn->token == '|' || *tkn->token == '>' || *tkn->token == '<'
+		|| (tkn->prev && (*tkn->prev->token == '|' || *tkn->prev->token == '>' || *tkn->prev->token == '<')
+		&& (!ft_strcmp(tkn->token, "\"\"")
+			|| !ft_strcmp(tkn->token, "''"))))
+	{
+			printf("lminishell: syntax error near unexpected token\n");
+			return (1);
+	}
 	return (0);
 }
 
-int	check_syntax(char **prompt, t_parms *prms)
+int	check_syntax(t_token *tkn, t_parms *prms)
 {
-	char	**splt;
-	int		i;
-	int		j;
-
-	i = 0;
-	if (special_chars(prompt))
+	if (special_chars(tkn))
 		return (1);
-	while (prompt[i])
-	{
-		j = 0;
-		if (ft_strchr(prompt[i], '|'))
-		{
-			// splt = my_split(prompt[i], "|");
-		}
-		i++;
-	}
+	
+	
 	return (0);
 }
 
 t_sh	*ft_parser(char *input, t_parms *prms)
 {
 	t_sh	*res;
-	t_token	*tokens;
+	t_token	*tkn;
 	char	**prompt;
 	int		i;
 	char	*value;
@@ -122,30 +112,33 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 	printf("\n\t----split result-----\n");
 	for(int i = 0; prompt[i]; i++)
 		printf("[%d]: %s\n", i, prompt[i]);
-	tokens = parse_input(NULL, input, NULL, 0);
-	while (tokens)
+	tkn = parse_input(NULL, input, NULL, 0);
+	t_token	*temp = tkn;
+	ft_expand(&tkn, prms);
+	while (temp)
 	{
-		printf("token: [%s]\ttype: %c%%\n", tokens->token, tokens->type);
-		tokens = tokens->next;
+		printf("token: [%s]\ttype: %c%%\n", temp->token, temp->type);
+		temp = temp->next;
 	}
 	printf("\t----------------\n");
-	if (check_syntax(prompt, prms))
+	if (check_syntax(tkn, prms))
 		return (NULL);
+	printf("after syntax\n");
 	i = -1;
 	res = NULL;
 	while (prompt[++i])
 	{
 		if (!ft_strcmp(prompt[i], "exit"))
 			clean_exit();
-		if (ft_strchr(prompt[i], '$'))
-		{
-			value = ft_expand(prompt[i], prms);
-			ft_sh_addb(&res, ft_sh_new(&value, check_quotes(prompt[i])));
-		}
+		// if (ft_strchr(prompt[i], '$'))
+		// {
+		// 	value = ft_expand(prompt[i], prms);
+		// 	ft_sh_addb(&res, ft_sh_new(&value, check_quotes(prompt[i])));
+		// }
 		else if (!ft_strcmp(prompt[i], "<") || !ft_strcmp(prompt[i], ">"))
 		{
-			ft_sh_addb(&res, ft_sh_new(&prompt[i++], "REDIR"));
-			ft_sh_addb(&res, ft_sh_new(&prompt[i], "FILE"));
+			ft_sh_addb(&res, ft_sh_new(&prompt[i], "REDIR"));
+			// ft_sh_addb(&res, ft_sh_new(&prompt[i], "FILE"));
 		}
 		else if (!ft_strcmp(prompt[i], "|"))
 		{

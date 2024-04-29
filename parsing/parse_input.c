@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 06:44:23 by aaghla            #+#    #+#             */
-/*   Updated: 2024/04/27 22:53:17 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/04/29 16:38:38 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	check_word(char *word)
 		return ('<');
 	else if (!ft_strcmp(word, "|"))
 		return ('|');
-	return ('0');
+	return (0);
 }
 
 void	get_rest_word(char *input, int *i, int *j)
@@ -67,9 +67,9 @@ void	get_word(t_token **token, char *input, int *i, int *j)
 		if (input[*i] == '\'' || input[*i] == '\"')
 		{
 			c = input[*i];
-			while (i && input[*i] != ' ' && input[*i] != 9
+			while (*i >= 0 && input[*i] != ' ' && input[*i] != 9
 				&& input[*i] != '>' && input[*i] != '<' && input[*i] != '|')
-				(*i)--;
+					(*i)--;
 			(*i)++;
 			*j = *i;
 			while (input[*i] && input[*i] != c)
