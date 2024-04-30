@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:29:54 by aaghla            #+#    #+#             */
-/*   Updated: 2024/04/29 23:47:01 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/04/30 23:25:22 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,45 +41,65 @@ char	*ft_trim(char *word, int j)
 }
 
 // get the rest after the variable name till the end of the string or till the starting of another variable
-char	*get_rest(char *word)
-{
-	int	i;
+// char	*get_rest(char *word, char c)
+// {
+// 	int	i;
 
-	i = 0;
-	word = my_strdup(word);
-	// i = 1;
-	printf("word in get_rest: %s|\n", word);
-	// if (!(word[i] && (word[i] == '_' || (word[i] >= 'a' && word[i] <= 'z'))
-	// 	|| (word[i] >= 'A' && word[i] <= 'Z'))  || (word[i] >= '0' && word[i] <= '9'))
-	// {
-	// 	while (word[i] && word[i] != '$')
-	// 		i++;
-	// 	word[i] = '\0';
-	// 	if (word[1] >= '0' && word[1] <= '9')
-	// 		return (word +2);
-	// 	else
-	// 		return (word);
-	// }
-	// i = 1;
-	while (word[i] && word[i] != '$')
-		i++;
-	word[i] = '\0';
-	// i = 1;
-	// while (word[i] && (word[i] == '_' || (word[i] >= 'a' && word[i] <= 'z'))
-	// 	|| (word[i] >= 'A' && word[i] <= 'Z') || (word[i] >= '0' && word[i] <= '9'))
-	// 	i++;
-	return (word);
-}
+// 	i = 0;
+// 	word = my_strdup(word);
+// 	// i = 1;
+// 	printf("word in get_rest: %s|\n", word);
+// 	// if (!(word[i] && (word[i] == '_' || (word[i] >= 'a' && word[i] <= 'z'))
+// 	// 	|| (word[i] >= 'A' && word[i] <= 'Z'))  || (word[i] >= '0' && word[i] <= '9'))
+// 	// {
+// 	// 	while (word[i] && word[i] != '$')
+// 	// 		i++;
+// 	// 	word[i] = '\0';
+// 	// 	if (word[1] >= '0' && word[1] <= '9')
+// 	// 		return (word +2);
+// 	// 	else
+// 	// 		return (word);
+// 	// }
+// 	// i = 1;
+// 	// if (c == '\'')
+// 	// {
+// 	// 	while (word[i] && word[i] != '\'')
+// 	// 		i++;
+// 	// 	if (word[i])
+// 	// 		i++;
+// 	// }
+// 	// else
+// 	while (word[i] && word[i] != '$')
+// 	{
+// 		if (c == '\'' && word[i] == c)
+// 		{
+// 			i++;
+// 			while (word[i] && word[i] != c)
+// 				i++;
+// 		}
+// 		i++;
+// 	}
+// 	word[i] = '\0';
+// 	// i = 1;
+// 	// while (word[i] && (word[i] == '_' || (word[i] >= 'a' && word[i] <= 'z'))
+// 	// 	|| (word[i] >= 'A' && word[i] <= 'Z') || (word[i] >= '0' && word[i] <= '9'))
+// 	// 	i++;
+// 	printf("rest in get_rest: [%s]\n", word);
+// 	return (word);
+// }
 
 // char	*invalid_var(char *prompt, int i)
 
-char	*expand_it(char *word, t_parms *prm, char c, int i)
+char	*expand_it(char *word, t_parms *prm, char c, int *i)
 {
 	char	*value;
 	char	*var;
 	char	*rest;
+	int		j;
 
-	var = ft_trim(word, i +1);
+	j = *i;
+
+	var = ft_trim(word, (*i) +1);
 	rest = "";
 	// if (c == '"')
 	printf("\nvar = %s\n\n", var);
@@ -88,11 +108,15 @@ char	*expand_it(char *word, t_parms *prm, char c, int i)
 	// if (word[i +1] != '_' && !((word[i +1] >= 'a' && word[i +1] <= 'z')
 	// 	|| (word[i +1] >= 'A' && word[i +1] <= 'Z')))
 	// 	return (get_rest(word, c, i));
-	i++;
-	while (word[i] && (word[i] == '_' || (word[i] >= 'a' && word[i] <= 'z'))
-		|| (word[i] >= 'A' && word[i] <= 'Z') || (word[i] >= '0' && word[i] <= '9'))
-		i++;
-	rest = get_rest(word + i);
+	// i++;
+	// while (word[i] && (word[i] == '_' || (word[i] >= 'a' && word[i] <= 'z'))
+	// 	|| (word[i] >= 'A' && word[i] <= 'Z') || (word[i] >= '0' && word[i] <= '9'))
+	// 	i++;
+	// rest = get_rest(word + i, c);
+	(*i)++;
+	while (word[*i] && (word[*i] == '_' || (word[*i] >= 'a' && word[*i] <= 'z'))
+		|| (word[*i] >= 'A' && word[*i] <= 'Z') || (word[*i] >= '0' && word[*i] <= '9'))
+		(*i)++;
 	value = ft_env_srch(var, &prm->env);
 	if (value)
 	{
@@ -102,7 +126,9 @@ char	*expand_it(char *word, t_parms *prm, char c, int i)
 		// 	printf("\t\twhy !*word?\n");
 		// 	return (value);
 		// }
-		return (ft_strjoin(value, rest));
+		rest = ft_strjoin(get_prev(word, j), value);
+		printf("res in expand_it: [%s]\n", rest);
+		return (rest);
 	}
 	// if (c == '"')
 	// 	return (ft_strtrim(rest, "\""));
@@ -120,11 +146,21 @@ char	*get_prev(char *word, int i)
 	// if (word[i] == '$')
 	// {
 	// 	i++;
-		while (word[i] && word[i] != '$')
-			i++;
+	// while (word[i] && word[i] != '$')
+	// {
+	// 	if (word[i] == '\'')
+	// 	{
+	// 		while (word[i] && word[i] != '\'')
+	// 			i++;
+	// 		if (word[i])
+	// 			i++;
+	// 	}
+	// 	i++;
 	// }
+	// // }
+	// word[i] = '\0';
+	// printf("word in get_prev: [%s]\n", word);
 	word[i] = '\0';
-	printf("word in get_prev: [%s]\n", word);
 	return (word);
 }
 
@@ -146,30 +182,109 @@ char	*get_prev(char *word, int i)
 // 	return (word +i);
 // }
 
+// char	*get_rest(char *word, char c)
+// {
+	
+// }
+
+// char	*join_res(char *word, int i, char *res)
+// {
+	
+// }
+
 void	expand_quotes(t_token *tkn, t_parms *prms)
 {
-	char	*prev;
-	char	*rest;
 	char	*res;
+	char	*rest;
+	char	*prev;
+	char	c;
 	int		i;
 
 	i = 0;
 	res = "";
-	prev = get_prev(tkn->token, i);
-	printf("prev = [%s]\n", prev);
+	// prev = get_prev(tkn->token, i);
+	// printf("prev = [%s]\n", prev);
 	while (tkn->token[i])
 	{
+		if (tkn->token[i] == '"')
+		{
+			i++;
+			while (tkn->token[i] != '"')
+			{
+				if (tkn->token[i] == '$')
+				{
+					// join_res(tkn->token, i, expand_it(tkn->token, prms, c, i));
+					// rest = get_rest(tkn->token, '"');
+					tkn->token = ft_strjoin(expand_it(tkn->token, prms, c, &i), tkn->token + i);
+					// res = ft_strjoin(res, get_rest(tkn->token))
+				}
+				i++;
+			}
+		}
+		if (tkn->token[i] == '\'')
+		{
+			while (tkn->token[++i] && tkn->token[i] != '\'')
+				;
+			i++;
+		}
 		if (tkn->token[i] == '$')
 		{
-			res = ft_strjoin(res, expand_it(tkn->token, prms, 0, i));
-			printf("res = [%s]\n", res);
+			tkn->token = ft_strjoin(expand_it(tkn->token, prms, c, &i), tkn->token + i);
 		}
 		i++;
 	}
-	res = ft_strjoin(prev, res);
-	if (*res)
-	tkn->token = res;
+	// tkn->token = res;
+	printf("\tres in quotes: [%s]\n", res);
 }
+
+// void	expand_quotes(t_token *tkn, t_parms *prms)
+// {
+// 	char	*prev;
+// 	char	*rest;
+// 	char	*res;
+// 	char	c;
+// 	int		i;
+
+// 	i = 0;
+// 	res = "";
+// 	prev = get_prev(tkn->token, i);
+// 	printf("prev = [%s]\n", prev);
+// 	while (tkn->token[i])
+// 	{
+// 		if (tkn->token[i] == '"')
+// 		{
+// 			c = tkn->token[i++];
+// 			while (tkn->token[i] && tkn->token[i] != c)
+// 			{
+// 				if (tkn->token[i] == '$')
+// 				{
+// 					res = ft_strjoin(res, expand_it(tkn->token, prms, '"', i));
+// 					printf("res = [%s]\n", res);
+// 				}
+// 				i++;
+// 			}
+// 			i++;
+// 		}
+// 		if (tkn->token[i] == '\'')
+// 		{
+// 			while (tkn->token[++i] && tkn->token[i] != '\'' && tkn->token[i] != '$')
+// 				;
+// 			res = ft_strjoin(res, get_rest(tkn->token +i, '\''));
+// 			while (tkn->token[i] && tkn->token[i] != '\'')
+// 				i++;
+// 			i++;
+// 		}
+// 		if (tkn->token[i] == '$')
+// 		{
+// 			res = ft_strjoin(res, expand_it(tkn->token, prms, '"', i));
+// 			printf("res = [%s]\n", res);
+// 		}
+// 		i++;
+// 	}
+// 	res = ft_strjoin(prev, res);
+// 	if (*res)
+// 	tkn->token = res;
+// }
 
 void	ft_expand(t_token **token, t_parms *prms)
 {
