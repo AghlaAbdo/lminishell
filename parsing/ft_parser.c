@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:54:38 by thedon            #+#    #+#             */
-/*   Updated: 2024/04/28 19:22:15 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/02 16:31:35 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,10 +108,10 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 		return (NULL);
 	input = ft_strtrim(input, " \t");
 	printf("\n\tiput after handling: %s|\n", input);
-	prompt = my_split(input, ' ');
+	// prompt = my_split(input, ' ');
 	printf("\n\t----split result-----\n");
-	for(int i = 0; prompt[i]; i++)
-		printf("[%d]: %s\n", i, prompt[i]);
+	// for(int i = 0; prompt[i]; i++)
+	// 	printf("[%d]: %s\n", i, prompt[i]);
 	tkn = parse_input(NULL, input, NULL, 0);
 	t_token	*temp = tkn;
 	ft_expand(&tkn, prms);
@@ -126,27 +126,27 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 	printf("after syntax\n");
 	i = -1;
 	res = NULL;
-	while (prompt[++i])
-	{
-		if (!ft_strcmp(prompt[i], "exit"))
+	// while (prompt[++i])
+	// {
+		if (!ft_strcmp(input, "exit"))
 			clean_exit();
 		// if (ft_strchr(prompt[i], '$'))
 		// {
 		// 	value = ft_expand(prompt[i], prms);
 		// 	ft_sh_addb(&res, ft_sh_new(&value, check_quotes(prompt[i])));
 		// }
-		else if (!ft_strcmp(prompt[i], "<") || !ft_strcmp(prompt[i], ">"))
-		{
-			ft_sh_addb(&res, ft_sh_new(&prompt[i], "REDIR"));
-			// ft_sh_addb(&res, ft_sh_new(&prompt[i], "FILE"));
-		}
-		else if (!ft_strcmp(prompt[i], "|"))
-		{
-			ft_sh_addb(&res, ft_sh_new(&prompt[i], "PIPE"));
-		}
-		else
-			printf("[%s] NONE of the above types\n", prompt[i]);
-	}
+		// else if (!ft_strcmp(prompt[i], "<") || !ft_strcmp(prompt[i], ">"))
+		// {
+		// 	ft_sh_addb(&res, ft_sh_new(&prompt[i], "REDIR"));
+		// 	// ft_sh_addb(&res, ft_sh_new(&prompt[i], "FILE"));
+		// }
+		// else if (!ft_strcmp(prompt[i], "|"))
+		// {
+		// 	ft_sh_addb(&res, ft_sh_new(&prompt[i], "PIPE"));
+		// }
+		// else
+		// 	printf("[%s] NONE of the above types\n", prompt[i]);
+	// }
 	while (res)
 	{
 		printf("type = %s\t| value = %s$\n", res->type, res->value[0]);

@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:40:41 by srachidi          #+#    #+#             */
-/*   Updated: 2024/04/30 21:28:15 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/02 19:06:05 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ void	ft_token_addb(t_token **head, t_token *new);
 
 //	Expanding
 void	ft_expand(t_token **token, t_parms *prm);
-char	*expand_it(char *word, t_parms *prm, char c, int *i);
+char	*expand_it(char *word, t_parms *prm, int *i, int *j);
 char	*get_prev(char *word, int i);
-char	*get_rest(char *word, char c);
+// char	*get_rest(char *word, char c);
 char	*ft_trim(char *word, int j);
 
 //	Handle_quotes

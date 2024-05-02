@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:29:54 by aaghla            #+#    #+#             */
-/*   Updated: 2024/04/30 23:25:22 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/02 19:05:15 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,11 +90,12 @@ char	*ft_trim(char *word, int j)
 
 // char	*invalid_var(char *prompt, int i)
 
-char	*expand_it(char *word, t_parms *prm, char c, int *i)
+char	*expand_it(char *word, t_parms *prm, int *i, int *l)
 {
 	char	*value;
 	char	*var;
 	char	*rest;
+	char	*res;
 	int		j;
 
 	j = *i;
@@ -112,27 +113,32 @@ char	*expand_it(char *word, t_parms *prm, char c, int *i)
 	// while (word[i] && (word[i] == '_' || (word[i] >= 'a' && word[i] <= 'z'))
 	// 	|| (word[i] >= 'A' && word[i] <= 'Z') || (word[i] >= '0' && word[i] <= '9'))
 	// 	i++;
-	// rest = get_rest(word + i, c);
-	(*i)++;
-	while (word[*i] && (word[*i] == '_' || (word[*i] >= 'a' && word[*i] <= 'z'))
-		|| (word[*i] >= 'A' && word[*i] <= 'Z') || (word[*i] >= '0' && word[*i] <= '9'))
-		(*i)++;
+	// rest = get_rest(word + *i, c);
+	j++;
+	while (word[j] && (word[j] == '_' || (word[j] >= 'a' && word[j] <= 'z'))
+		|| (word[j] >= 'A' && word[j] <= 'Z') || (word[j] >= '0' && word[j] <= '9'))
+		printf("skipped word[%d]: %c\n", j, word[j++]);
 	value = ft_env_srch(var, &prm->env);
 	if (value)
 	{
-		printf("value: [%s]\t rest: [%s]\n", value, rest);
-		// if (!*word)
-		// {
-		// 	printf("\t\twhy !*word?\n");
-		// 	return (value);
-		// }
-		rest = ft_strjoin(get_prev(word, j), value);
-		printf("res in expand_it: [%s]\n", rest);
-		return (rest);
+		int le = ft_len(value);
+		*l = ft_len(value);
+		if (!word[j])
+		{
+			printf("\t\twhy !*word?\n");
+			return (value);
+		}
+		res = ft_strjoin(value, word +j);
+		// while (le--)
+		// 	printf("\tskipped token[%d]: [%c]\n", *i, res[(*i)++]);
+		// rest = get_rest(word + j, '"');
+		printf("value: [%s]\t res: [%s]\trest: [%s]\n", value, res, word +j);
+		return (res);
 	}
+	*l = 0;
 	// if (c == '"')
 	// 	return (ft_strtrim(rest, "\""));
-	return (rest);
+	return (word +j);
 }
 
 // Get the characters before '$' if word is like (ggg$SHELL)
@@ -194,16 +200,10 @@ char	*get_prev(char *word, int i)
 
 void	expand_quotes(t_token *tkn, t_parms *prms)
 {
-	char	*res;
-	char	*rest;
-	char	*prev;
-	char	c;
 	int		i;
+	int		len;
 
 	i = 0;
-	res = "";
-	// prev = get_prev(tkn->token, i);
-	// printf("prev = [%s]\n", prev);
 	while (tkn->token[i])
 	{
 		if (tkn->token[i] == '"')
@@ -213,28 +213,31 @@ void	expand_quotes(t_token *tkn, t_parms *prms)
 			{
 				if (tkn->token[i] == '$')
 				{
-					// join_res(tkn->token, i, expand_it(tkn->token, prms, c, i));
-					// rest = get_rest(tkn->token, '"');
-					tkn->token = ft_strjoin(expand_it(tkn->token, prms, c, &i), tkn->token + i);
-					// res = ft_strjoin(res, get_rest(tkn->token))
+					tkn->token = ft_strjoin(get_prev(tkn->token, i), expand_it(tkn->token, prms, &i, &len));
+					while (len-- > 1)
+						i++;
 				}
 				i++;
 			}
+			i++;
 		}
 		if (tkn->token[i] == '\'')
 		{
 			while (tkn->token[++i] && tkn->token[i] != '\'')
 				;
 			i++;
+			printf("index:[%d]: [%c]\n",i,  tkn->token[i]);
 		}
+		
 		if (tkn->token[i] == '$')
 		{
-			tkn->token = ft_strjoin(expand_it(tkn->token, prms, c, &i), tkn->token + i);
+			tkn->token = ft_strjoin(get_prev(tkn->token, i), expand_it(tkn->token, prms, &i, &len));
+			while (len-- > 1)
+				i++;
 		}
+		if (tkn->token[i] != '"')
 		i++;
 	}
-	// tkn->token = res;
-	printf("\tres in quotes: [%s]\n", res);
 }
 
 // void	expand_quotes(t_token *tkn, t_parms *prms)
@@ -297,7 +300,7 @@ void	ft_expand(t_token **token, t_parms *prms)
 	tkn = *token;
 	while (tkn)
 	{
-		if (ft_strchr(tkn->token, '\'') || ft_strchr(tkn->token, '"') && ft_strchr(tkn->token, '$'))
+		// if (ft_strchr(tkn->token, '\'') || ft_strchr(tkn->token, '"') && ft_strchr(tkn->token, '$'))
 			expand_quotes(tkn, prms);
 		tkn = tkn->next;
 	}
