@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:54:38 by thedon            #+#    #+#             */
-/*   Updated: 2024/05/02 16:31:35 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/05 19:11:35 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 	tkn = parse_input(NULL, input, NULL, 0);
 	t_token	*temp = tkn;
 	ft_expand(&tkn, prms);
+	read_heredoc(&tkn, prms);
 	while (temp)
 	{
 		printf("token: [%s]\ttype: %c%%\n", temp->token, temp->type);

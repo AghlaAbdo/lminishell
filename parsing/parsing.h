@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:40:41 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/02 19:06:05 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/05 19:13:53 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,8 @@ char	*ft_trim(char *word, int j);
 char	*handle_quotes(t_histr **histr, char *input);
 char	*keep_reading(t_histr **histr, char *input, char *c, int i);
 int		count_quotes(char *input, char *c);
+
+// Here_doc
+void	read_heredoc(t_token *tkn, t_parms *prm);
 
 #endif

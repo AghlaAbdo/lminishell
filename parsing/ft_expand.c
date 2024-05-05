@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:29:54 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/02 19:05:15 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/05 18:45:04 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,30 +90,41 @@ char	*ft_trim(char *word, int j)
 
 // char	*invalid_var(char *prompt, int i)
 
+char	*get_n_var(t_parms *prm, char *word, int i, int *l)
+{
+	char	*cpy;
+	char	*value;
+
+	cpy = my_strdup(word);
+	cpy[i +2] = '\0';
+	cpy++;
+	*l = 2;
+	value = ft_env_srch(cpy, &prm->env);
+	if (value)
+		return(ft_strjoin(cpy,  word +2));
+	*l = 0;
+	return (word +2);
+}
+
 char	*expand_it(char *word, t_parms *prm, int *i, int *l)
 {
 	char	*value;
 	char	*var;
-	char	*rest;
 	char	*res;
 	int		j;
 
 	j = *i;
-
 	var = ft_trim(word, (*i) +1);
-	rest = "";
-	// if (c == '"')
+	*l = 0;
 	printf("\nvar = %s\n\n", var);
-	// if (word[i +1] >= '0' && word[i +1] <= '9')
-	// 	return (ft_strtrim(get_rest(word, c, i), "\""));
-	// if (word[i +1] != '_' && !((word[i +1] >= 'a' && word[i +1] <= 'z')
-	// 	|| (word[i +1] >= 'A' && word[i +1] <= 'Z')))
-	// 	return (get_rest(word, c, i));
-	// i++;
-	// while (word[i] && (word[i] == '_' || (word[i] >= 'a' && word[i] <= 'z'))
-	// 	|| (word[i] >= 'A' && word[i] <= 'Z') || (word[i] >= '0' && word[i] <= '9'))
-	// 	i++;
-	// rest = get_rest(word + *i, c);
+	if (word[(*i) +1] >= '0' && word[(*i) +1] <= '9')
+		return (get_n_var(prm, word, *i, l));
+	if (word[j +1] != '_' && !((word[j +1] >= 'a' && word[j +1] <= 'z')
+		|| (word[j +1] >= 'A' && word[j +1] <= 'Z')))
+	{
+		(*i)++;
+		return (word);
+	}
 	j++;
 	while (word[j] && (word[j] == '_' || (word[j] >= 'a' && word[j] <= 'z'))
 		|| (word[j] >= 'A' && word[j] <= 'Z') || (word[j] >= '0' && word[j] <= '9'))
@@ -121,7 +132,6 @@ char	*expand_it(char *word, t_parms *prm, int *i, int *l)
 	value = ft_env_srch(var, &prm->env);
 	if (value)
 	{
-		int le = ft_len(value);
 		*l = ft_len(value);
 		if (!word[j])
 		{
@@ -129,15 +139,9 @@ char	*expand_it(char *word, t_parms *prm, int *i, int *l)
 			return (value);
 		}
 		res = ft_strjoin(value, word +j);
-		// while (le--)
-		// 	printf("\tskipped token[%d]: [%c]\n", *i, res[(*i)++]);
-		// rest = get_rest(word + j, '"');
 		printf("value: [%s]\t res: [%s]\trest: [%s]\n", value, res, word +j);
 		return (res);
 	}
-	*l = 0;
-	// if (c == '"')
-	// 	return (ft_strtrim(rest, "\""));
 	return (word +j);
 }
 
@@ -217,7 +221,8 @@ void	expand_quotes(t_token *tkn, t_parms *prms)
 					while (len-- > 1)
 						i++;
 				}
-				i++;
+				if (tkn->token[i] != '"' && tkn->token[i] != '$')
+					i++;
 			}
 			i++;
 		}
@@ -235,7 +240,7 @@ void	expand_quotes(t_token *tkn, t_parms *prms)
 			while (len-- > 1)
 				i++;
 		}
-		if (tkn->token[i] != '"')
+		if (tkn->token[i] != '"' && tkn->token[i] != '$' && tkn->token[i] != '\'')
 		i++;
 	}
 }
@@ -300,12 +305,10 @@ void	ft_expand(t_token **token, t_parms *prms)
 	tkn = *token;
 	while (tkn)
 	{
-		// if (ft_strchr(tkn->token, '\'') || ft_strchr(tkn->token, '"') && ft_strchr(tkn->token, '$'))
+		if (!tkn->prev || ft_strcmp(tkn->prev->token, "<<"))
 			expand_quotes(tkn, prms);
 		tkn = tkn->next;
 	}
-
-
 	// res = "";
 	// if (*word == '"' || *word == '\'')
 	// 	c = *word;
