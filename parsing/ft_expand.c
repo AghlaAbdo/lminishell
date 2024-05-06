@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:29:54 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/05 18:45:04 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/06 19:27:00 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ char	*expand_it(char *word, t_parms *prm, int *i, int *l)
 	j++;
 	while (word[j] && (word[j] == '_' || (word[j] >= 'a' && word[j] <= 'z'))
 		|| (word[j] >= 'A' && word[j] <= 'Z') || (word[j] >= '0' && word[j] <= '9'))
-		printf("skipped word[%d]: %c\n", j, word[j++]);
+		j++;
 	value = ft_env_srch(var, &prm->env);
 	if (value)
 	{
@@ -202,47 +202,68 @@ char	*get_prev(char *word, int i)
 	
 // }
 
-void	expand_quotes(t_token *tkn, t_parms *prms)
+char	*expand_tkn(char *token, t_parms *prms, char c)
 {
 	int		i;
 	int		len;
 
 	i = 0;
-	while (tkn->token[i])
+	while (token[i])
 	{
-		if (tkn->token[i] == '"')
+		if (token[i] == '"')
 		{
 			i++;
-			while (tkn->token[i] != '"')
+			while (token[i] != '"')
 			{
-				if (tkn->token[i] == '$')
+				if (token[i] == '$')
 				{
-					tkn->token = ft_strjoin(get_prev(tkn->token, i), expand_it(tkn->token, prms, &i, &len));
+					token = ft_strjoin(get_prev(token, i), expand_it(token, prms, &i, &len));
 					while (len-- > 1)
 						i++;
 				}
-				if (tkn->token[i] != '"' && tkn->token[i] != '$')
+				if (token[i] != '"' && token[i] != '$')
 					i++;
 			}
 			i++;
 		}
-		if (tkn->token[i] == '\'')
+		if (c == '\'')
 		{
-			while (tkn->token[++i] && tkn->token[i] != '\'')
-				;
-			i++;
-			printf("index:[%d]: [%c]\n",i,  tkn->token[i]);
+			if (token[i] == '\'')
+			{
+				i++;
+				while (token[i] != '\'')
+				{
+					if (token[i] == '$')
+					{
+						token = ft_strjoin(get_prev(token, i), expand_it(token, prms, &i, &len));
+						while (len-- > 1)
+							i++;
+					}
+					if (token[i] != '\'' && token[i] != '$')
+						i++;
+				}
+				i++;
+			}
 		}
-		
-		if (tkn->token[i] == '$')
+		else
 		{
-			tkn->token = ft_strjoin(get_prev(tkn->token, i), expand_it(tkn->token, prms, &i, &len));
+			if (token[i] == '\'')
+			{
+				while (token[++i] && token[i] != '\'')
+					;
+				i++;
+			}
+		}
+		if (token[i] == '$')
+		{
+			token = ft_strjoin(get_prev(token, i), expand_it(token, prms, &i, &len));
 			while (len-- > 1)
 				i++;
 		}
-		if (tkn->token[i] != '"' && tkn->token[i] != '$' && tkn->token[i] != '\'')
+		if (token[i] != '"' && token[i] != '$' && token[i] != '\'')
 		i++;
 	}
+	return (token);
 }
 
 // void	expand_quotes(t_token *tkn, t_parms *prms)
@@ -296,35 +317,16 @@ void	expand_quotes(t_token *tkn, t_parms *prms)
 
 void	ft_expand(t_token **token, t_parms *prms)
 {
-	char	*res;
-	char	*prev;
-	char	c;
-	int		i;
 	t_token	*tkn;
 
 	tkn = *token;
 	while (tkn)
 	{
 		if (!tkn->prev || ft_strcmp(tkn->prev->token, "<<"))
-			expand_quotes(tkn, prms);
+		{
+			tkn->token = expand_tkn(tkn->token, prms, '"');
+			
+		}
 		tkn = tkn->next;
 	}
-	// res = "";
-	// if (*word == '"' || *word == '\'')
-	// 	c = *word;
-	// else
-	// 	c = 0;
-	// i = -1;
-	// if (c == '\'')
-	// 	return (ft_strtrim(word, "\'\""));
-	// // prev = get_prev(word);
-	// while (word[++i])
-	// {
-	// 	if (word[i] == '$')
-	// 	{
-	// 		res = ft_strjoin(res, ft_strjoin(get_prev(word, i), expand_it(word, prm, c, i)));
-	// 		// printf("\nword in ft_expand = %s$\nAnd res = %s$\n\n", word+i, res);
-	// 	}
-	// }
-	// return (res);
 }

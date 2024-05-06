@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:40:41 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/05 19:13:53 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/06 19:26:13 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	ft_token_addb(t_token **head, t_token *new);
 //	Expanding
 void	ft_expand(t_token **token, t_parms *prm);
 char	*expand_it(char *word, t_parms *prm, int *i, int *j);
+char	*expand_tkn(char *token, t_parms *prms, char c);
 char	*get_prev(char *word, int i);
 // char	*get_rest(char *word, char c);
 char	*ft_trim(char *word, int j);
@@ -63,8 +64,10 @@ char	*ft_trim(char *word, int j);
 char	*handle_quotes(t_histr **histr, char *input);
 char	*keep_reading(t_histr **histr, char *input, char *c, int i);
 int		count_quotes(char *input, char *c);
+void	rmv_quotes(t_token *tkn);
+void	rmv_char(char *token);
 
 // Here_doc
-void	read_heredoc(t_token *tkn, t_parms *prm);
+void	here_doc(t_token *tkn, t_parms *prm);
 
 #endif
