@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:40:41 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/06 19:26:13 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/07 16:24:06 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,8 @@ void	rmv_char(char *token);
 
 // Here_doc
 void	here_doc(t_token *tkn, t_parms *prm);
+
+// Tokenization
+t_sh	*ft_tokenization(t_token *tkn);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:54:38 by thedon            #+#    #+#             */
-/*   Updated: 2024/05/06 11:37:55 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/07 21:03:18 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,27 +107,27 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 	if (is_quote_closed(input))
 		return (NULL);
 	input = ft_strtrim(input, " \t");
-	printf("\n\tiput after handling: %s|\n", input);
 	// prompt = my_split(input, ' ');
-	printf("\n\t----split result-----\n");
 	// for(int i = 0; prompt[i]; i++)
 	// 	printf("[%d]: %s\n", i, prompt[i]);
 	tkn = parse_input(NULL, input, NULL, 0);
+	if (check_syntax(tkn, prms))
+		return (NULL);
 	t_token	*temp = tkn;
 	ft_expand(&tkn, prms);
 	here_doc(tkn, prms);
 	rmv_quotes(tkn);
+	printf("\n\t----Tokens result-----\n");
 	while (temp)
 	{
-		printf("token: [%s]\ttype: %c%%\n", temp->token, temp->type);
+		printf("\ttoken: [%s]\ttype: %c%%\n", temp->token, temp->type);
 		temp = temp->next;
 	}
-	printf("\t----------------\n");
-	if (check_syntax(tkn, prms))
-		return (NULL);
-	printf("after syntax\n");
+	printf("\n\t----------------\n\n");
+	res = ft_tokenization(tkn);
+	printf("here after?\n");
 	i = -1;
-	res = NULL;
+	// res = NULL;
 	// while (prompt[++i])
 	// {
 		if (!ft_strcmp(input, "exit"))
@@ -149,6 +149,7 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 		// else
 		// 	printf("[%s] NONE of the above types\n", prompt[i]);
 	// }
+	printf("\n\t-------- SH Token result--------\n\n");
 	while (res)
 	{
 		printf("type = %s\t| value = %s$\n", res->type, res->value[0]);

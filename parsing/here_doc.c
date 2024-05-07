@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 19:11:49 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/06 20:18:06 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/07 16:07:44 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	read_heredoc(t_token *tkn, t_parms *prm, char *limit, int quots)
 	char	*res;
 
 	res = "";
-	if (limit[0] == '"' || limit[0] == '\'')
+	if (ft_strchr(limit, '"') || ft_strchr(limit, '\''))
 		quots = 1;
 	rmv_char(limit);
 	while (1)
