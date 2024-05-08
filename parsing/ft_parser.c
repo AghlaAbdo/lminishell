@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:54:38 by thedon            #+#    #+#             */
-/*   Updated: 2024/05/07 21:03:18 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/08 16:12:14 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 	char	*value;
 
 	// input = handle_quotes(&prms->histr, input);
-	if (is_quote_closed(input))
+	if (!*input || is_quote_closed(input))
 		return (NULL);
 	input = ft_strtrim(input, " \t");
 	// prompt = my_split(input, ' ');
@@ -114,7 +114,16 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 	if (check_syntax(tkn, prms))
 		return (NULL);
 	t_token	*temp = tkn;
+	printf("\n\t----Tokens result before expanding-----\n");
+	while (temp)
+	{
+		printf("\ttoken: [%s]\ttype: %c%%\n", temp->token, temp->type);
+		temp = temp->next;
+	}
+	printf("\n\t----------------\n\n");
+	temp = tkn;
 	ft_expand(&tkn, prms);
+	printf("out of expnding\n");
 	here_doc(tkn, prms);
 	rmv_quotes(tkn);
 	printf("\n\t----Tokens result-----\n");
@@ -149,11 +158,27 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 		// else
 		// 	printf("[%s] NONE of the above types\n", prompt[i]);
 	// }
-	printf("\n\t-------- SH Token result--------\n\n");
+	printf("\n\t-------- SH Token result --------\n\n");
+	// for (int i = 0; res->value[i]; i++)
+	// 	printf("res: [%s]\n", res->value[i]);
 	while (res)
 	{
-		printf("type = %s\t| value = %s$\n", res->type, res->value[0]);
+		if (!ft_strcmp(res->type, "CMD"))
+		{
+			i = 0;
+			printf("value = [%s]\t| type = [%s]\n", res->value[i++], res->type);
+			while (res->value[i])
+				printf("\tvalue = [%s]\n", res->value[i++]);
+			printf("\n");
+		}
+		else
+		{
+			printf("value = [%s]\t| type = [%s]\n", res->value[0], res->type);
+			if (!ft_strcmp(res->type, "PIPE"))
+				printf("\n");
+		}
 		res = res->next;
 	}
+	printf("\n\t-------------------------------\n\n");
 	return (res);
 }

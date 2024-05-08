@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:29:54 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/06 19:27:00 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/08 15:13:23 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,20 +90,29 @@ char	*ft_trim(char *word, int j)
 
 // char	*invalid_var(char *prompt, int i)
 
-char	*get_n_var(t_parms *prm, char *word, int i, int *l)
+char	*get_n_var(t_parms *prm, char *word, char *var, int *i, int *l)
 {
 	char	*cpy;
 	char	*value;
 
 	cpy = my_strdup(word);
-	cpy[i +2] = '\0';
+	cpy[(*i) +2] = '\0';
 	cpy++;
-	*l = 2;
+	printf("var = [%s]\n", var);
+	// exit(1);
+	*l = ft_len(var);
+	if (!*l)
+	{
+		printf("*L is 0?\n");
+		*l = 2;
+	}
 	value = ft_env_srch(cpy, &prm->env);
 	if (value)
-		return(ft_strjoin(cpy,  word +2));
-	*l = 0;
-	return (word +2);
+		return(ft_strjoin(value,  word + *i +2));
+	// *l = 0;
+	printf("word + *i +2: [%s]\n", word + *i +2);
+	// printf("in var, word: [%s]\t word[%d]: %c\n", word, *i, word[*i]);
+	return (word + *i +2);
 }
 
 char	*expand_it(char *word, t_parms *prm, int *i, int *l)
@@ -116,9 +125,13 @@ char	*expand_it(char *word, t_parms *prm, int *i, int *l)
 	j = *i;
 	var = ft_trim(word, (*i) +1);
 	*l = 0;
+	// sleep(3);
+	printf("before word: [%s]\n", word);
+	// (*i)++;
+	// return (word);
 	printf("\nvar = %s\n\n", var);
 	if (word[(*i) +1] >= '0' && word[(*i) +1] <= '9')
-		return (get_n_var(prm, word, *i, l));
+		return (get_n_var(prm, word, var, i, l));
 	if (word[j +1] != '_' && !((word[j +1] >= 'a' && word[j +1] <= 'z')
 		|| (word[j +1] >= 'A' && word[j +1] <= 'Z')))
 	{
@@ -322,7 +335,7 @@ void	ft_expand(t_token **token, t_parms *prms)
 	tkn = *token;
 	while (tkn)
 	{
-		if (!tkn->prev || ft_strcmp(tkn->prev->token, "<<"))
+		if ((!tkn->prev || ft_strcmp(tkn->prev->token, "<<")) && ft_strchr(tkn->token, '$'))
 		{
 			tkn->token = expand_tkn(tkn->token, prms, '"');
 			
