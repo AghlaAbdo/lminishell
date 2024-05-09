@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 16:22:36 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/08 18:59:41 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/09 11:28:24 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,17 @@
 
 void	in_file(t_sh **sh, t_token *in, t_token *tkn)
 {
-	printf("called in_file?\n");
+	// printf("called in_file?\n");
 	while (in->next && in->type != '|')
 	{
-		printf("skipped [%s]\n", in->token);
+		// printf("skipped [%s]\n", in->token);
 		in = in->next;
 	}
 	// if (in)
 	// 	in = in->prev;
 	while (in && in != tkn->prev)
 	{
-		printf("back to [%s]\n", in->token);
+		// printf("back to [%s]\n", in->token);
 		if (in->prev && in->prev->type == '<')
 		{
 			ft_sh_addb(sh, ft_sh_new(&in->prev->token, "REDIR"));
@@ -40,17 +40,17 @@ void	in_file(t_sh **sh, t_token *in, t_token *tkn)
 
 void	out_file(t_sh **sh, t_token *out, t_token *tkn)
 {
-	printf("called out_file\n");
+	// printf("called out_file\n");
 	while (out->next && out->type != '|')
 	{
-		printf("skipped [%s]\n", out->token);
+		// printf("skipped [%s]\n", out->token);
 		out = out->next;
 	}
 	// if (out)
 	// 	out = out->prev;
 	while (out && out != tkn->prev)
 	{
-		printf("back to [%s]\n", out->token);
+		// printf("back to [%s]\n", out->token);
 		if (out->prev && out->prev->type == '>')
 		{
 			ft_sh_addb(sh, ft_sh_new(&out->prev->token, "REDIR"));
@@ -82,7 +82,7 @@ t_sh	*ft_tokenization(t_token *tkn)
 		temp = tkn;
 		while (temp && temp->type != '|')
 		{
-			printf("Added [%s]\n", temp->token);
+			// printf("Added [%s]\n", temp->token);
 			if (!temp->prev || (temp->prev && temp->prev->type != '<' && temp->prev->type != '>'
 				&& temp->type != '<' && temp->type != '>'))
 			{
@@ -90,17 +90,16 @@ t_sh	*ft_tokenization(t_token *tkn)
 			}
 			temp = temp->next;
 		}
-		printf("count = %d\n", count);
+		// printf("count = %d\n", count);
 		cmd = (char **)ft_malloc((count +1) * sizeof(char *), 0);
 		i = 0;
 		while (tkn && tkn->type != '|')
 		{
-			printf("tkn skipped [%s]\n", tkn->token);
+			// printf("tkn skipped [%s]\n", tkn->token);
 			if (!tkn->prev || (tkn->prev && tkn->prev->type != '<' && tkn->prev->type != '>'
 				&& tkn->type != '<' && tkn->type != '>'))
 			{
 				cmd[i++] = tkn->token;
-				printf("ever really added?\n");
 			}
 			tkn = tkn->next;
 			if (!tkn || tkn->type == '|')

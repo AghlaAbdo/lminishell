@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:29:54 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/08 15:13:23 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/09 10:56:57 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ char	*get_n_var(t_parms *prm, char *word, char *var, int *i, int *l)
 	cpy = my_strdup(word);
 	cpy[(*i) +2] = '\0';
 	cpy++;
-	printf("var = [%s]\n", var);
 	// exit(1);
 	*l = ft_len(var);
 	if (!*l)
@@ -123,13 +122,20 @@ char	*expand_it(char *word, t_parms *prm, int *i, int *l)
 	int		j;
 
 	j = *i;
-	var = ft_trim(word, (*i) +1);
 	*l = 0;
+	printf("word +i= [%c]\n", *(word + *i + 1));
+	var = ft_trim(word, (*i) +1);
+	printf("\nvar = %s\n\n", var);
+	if (!*var || *(word + *i + 1) == '"')
+	{
+		// exit(1);
+		// (*i)++;
+		return (word + *i +1);
+	}
 	// sleep(3);
 	printf("before word: [%s]\n", word);
 	// (*i)++;
 	// return (word);
-	printf("\nvar = %s\n\n", var);
 	if (word[(*i) +1] >= '0' && word[(*i) +1] <= '9')
 		return (get_n_var(prm, word, var, i, l));
 	if (word[j +1] != '_' && !((word[j +1] >= 'a' && word[j +1] <= 'z')
@@ -226,14 +232,16 @@ char	*expand_tkn(char *token, t_parms *prms, char c)
 		if (token[i] == '"')
 		{
 			i++;
-			while (token[i] != '"')
+			while (token[i] && token[i] != '"')
 			{
 				if (token[i] == '$')
 				{
 					token = ft_strjoin(get_prev(token, i), expand_it(token, prms, &i, &len));
+					printf("token after join: [%s]\n", token);
 					while (len-- > 1)
 						i++;
 				}
+				printf("token +i in expand_tkn: [%s]\n", token +i);
 				if (token[i] != '"' && token[i] != '$')
 					i++;
 			}
@@ -273,7 +281,7 @@ char	*expand_tkn(char *token, t_parms *prms, char c)
 			while (len-- > 1)
 				i++;
 		}
-		if (token[i] != '"' && token[i] != '$' && token[i] != '\'')
+		if (token[i] && token[i] != '"' && token[i] != '$' && token[i] != '\'')
 		i++;
 	}
 	return (token);
