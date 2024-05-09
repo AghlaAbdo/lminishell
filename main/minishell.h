@@ -19,11 +19,19 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+typedef struct	s_rdr
+{
+	char			*fl_name;
+	char			*mode;
+	struct s_rdr	*next;
+}					t_rdr;
+
 //? MAIN struct
 typedef struct s_sh
 {
 	char		**value;
 	char		*type;
+	t_rdr		*rdr;
 	struct s_sh	*next;
 }	t_sh;
 
@@ -86,7 +94,7 @@ t_env	*ft_env_sort(t_env	**env); //?sort the link_list
 
 // SH TOOLS
 int 	ft_sh_sz(t_sh **sh);
-t_sh	*ft_sh_new(char **value, char *type);
+t_sh	*ft_sh_new(t_rdr *rdr, char **value, char *type);
 void	ft_sh_addb(t_sh **sh, t_sh *new_sh);
 void	ft_sh_rmv(t_sh **sh, char *value);
 

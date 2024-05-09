@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:40:41 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/07 16:24:06 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/09 19:53:00 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,10 @@ void	ft_add_histr(t_histr **histr);
 //	t_hoken tools
 t_token	*ft_token_new(char *word, char type);
 void	ft_token_addb(t_token **head, t_token *new);
+
+//	t_rdr tools
+t_rdr	*ft_rdr_new(char *name, char *mode);
+void	ft_rdr_addb(t_rdr **head, t_rdr *new);
 
 //	Expanding
 void	ft_expand(t_token **token, t_parms *prm);

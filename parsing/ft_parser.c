@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:54:38 by thedon            #+#    #+#             */
-/*   Updated: 2024/05/08 16:12:14 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/09 20:12:23 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,19 +163,31 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 	// 	printf("res: [%s]\n", res->value[i]);
 	while (res)
 	{
-		if (!ft_strcmp(res->type, "CMD"))
+		if (!res->value)
 		{
-			i = 0;
-			printf("value = [%s]\t| type = [%s]\n", res->value[i++], res->type);
-			while (res->value[i])
-				printf("\tvalue = [%s]\n", res->value[i++]);
-			printf("\n");
+			while (res->rdr)
+			{
+				printf("fl_name: [%s]\tmode: [%s]\n", res->rdr->fl_name, res->rdr->mode);
+				res->rdr = res->rdr->next;
+			}
 		}
 		else
 		{
-			printf("value = [%s]\t| type = [%s]\n", res->value[0], res->type);
-			if (!ft_strcmp(res->type, "PIPE"))
+			if (!ft_strcmp(res->type, "CMD"))
+			{
+				i = 0;
+				printf("value = [%s]\t| type = [%s]\n", res->value[i++], res->type);
+				while (res->value[i])
+					printf("\tvalue = [%s]\n", res->value[i++]);
 				printf("\n");
+			}
+			else
+			{
+				printf("value = [%s]\t| type = [%s]\n", res->value[0], res->type);
+				if (!ft_strcmp(res->type, "PIPE"))
+					printf("\n");
+			}
+			
 		}
 		res = res->next;
 	}

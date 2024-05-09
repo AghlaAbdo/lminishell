@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_tools1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thedon <thedon@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 21:32:49 by srachidi          #+#    #+#             */
-/*   Updated: 2024/04/08 23:34:47 by thedon           ###   ########.fr       */
+/*   Updated: 2024/05/09 20:05:40 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	ft_sh_sz(t_sh **sh)
 	return (i);
 }
 
-t_sh	*ft_sh_new(char **value, char *type)//!y9adro yezado members so aydar hadchi fstruct
+t_sh	*ft_sh_new(t_rdr *rdr, char **value, char *type)//!y9adro yezado members so aydar hadchi fstruct
 {
 	t_sh	*new_node;
 
@@ -38,6 +38,7 @@ t_sh	*ft_sh_new(char **value, char *type)//!y9adro yezado members so aydar hadch
 		return (NULL);
 	new_node->value = value;
 	new_node->type = type;
+	new_node->rdr = rdr;
 	new_node->next = NULL;
 	return (new_node);
 }
