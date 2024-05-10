@@ -15,6 +15,7 @@
 
 # include <stdio.h>
 # include <unistd.h>
+# include <fcntl.h>
 # include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -57,6 +58,8 @@ typedef struct s_parms
 	char	**envp;
 	t_env	*env;
 	t_histr	*histr;
+
+	size_t	n_file;
 }	t_parms;
 
 

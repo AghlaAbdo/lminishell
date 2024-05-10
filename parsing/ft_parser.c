@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:54:38 by thedon            #+#    #+#             */
-/*   Updated: 2024/05/09 20:12:23 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/10 18:57:53 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,13 +161,31 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 	printf("\n\t-------- SH Token result --------\n\n");
 	// for (int i = 0; res->value[i]; i++)
 	// 	printf("res: [%s]\n", res->value[i]);
+	char	*here;
+	char	*line;
+	int		fd;
 	while (res)
 	{
 		if (!res->value)
 		{
 			while (res->rdr)
 			{
-				printf("fl_name: [%s]\tmode: [%s]\n", res->rdr->fl_name, res->rdr->mode);
+				if (!ft_strcmp(res->rdr->mode, "<<"))
+				{
+					fd = open(res->rdr->fl_name, O_RDONLY);
+					here = "";
+					line = get_next_line(fd);
+					while (line)
+					{
+						here = ft_strjoin(here, line);
+						free(line);
+						line = get_next_line(fd);
+					}
+					printf("fl_name: [%s]\tmode: [%s]\tcontent: [%s]\n", res->rdr->fl_name, res->rdr->mode, here);
+					
+				}
+				else
+					printf("fl_name: [%s]\tmode: [%s]\n", res->rdr->fl_name, res->rdr->mode);
 				res->rdr = res->rdr->next;
 			}
 		}

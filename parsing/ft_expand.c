@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:29:54 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/09 10:56:57 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/10 19:01:45 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,62 +227,81 @@ char	*expand_tkn(char *token, t_parms *prms, char c)
 	int		len;
 
 	i = 0;
-	while (token[i])
+	if (c == '"')
 	{
-		if (token[i] == '"')
+		while (token[i])
 		{
-			i++;
-			while (token[i] && token[i] != '"')
-			{
-				if (token[i] == '$')
-				{
-					token = ft_strjoin(get_prev(token, i), expand_it(token, prms, &i, &len));
-					printf("token after join: [%s]\n", token);
-					while (len-- > 1)
-						i++;
-				}
-				printf("token +i in expand_tkn: [%s]\n", token +i);
-				if (token[i] != '"' && token[i] != '$')
-					i++;
-			}
-			i++;
-		}
-		if (c == '\'')
-		{
-			if (token[i] == '\'')
+			if (token[i] == '"')
 			{
 				i++;
-				while (token[i] != '\'')
+				while (token[i] && token[i] != '"')
 				{
 					if (token[i] == '$')
 					{
 						token = ft_strjoin(get_prev(token, i), expand_it(token, prms, &i, &len));
+						printf("token after join: [%s]\n", token);
 						while (len-- > 1)
 							i++;
 					}
-					if (token[i] != '\'' && token[i] != '$')
+					printf("token +i in expand_tkn: [%s]\n", token +i);
+					if (token[i] != '"' && token[i] != '$')
 						i++;
 				}
 				i++;
 			}
-		}
-		else
-		{
-			if (token[i] == '\'')
+			// if (c == '\'')
+			// {
+			// 	if (token[i] == '\'')
+			// 	{
+			// 		i++;
+			// 		while (token[i] != '\'')
+			// 		{
+			// 			if (token[i] == '$')
+			// 			{
+			// 				token = ft_strjoin(get_prev(token, i), expand_it(token, prms, &i, &len));
+			// 				while (len-- > 1)
+			// 					i++;
+			// 			}
+			// 			if (token[i] != '\'' && token[i] != '$')
+			// 				i++;
+			// 		}
+			// 		i++;
+			// 	}
+			// }
+			// else
+			// {
+				if (token[i] == '\'')
+				{
+					while (token[++i] && token[i] != '\'')
+						;
+					i++;
+				}
+			// }
+			if (token[i] == '$')
 			{
-				while (token[++i] && token[i] != '\'')
-					;
-				i++;
+				token = ft_strjoin(get_prev(token, i), expand_it(token, prms, &i, &len));
+				while (len-- > 1)
+					i++;
 			}
-		}
-		if (token[i] == '$')
-		{
-			token = ft_strjoin(get_prev(token, i), expand_it(token, prms, &i, &len));
-			while (len-- > 1)
+			if (token[i] && token[i] != '"' && token[i] != '$' && token[i] != '\'')
 				i++;
 		}
-		if (token[i] && token[i] != '"' && token[i] != '$' && token[i] != '\'')
-		i++;
+	}
+	else
+	{
+		printf("sec expand\n");
+		while (token[i])
+		{
+			if (token[i] == '$')
+			{
+				token = ft_strjoin(get_prev(token, i), expand_it(token, prms, &i, &len));
+				while (len-- > 1)
+					i++;
+			}
+			if (token[i] && token[i] != '$')
+				i++;
+			
+		}
 	}
 	return (token);
 }

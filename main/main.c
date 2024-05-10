@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 02:15:05 by srachidi          #+#    #+#             */
-/*   Updated: 2024/04/24 22:13:43 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/10 08:07:04 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	ft_parms_init(t_parms *holder, int ac, char *av[], char *ep[])
 	holder->envp = ep;
 	holder->env = ft_env_crt(ep);
 	holder->histr = NULL;
+	holder->n_file = 0;
 }
 
 char	*ft_line(int ext_stts)

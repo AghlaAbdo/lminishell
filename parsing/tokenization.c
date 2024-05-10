@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 16:22:36 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/09 20:11:03 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/10 11:41:27 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ t_sh	*ft_tokenization(t_token *tkn)
 				cmd[i++] = tkn->token;
 			}
 			tkn = tkn->next;
-			if (!tkn || tkn->type == '|')
+			if (count && (!tkn || tkn->type == '|'))
 			{
 				cmd[i] = NULL;
 				ft_sh_addb(&sh, ft_sh_new(NULL, cmd, "CMD"));
