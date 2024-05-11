@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 19:11:49 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/10 19:37:17 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/11 15:02:03 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ void	read_heredoc(t_token *tkn, t_parms *prm, char *limit, int quots)
 		if (!line || !ft_strcmp(line, limit))
 			break;
 		res = line;
-		if (!quots)
-			res = expand_tkn(line, prm, '\'');
+		// if (!quots)
+		// 	res = expand_tkn(line, prm, '\'');
 		write(fd, res, ft_len(res));
 		write(fd, "\n", 1);
 		free(line);

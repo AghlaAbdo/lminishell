@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:29:54 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/10 19:01:45 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/11 16:58:47 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,15 +114,38 @@ char	*get_n_var(t_parms *prm, char *word, char *var, int *i, int *l)
 	return (word + *i +2);
 }
 
-char	*expand_it(char *word, t_parms *prm, int *i, int *l)
+char	*split_value(t_token **tkn, char *value, char *bef, char *aft)
+{
+	char	**arr;
+	char	*res;
+	int		i;
+
+	i = 0;
+	printf("value in splie_value: [%s]\n", value);
+	arr = my_split(value, ' ');
+	(*tkn)->token = ft_strjoin(bef, arr[i]);
+	while (arr[++i + 1] && (*tkn))
+	{
+		ft_token_insrt(tkn, ft_token_new(arr[i], 'V'));
+		(*tkn) = (*tkn)->next;
+	}
+	res = ft_strjoin(arr[i], aft);
+	printf("res after: [%s]\narr[%d]: [%s]\n", res, i,  arr[i]);
+	ft_token_insrt(tkn, ft_token_new(res, 'V'));
+	return (NULL);
+}
+
+char	*expand_it(t_token **tkn, char *word, t_parms *prm, int *i, int *l)
 {
 	char	*value;
 	char	*var;
 	char	*res;
+	// char	*word;
 	int		j;
 
 	j = *i;
 	*l = 0;
+	// word = tkn->token;
 	printf("word +i= [%c]\n", *(word + *i + 1));
 	var = ft_trim(word, (*i) +1);
 	printf("\nvar = %s\n\n", var);
@@ -149,6 +172,8 @@ char	*expand_it(char *word, t_parms *prm, int *i, int *l)
 		|| (word[j] >= 'A' && word[j] <= 'Z') || (word[j] >= '0' && word[j] <= '9'))
 		j++;
 	value = ft_env_srch(var, &prm->env);
+	if (value && (ft_strchr(value, ' ') || ft_strchr(value, '\t')))
+		return (split_value(tkn, value, get_prev(word, *i), word +j));
 	if (value)
 	{
 		*l = ft_len(value);
@@ -221,11 +246,14 @@ char	*get_prev(char *word, int i)
 	
 // }
 
-char	*expand_tkn(char *token, t_parms *prms, char c)
+char	*expand_tkn(t_token *tkn, t_parms *prms, char c)
 {
 	int		i;
 	int		len;
+	char	*token;
+	char	*res;
 
+	token = tkn->token;
 	i = 0;
 	if (c == '"')
 	{
@@ -238,7 +266,10 @@ char	*expand_tkn(char *token, t_parms *prms, char c)
 				{
 					if (token[i] == '$')
 					{
-						token = ft_strjoin(get_prev(token, i), expand_it(token, prms, &i, &len));
+						res = expand_it(&tkn, token, prms, &i, &len);
+						if (!res)
+							return (NULL);
+						token = ft_strjoin(get_prev(token, i), res);
 						printf("token after join: [%s]\n", token);
 						while (len-- > 1)
 							i++;
@@ -249,37 +280,18 @@ char	*expand_tkn(char *token, t_parms *prms, char c)
 				}
 				i++;
 			}
-			// if (c == '\'')
-			// {
-			// 	if (token[i] == '\'')
-			// 	{
-			// 		i++;
-			// 		while (token[i] != '\'')
-			// 		{
-			// 			if (token[i] == '$')
-			// 			{
-			// 				token = ft_strjoin(get_prev(token, i), expand_it(token, prms, &i, &len));
-			// 				while (len-- > 1)
-			// 					i++;
-			// 			}
-			// 			if (token[i] != '\'' && token[i] != '$')
-			// 				i++;
-			// 		}
-			// 		i++;
-			// 	}
-			// }
-			// else
-			// {
-				if (token[i] == '\'')
-				{
-					while (token[++i] && token[i] != '\'')
-						;
-					i++;
-				}
-			// }
+			if (token[i] == '\'')
+			{
+				while (token[++i] && token[i] != '\'')
+					;
+				i++;
+			}
 			if (token[i] == '$')
 			{
-				token = ft_strjoin(get_prev(token, i), expand_it(token, prms, &i, &len));
+				res = expand_it(&tkn, token, prms, &i, &len);
+					if (!res)
+						return (NULL);
+				token = ft_strjoin(get_prev(token, i), res);
 				while (len-- > 1)
 					i++;
 			}
@@ -294,7 +306,10 @@ char	*expand_tkn(char *token, t_parms *prms, char c)
 		{
 			if (token[i] == '$')
 			{
-				token = ft_strjoin(get_prev(token, i), expand_it(token, prms, &i, &len));
+				res = expand_it(&tkn, token, prms, &i, &len);
+					if (!res)
+						return (NULL);
+				token = ft_strjoin(get_prev(token, i), res);
 				while (len-- > 1)
 					i++;
 			}
@@ -358,13 +373,16 @@ char	*expand_tkn(char *token, t_parms *prms, char c)
 void	ft_expand(t_token **token, t_parms *prms)
 {
 	t_token	*tkn;
+	char	*res;
 
 	tkn = *token;
 	while (tkn)
 	{
 		if ((!tkn->prev || ft_strcmp(tkn->prev->token, "<<")) && ft_strchr(tkn->token, '$'))
 		{
-			tkn->token = expand_tkn(tkn->token, prms, '"');
+			res = expand_tkn(tkn, prms, '"');
+			if (res)
+				tkn->token = res;
 			
 		}
 		tkn = tkn->next;
