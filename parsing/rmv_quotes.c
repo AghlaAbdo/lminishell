@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 11:38:27 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/06 16:37:05 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/11 20:56:43 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	rmv_quotes(t_token *tkn)
 	while (tkn)
 	{
 		if ((!tkn->prev || ft_strcmp(tkn->prev->token, "<<"))
-			&& (ft_strchr(tkn->token, '\'') || ft_strchr(tkn->token, '"')))
+			&& tkn->type != 'V' && (ft_strchr(tkn->token, '\'') || ft_strchr(tkn->token, '"')))
 		{
 			rmv_char(tkn->token);
 		}
