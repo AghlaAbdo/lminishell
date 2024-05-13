@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:40:41 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/13 16:56:02 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/13 21:15:16 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ typedef struct	s_token
 {
 	char			*token;
 	char			type;
+	int				lst_len;
 	struct s_token	*next;
 	struct s_token	*prev;
 }				t_token; 
@@ -50,7 +51,7 @@ void	ft_hist_rmvlast(t_histr **histr);
 void	ft_add_histr(t_histr **histr);
 
 //	t_hoken tools
-t_token	*ft_token_new(char *word, char type);
+t_token	*ft_token_new(char *word, char type, int len);
 void	ft_token_addb(t_token **head, t_token *new);
 void	ft_token_insrt(t_token **head, t_token *new);
 
@@ -64,6 +65,9 @@ char	*expand_it(t_token **tkn, char *word, t_parms *prm, int i);
 char	*expand_tkn(t_token *tkn, t_parms *prms, char *token, int i);
 char	*get_prev(char *word, int i);
 char	*ft_trim(char *word, int j);
+char	*get_n_var(t_parms *prm, char *word, char *var, int i);
+void	skip_sngl_quot(char	*token, int *i);
+char	*check_vlid_var(t_parms *prm, char *word, int i);
 
 //	Handle_quotes
 char	*handle_quotes(t_histr **histr, char *input);

@@ -6,7 +6,7 @@
 #    By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/08 09:21:55 by srachidi          #+#    #+#              #
-#    Updated: 2024/05/10 11:41:25 by aaghla           ###   ########.fr        #
+#    Updated: 2024/05/13 21:06:58 by aaghla           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,6 +47,7 @@ SRC := 	main/main.c \
 		parsing/rmv_quotes.c				\
 		parsing/tokenization.c				\
 		parsing/ft_rdr_tools.c				\
+		parsing/ft_expand_tools.c			\
 		parsing/ft_itoa.c					\
 		parsing/get_next_line/get_next_line.c		\
 		parsing/get_next_line/get_next_line_utils.c	\

@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:53:36 by thedon            #+#    #+#             */
-/*   Updated: 2024/04/25 11:21:36 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/13 18:42:15 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 
 static int	wordcount(char const *s, char c)
 {
-	int		i;
-	int		count;
-	char	first_c;
+	int	i;
+	int	count;
 
 	i = 0;
 	count = 0;
@@ -24,12 +23,6 @@ static int	wordcount(char const *s, char c)
 	{
 		while (s[i] && (s[i] == c || s[i] == 9))
 			i++;
-		if (s[i] == '\'' || s[i] == '"')
-		{
-			first_c = s[i++];
-			while (s[i] && s[i] != first_c)
-				i++;
-		}
 		if (s[i])
 			count++;
 		while (s[i] && s[i] != c && s[i] != 9)
@@ -42,24 +35,19 @@ static char	*word(char const *str, char c)
 {
 	char	*word;
 	int		i;
-	int		j;
 
-	i = word_len(str, &c);
+	i = 0;
+	while (str[i] && str[i] != c && str[i] != 9)
+		i++;
 	word = ft_malloc((i +1) * sizeof(char), 0);
 	if (!word)
 		return (NULL);
 	i = 0;
-	j = 0;
-	if (c == '\'' || c == '"')
+	while (str[i] && str[i] != c && str[i] != 9)
 	{
-        word[j++] = str[i++];
-		while (str[i] && str[i] != c)
-			word[j++] = str[i++];
-        word[j++] = str[i++];
+		word[i] = str[i];
+		i++;
 	}
-	else
-		while (str[i] && str[i] != c && str[i] != 9)
-			word[j++] = str[i++];
 	word[i] = '\0';
 	return (word);
 }
@@ -97,7 +85,8 @@ char	**my_split(char const *s, char c)
 				return (freearr(arr, i));
 			i++;
 		}
-		skip_word(&s, c);
+		while (*s && *s != c && *s != 9)
+			s++;
 	}
 	arr[i] = NULL;
 	return (arr);

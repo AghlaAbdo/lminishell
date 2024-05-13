@@ -6,13 +6,13 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 06:33:02 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/11 18:18:25 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/13 18:38:22 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-t_token	*ft_token_new(char *word, char type)
+t_token	*ft_token_new(char *word, char type, int len)
 {
 	t_token	*new;
 
@@ -21,6 +21,7 @@ t_token	*ft_token_new(char *word, char type)
 		return (NULL);
 	new->token = word;
 	new->type = type;
+	new->lst_len = len;
 	new->next = NULL;
 	new->prev = NULL;
 	return (new);

@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 06:44:23 by aaghla            #+#    #+#             */
-/*   Updated: 2024/04/29 16:38:38 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/13 18:39:36 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	get_word(t_token **token, char *input, int *i, int *j)
 			while (input[++(*i)] && input[*i] != c)
 				;
 			get_rest_word(input, i, j);
-			ft_token_addb(token, ft_token_new(get_token(input +*j, *i -*j), 'w'));
+			ft_token_addb(token, ft_token_new(get_token(input +*j, *i -*j), 'w', 0));
 			*j = *i;
 			break ;
 		}
@@ -122,7 +122,7 @@ t_token	*parse_input(t_token *token, char *input, char *word, int i)
 		j = i;
 		get_word(&token, input, &i, &j);
 		if (j != i)
-			ft_token_addb(&token, ft_token_new(get_token(input +j, i -j), 'S'));
+			ft_token_addb(&token, ft_token_new(get_token(input +j, i -j), 'S', 0));
 		while (input[i] && (input[i] == ' ' || input[i] == 9))
 			i++;
 		c = input[i];
@@ -132,7 +132,7 @@ t_token	*parse_input(t_token *token, char *input, char *word, int i)
 			while (input[i] && input[i] == c)
 				i++;
 			word = get_token(input + j, i -j);
-			ft_token_addb(&token, ft_token_new(word, check_word(word)));
+			ft_token_addb(&token, ft_token_new(word, check_word(word), 0));
 		}
 		while (input[i] && (input[i] == ' ' || input[i] == 9))
 			i++;
