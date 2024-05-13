@@ -60,6 +60,9 @@ typedef struct s_parms
 	t_histr	*histr;
 
 	size_t	n_file;
+	char	*word;
+	char	c;
+	int		len;
 }	t_parms;
 
 

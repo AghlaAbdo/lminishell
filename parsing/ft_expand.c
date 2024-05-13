@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:29:54 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/12 19:55:16 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/13 17:06:01 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,28 +40,28 @@ char	*ft_trim(char *word, int j)
 	return (res);
 }
 
-char	*get_n_var(t_parms *prm, char *word, char *var, int *i, int *l)
+char	*get_n_var(t_parms *prm, char *word, char *var, int i)
 {
 	char	*cpy;
 	char	*value;
 
 	cpy = my_strdup(word);
-	cpy[(*i) +2] = '\0';
+	cpy[(i) +2] = '\0';
 	cpy++;
 	// exit(1);
-	*l = ft_len(var);
-	if (!*l)
+	prm->len = ft_len(var);
+	if (!prm->len)
 	{
-		printf("*L is 0?\n");
-		*l = 2;
+		printf("prm->len is 0?\n");
+		prm->len = 2;
 	}
 	value = ft_env_srch(cpy, &prm->env);
 	if (value)
-		return(ft_strjoin(value,  word + *i +2));
+		return(ft_strjoin(value,  word + i +2));
 	// *l = 0;
-	printf("word + *i +2: [%s]\n", word + *i +2);
-	// printf("in var, word: [%s]\t word[%d]: %c\n", word, *i, word[*i]);
-	return (word + *i +2);
+	printf("word + i +2: [%s]\n", word + i +2);
+	// printf("in var, word: [%s]\t word[%d]: %c\n", word, i, word[i]);
+	return (word + i +2);
 }
 
 char	*split_value(t_token **tkn, char *value, char *bef, char *aft)
@@ -88,45 +88,49 @@ char	*split_value(t_token **tkn, char *value, char *bef, char *aft)
 	return (NULL);
 }
 
-char	*expand_it(t_token **tkn, char *word, t_parms *prm, int *i, int *l, char c)
+char	*check_vlid_var(t_parms *prm, char *word, int i)
 {
-	char	*value;
+	char	*var;
+	
+	var = ft_trim(word, i +1);
+	if (word[i +1] >= '0' && word[i +1] <= '9')
+		return (get_n_var(prm, word, var, i));
+	if (word[i +1] != '_' && !((word[i +1] >= 'a' && word[i +1] <= 'z')
+		|| (word[i +1] >= 'A' && word[i +1] <= 'Z')))
+	{
+		prm->len = 2;
+		return (word + i);
+	}
+	printf("\nvar = %s\n\n", var);
+	if (!*var || *(word + i + 1) == '"')
+		return (word + i +1);
+	return (NULL);
+}
+
+char	*expand_it(t_token **tkn, char *word, t_parms *prm, int i)
+{
 	char	*var;
 	char	*res;
-	// char	*word;
 	int		j;
 
-	j = *i;
-	*l = 0;
-	// word = tkn->token;
-	printf("word +i= [%c]\n", *(word + *i + 1));
-	var = ft_trim(word, (*i) +1);
-	printf("\nvar = %s\n\n", var);
-	if (!*var || *(word + *i + 1) == '"')
-	{
-		return (word + *i +1);
-	}
-	if (word[(*i) +1] >= '0' && word[(*i) +1] <= '9')
-		return (get_n_var(prm, word, var, i, l));
-	if (word[j +1] != '_' && !((word[j +1] >= 'a' && word[j +1] <= 'z')
-		|| (word[j +1] >= 'A' && word[j +1] <= 'Z')))
-	{
-		(*i)++;
-		return (word);
-	}
-	j++;
+	j = i +1;
+	var = ft_trim(word, i +1);
+	res = check_vlid_var(prm, word, i);
+	if (res)
+		return (res);
 	while (word[j] && (word[j] == '_' || (word[j] >= 'a' && word[j] <= 'z'))
-		|| (word[j] >= 'A' && word[j] <= 'Z') || (word[j] >= '0' && word[j] <= '9'))
+		|| (word[j] >= 'A' && word[j] <= 'Z')
+		|| (word[j] >= '0' && word[j] <= '9'))
 		j++;
-	value = ft_env_srch(var, &prm->env);
-	if (value && c != '"' && (ft_strchr(value, ' ') || ft_strchr(value, '\t')))
-		return (split_value(tkn, value, get_prev(word, *i), word +j));
-	if (value)
+	var = ft_env_srch(var, &prm->env);
+	if (var && prm->c != '"' && (ft_strchr(var, ' ') || ft_strchr(var, '\t')))
+		return (split_value(tkn, var, get_prev(word, i), word + j));
+	if (var)
 	{
-		*l = ft_len(value);
+		prm->len = ft_len(var);
 		if (!word[j])
-			return (value);
-		res = ft_strjoin(value, word +j);
+			return (var);
+		res = ft_strjoin(var, word +j);
 		return (res);
 	}
 	return (word +j);
@@ -139,24 +143,25 @@ char	*get_prev(char *word, int i)
 	return (word);
 }
 
-int	expand_quotes(t_parms *prms, char **token, int *i, int *len)
+int	expand_quotes(t_parms *prms, char **token, int *i)
 {
 	char	*res;
 	
+	prms->word = *token;
 	(*i)++;
 	while ((*token)[*i] && (*token)[*i] != '"')
 	{
 		if ((*token)[*i] == '$')
 		{
-			res = expand_it(NULL, (*token), prms, i, len, '"');
+			prms->len = 0;
+			prms->c = '"';
+			res = expand_it(NULL, *token, prms, *i);
 			if (!res)
 				return (1);
 			(*token) = ft_strjoin(get_prev((*token), *i), res);
-			printf("(*token) after join: [%s]\n", (*token));
-			while ((*len)-- > 1)
+			while (prms->len-- > 1)
 				(*i)++;
 		}
-		printf("(*token) +i in expand_tkn: [%s]\n", (*token) + *i);
 		if ((*token)[*i] != '"' && (*token)[*i] != '$')
 			(*i)++;
 	}
@@ -179,22 +184,23 @@ void	skip_sngl_quot(char	*token, int *i)
 
 char	*expand_tkn(t_token *tkn, t_parms *prms, char *token, int i)
 {
-	int		len;
 	char	*res;
 
 	while (token[i])
 	{
 		if (token[i] == '"')
-			if (expand_quotes(prms, &token, &i, &len))
+			if (expand_quotes(prms, &token, &i))
 				return (NULL);
 		skip_sngl_quot(token, &i);
 		if (token[i] == '$')
 		{
-			res = expand_it(&tkn, token, prms, &i, &len, 0);
+			prms->len = 0;
+			prms->c = 0;
+			res = expand_it(&tkn, token, prms, i);
 				if (!res)
 					return (NULL);
 			token = ft_strjoin(get_prev(token, i), res);
-			while (len-- > 1)
+			while (prms->len-- > 1)
 				i++;
 		}
 		if (token[i] && token[i] != '"' && token[i] != '$' && token[i] != '\'')
