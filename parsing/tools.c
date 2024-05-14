@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 01:22:02 by thedon            #+#    #+#             */
-/*   Updated: 2024/05/13 19:16:15 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/14 18:49:10 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ char	*ft_strjoin(char *s1, char const *s2)
 
 	i = 0;
 	j = 0;
-	printf("s1: [%s], s2: [%s]\n", s1, s2);
 	if (!s1 || !s2)
 		return (NULL);
 	while (s1[i])
@@ -38,7 +37,6 @@ char	*ft_strjoin(char *s1, char const *s2)
 	while (s2[i])
 		str[j++] = s2[i++];
 	str[j] = '\0';
-	// free(s1);
 	return (str);
 }
 

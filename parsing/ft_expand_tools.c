@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 21:07:30 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/13 21:13:55 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/14 19:20:42 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ char	*check_vlid_var(t_parms *prm, char *word, int i)
 		prm->len = 2;
 		return (word + i);
 	}
-	printf("\nvar = %s\n\n", var);
 	if (!*var || *(word + i + 1) == '"')
 		return (word + i +1);
 	return (NULL);

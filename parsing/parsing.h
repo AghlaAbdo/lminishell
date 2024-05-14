@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:40:41 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/13 21:15:16 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/14 18:44:29 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@
 # include "get_next_line/get_next_line.h"
 
 //  For storing tokens
-typedef struct	s_token
+typedef struct s_token
 {
 	char			*token;
 	char			type;
 	int				lst_len;
 	struct s_token	*next;
 	struct s_token	*prev;
-}				t_token; 
+}				t_token;
 
 t_sh	*ft_parser(char *input, t_parms *prms);
 char	**my_split(char const *s, char c);
@@ -45,10 +45,10 @@ void	clean_exit(void);
 t_token	*parse_input(t_token *token, char *input, char *word, int i);
 
 //	History funcs
-t_histr	*ft_hist_new(char *line);
-void	ft_hist_addb(t_histr **histr, t_histr *new);
-void	ft_hist_rmvlast(t_histr **histr);
-void	ft_add_histr(t_histr **histr);
+// t_histr	*ft_hist_new(char *line);
+// void	ft_hist_addb(t_histr **histr, t_histr *new);
+// void	ft_hist_rmvlast(t_histr **histr);
+// void	ft_add_histr(t_histr **histr);
 
 //	t_hoken tools
 t_token	*ft_token_new(char *word, char type, int len);
@@ -68,11 +68,12 @@ char	*ft_trim(char *word, int j);
 char	*get_n_var(t_parms *prm, char *word, char *var, int i);
 void	skip_sngl_quot(char	*token, int *i);
 char	*check_vlid_var(t_parms *prm, char *word, int i);
+char	*expand_heredoc(char *token, t_parms *prms);
 
 //	Handle_quotes
-char	*handle_quotes(t_histr **histr, char *input);
-char	*keep_reading(t_histr **histr, char *input, char *c, int i);
-int		count_quotes(char *input, char *c);
+// char	*handle_quotes(t_histr **histr, char *input);
+// char	*keep_reading(t_histr **histr, char *input, char *c, int i);
+// int		count_quotes(char *input, char *c);
 void	rmv_quotes(t_token *tkn);
 void	rmv_char(char *token);
 
@@ -80,6 +81,6 @@ void	rmv_char(char *token);
 void	here_doc(t_token *tkn, t_parms *prm);
 
 // Tokenization
-t_sh	*ft_tokenization(t_token *tkn);
+t_sh	*ft_tokenization(t_sh *sh, t_token *tkn, char **cmd, int i);
 
 #endif

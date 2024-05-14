@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:29:54 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/13 21:13:49 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/14 19:25:42 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,11 @@
 char	*split_value(t_token **tkn, char *value, char *bef, char *aft)
 {
 	char	**arr;
-	char	*res;
 	int		i;
 
 	i = 0;
 	arr = my_split(value, ' ');
-	if ((*tkn)->type == 'B')
+	if ((*tkn)->type == 'L')
 	{
 		while ((*tkn)->lst_len)
 		{
@@ -37,8 +36,8 @@ char	*split_value(t_token **tkn, char *value, char *bef, char *aft)
 		ft_token_insrt(tkn, ft_token_new(arr[i], 'V', 0));
 		(*tkn) = (*tkn)->next;
 	}
-	res = ft_strjoin(arr[i], aft);
-	ft_token_insrt(tkn, ft_token_new(res, 'B', ft_len(arr[i])));
+	value = ft_strjoin(arr[i], aft);
+	ft_token_insrt(tkn, ft_token_new(value, 'L', ft_len(arr[i])));
 	return (NULL);
 }
 
@@ -141,7 +140,7 @@ void	ft_expand(t_token **token, t_parms *prms)
 		{
 			i = 0;
 			res = tkn->token;
-			if (tkn->type == 'B')
+			if (tkn->type == 'L')
 			{
 				j = tkn->lst_len +1;
 				while (--j)

@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 02:15:05 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/10 08:07:04 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/14 19:22:42 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	main(int ac, char *av[], char *ep[])
 	while (1)
 	{
 		input = ft_line(holder.ext_stts);
-		printf("You entered: %s\n", input);
+		// printf("You entered: %s\n", input);
 		shel = ft_parser(input, &holder); //!PARSIG + error handling + explanding
 		
 		//TODO ft_exec(shel, holder); //! pipes + redirection + built-ins

@@ -6,20 +6,11 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:54:38 by thedon            #+#    #+#             */
-/*   Updated: 2024/05/10 18:57:53 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/14 19:24:02 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
-
-// Check the variable is inside which quotes
-char	*check_quotes(char *prompt)
-{
-	if (*prompt == '\'' || *prompt == '"')
-		return ("STR");
-	else
-		return ("VAR");
-}
 
 void	clean_exit(void)
 {
@@ -30,7 +21,6 @@ void	clean_exit(void)
 	exit(0);
 }
 
-// As the name suggest
 int	is_quote_closed(char *input)
 {
 	char	c;
@@ -55,7 +45,7 @@ int	is_quote_closed(char *input)
 	return (0);
 }
 
-int	special_chars(t_token *tkn)
+int	check_syntax(t_token *tkn, t_parms *prms)
 {
 	if (*tkn->token == '|')
 	{
@@ -65,8 +55,10 @@ int	special_chars(t_token *tkn)
 	while (tkn)
 	{
 		if (!tkn->type
-			|| tkn->next && *tkn->next->token == '|' && (*tkn->token == '>'
+			|| (tkn->next && *tkn->next->token == '|' && (*tkn->token == '>'
 			|| *tkn->token == '<' || *tkn->token == '|'))
+			|| ((tkn->type == '>' || tkn->type == '<') && (!tkn->next || (tkn->next
+			&& (tkn->next->type == '<' || tkn->next->type == '>')))))
 		{
 			printf("lminishell: syntax error near unexpected token\n");
 			return (1);
@@ -75,95 +67,41 @@ int	special_chars(t_token *tkn)
 			break ;
 		tkn = tkn->next;
 	}
-	if (*tkn->token == '|' || *tkn->token == '>' || *tkn->token == '<'
-		|| (tkn->prev && (*tkn->prev->token == '|' || *tkn->prev->token == '>' || *tkn->prev->token == '<')
-		&& (!ft_strcmp(tkn->token, "\"\"")
-			|| !ft_strcmp(tkn->token, "''"))))
-	{
-			printf("lminishell: syntax error near unexpected token\n");
-			return (1);
-	}
 	return (0);
 }
 
-int	check_syntax(t_token *tkn, t_parms *prms)
+// Used just to print result, will be deleted
+void	print_tkn_exp(t_token *tkn, int i)
 {
-	if (special_chars(tkn))
-		return (1);
+	if (i == 0)
+	{
+		printf("\n\t----Tokens result before expanding-----\n");
+		while (tkn)
+		{
+			printf("\ttoken: [%s]\ttype: %c%%\n", tkn->token, tkn->type);
+			tkn = tkn->next;
+		}
+		printf("\n\t---------------------------------------\n\n");
+	}
+	else
+	{
+		printf("\n\t----- Tokens result after expanding -----\n");
+		while (tkn)
+		{
+			printf("\ttoken: [%s]\ttype: %c%%\n", tkn->token, tkn->type);
+			tkn = tkn->next;
+		}
+		printf("\n\t-----------------------------------------\n\n");
+	}
 	
-	
-	return (0);
 }
 
-t_sh	*ft_parser(char *input, t_parms *prms)
+// Used just to print result, will be deleted
+void	print_sh_token(t_sh *res, char *line, char *here, int fd)
 {
-	t_sh	*res;
-	t_token	*tkn;
-	char	**prompt;
-	int		i;
-	char	*value;
-
-	// input = handle_quotes(&prms->histr, input);
-	if (!*input || is_quote_closed(input))
-		return (NULL);
-	input = ft_strtrim(input, " \t");
-	// prompt = my_split(input, ' ');
-	// for(int i = 0; prompt[i]; i++)
-	// 	printf("[%d]: %s\n", i, prompt[i]);
-	tkn = parse_input(NULL, input, NULL, 0);
-	if (check_syntax(tkn, prms))
-		return (NULL);
-	t_token	*temp = tkn;
-	printf("\n\t----Tokens result before expanding-----\n");
-	while (temp)
-	{
-		printf("\ttoken: [%s]\ttype: %c%%\n", temp->token, temp->type);
-		temp = temp->next;
-	}
-	printf("\n\t----------------\n\n");
-	temp = tkn;
-	ft_expand(&tkn, prms);
-	printf("out of expnding\n");
-	here_doc(tkn, prms);
-	rmv_quotes(tkn);
-	printf("\n\t----Tokens result-----\n");
-	while (temp)
-	{
-		printf("\ttoken: [%s]\ttype: %c%%\n", temp->token, temp->type);
-		temp = temp->next;
-	}
-	printf("\n\t----------------\n\n");
-	res = ft_tokenization(tkn);
-	printf("here after?\n");
-	i = -1;
-	// res = NULL;
-	// while (prompt[++i])
-	// {
-		if (!ft_strcmp(input, "exit"))
-			clean_exit();
-		// if (ft_strchr(prompt[i], '$'))
-		// {
-		// 	value = ft_expand(prompt[i], prms);
-		// 	ft_sh_addb(&res, ft_sh_new(&value, check_quotes(prompt[i])));
-		// }
-		// else if (!ft_strcmp(prompt[i], "<") || !ft_strcmp(prompt[i], ">"))
-		// {
-		// 	ft_sh_addb(&res, ft_sh_new(&prompt[i], "REDIR"));
-		// 	// ft_sh_addb(&res, ft_sh_new(&prompt[i], "FILE"));
-		// }
-		// else if (!ft_strcmp(prompt[i], "|"))
-		// {
-		// 	ft_sh_addb(&res, ft_sh_new(&prompt[i], "PIPE"));
-		// }
-		// else
-		// 	printf("[%s] NONE of the above types\n", prompt[i]);
-	// }
+	int	i;
+	
 	printf("\n\t-------- SH Token result --------\n\n");
-	// for (int i = 0; res->value[i]; i++)
-	// 	printf("res: [%s]\n", res->value[i]);
-	char	*here;
-	char	*line;
-	int		fd;
 	while (res)
 	{
 		if (!res->value)
@@ -210,5 +148,29 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 		res = res->next;
 	}
 	printf("\n\t-------------------------------\n\n");
+	
+}
+
+t_sh	*ft_parser(char *input, t_parms *prms)
+{
+	t_sh	*res;
+	t_token	*tkn;
+	int		i;
+
+	if (!*input || is_quote_closed(input))
+		return (NULL);
+	input = ft_strtrim(input, " \t");
+	tkn = parse_input(NULL, input, NULL, 0);
+	if (check_syntax(tkn, prms))
+		return (NULL);
+	print_tkn_exp(tkn, 0);
+	ft_expand(&tkn, prms);
+	here_doc(tkn, prms);
+	rmv_quotes(tkn);
+	print_tkn_exp(tkn, 1);
+	res = ft_tokenization(NULL, tkn, NULL, 0);
+	if (!ft_strcmp(input, "exit"))
+		clean_exit();
+	print_sh_token(res, NULL, NULL, 0);
 	return (res);
 }
