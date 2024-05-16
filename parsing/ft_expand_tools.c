@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 21:07:30 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/14 20:42:55 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/16 21:09:56 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,63 @@ void	skip_sngl_quot(char	*token, int *i)
 	}
 }
 
-char	*get_prev(char *word, int i)
+char	*get_prev(char *word, int i, char c)
 {
-	word = my_strdup(word);
-	word[i] = '\0';
-	return (word);
+	char	*res;
+	int		j;
+
+	if (i >= 0)
+	{
+		word = my_strdup(word);
+		word[i] = '\0';
+	}
+	res = word;
+	j = 0;
+	i = 0;
+	printf("get_prev word:[%s]\n", word);
+	if (c == '"')
+	{
+		while (word[i])
+		{
+			if (word[i] == '"')
+			{
+				i++;
+				while (word[i] && word[i] != '"')
+					res[j++] = word[i++];
+			}
+			while (word[i] && word[i] != '"')
+			{
+				if (word[i] == '\'')
+				{
+					c = word[i++];
+					while (word[i] != c)
+						res[j++] = word[i++];
+					i++;
+				}
+				if (word[i] && word[i] != '\'' && word[i] != '"')
+					res[j++] = word[i++];
+			}
+		}
+	}
+	else
+	{
+		while (word[i])
+		{
+			if (word[i] == '\'' || word[i] == '"')
+			{
+				c = word[i++];
+				while (word[i] != c)
+					res[j++] = word[i++];
+				i++;
+			}
+			if (word[i] && word[i] != '\'' && word[i] != '"')
+				res[j++] = word[i++];
+			
+		}
+	}
+	res[j] = '\0';
+	printf("res after all: [%s]\n", res);
+	return (res);
 }
 
 char	*check_vlid_var(t_parms *prm, char *word, int i)

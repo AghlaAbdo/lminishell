@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:29:54 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/16 15:30:15 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/16 21:08:38 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*split_value(t_token **tkn, char *value, char *bef, char *aft)
 			(*tkn)->lst_len--;
 		}
 	}
-	rmv_char(bef + i);
+	// rmv_char(bef + i);
 	i = 0;
 	(*tkn)->token = ft_pstrjoin(bef, arr[i]);
 	(*tkn)->type = 'V';
@@ -36,6 +36,8 @@ char	*split_value(t_token **tkn, char *value, char *bef, char *aft)
 		ft_token_insrt(tkn, ft_token_new(arr[i], 'V', 0));
 		(*tkn) = (*tkn)->next;
 	}
+	if (!ft_strchr(aft, '$'))
+		aft = get_prev(aft, -1, 0);
 	value = ft_pstrjoin(arr[i], aft);
 	ft_token_insrt(tkn, ft_token_new(value, 'L', ft_len(arr[i])));
 	return (NULL);
@@ -92,7 +94,7 @@ char	*expand_it(t_token **tkn, char *word, t_parms *prm, int i)
 		j++;
 	var = ft_env_srch(var, &prm->env);
 	if (var && prm->c != '"' && (ft_strchr(var, ' ') || ft_strchr(var, '\t')))
-		return (split_value(tkn, var, get_prev(word, i), word + j));
+		return (split_value(tkn, var, get_prev(word, i, 0), word + j));
 	if (var)
 	{
 		prm->len = ft_len(var);
@@ -119,7 +121,7 @@ int	expand_quotes(t_parms *prms, char **token, int *i)
 			res = expand_it(NULL, *token, prms, *i);
 			if (!res)
 				return (1);
-			(*token) = ft_pstrjoin(get_prev((*token), *i), res);
+			(*token) = ft_pstrjoin(get_prev((*token), *i, '"'), res);
 			while (prms->len-- > 1)
 				(*i)++;
 		}
@@ -147,7 +149,7 @@ char	*expand_tkn(t_token *tkn, t_parms *prms, char *token, int i)
 			res = expand_it(&tkn, token, prms, i);
 			if (!res)
 				return (NULL);
-			token = ft_pstrjoin(get_prev(token, i), res);
+			token = ft_pstrjoin(get_prev(token, i, 0), res);
 			while (prms->len-- > 1)
 				i++;
 		}
