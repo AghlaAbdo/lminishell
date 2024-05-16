@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:54:38 by thedon            #+#    #+#             */
-/*   Updated: 2024/05/14 19:24:02 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/16 11:25:54 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	is_quote_closed(char *input)
 	return (0);
 }
 
-int	check_syntax(t_token *tkn, t_parms *prms)
+int	check_syntax(t_token *tkn)
 {
 	if (*tkn->token == '|')
 	{
@@ -98,36 +98,43 @@ void	print_tkn_exp(t_token *tkn, int i)
 
 // Used just to print result, will be deleted
 void	print_sh_token(t_sh *res, char *line, char *here, int fd)
-{
-	int	i;
+{	
+	int		i;
 	
+	(void)line;
+	(void)here;
+	(void)fd;
+	t_rdr	*rdr_head;//!by_sala7
+
+	rdr_head = res->rdr;//!by_sala7 hint kenti kat incremente l head  o kiwsalni NULL 
 	printf("\n\t-------- SH Token result --------\n\n");
 	while (res)
 	{
-		if (!res->value)
-		{
-			while (res->rdr)
-			{
-				if (!ft_strcmp(res->rdr->mode, "<<"))
-				{
-					fd = open(res->rdr->fl_name, O_RDONLY);
-					here = "";
-					line = get_next_line(fd);
-					while (line)
-					{
-						here = ft_strjoin(here, line);
-						free(line);
-						line = get_next_line(fd);
-					}
-					printf("fl_name: [%s]\tmode: [%s]\tcontent: [%s]\n", res->rdr->fl_name, res->rdr->mode, here);
+		if (res->rdr)
+			prnt_rdr(res->rdr);
+		// {
+		// 	while (rdr_head)
+		// 	{
+		// 		if (!ft_strcmp(rdr_head->mode, "<<"))
+		// 		{
+		// 			fd = open(rdr_head->fl_name, O_RDONLY);
+		// 			// here = "";
+		// 			// line = get_next_line(fd);
+		// 			// while (line)
+		// 			// {
+		// 			// 	here = ft_pstrjoin(here, line);
+		// 			// 	free(line);
+		// 			// 	line = get_next_line(fd);
+		// 			// }
+		// 			printf("fl_name: [%s]\tmode: [%s]\tcontent: [in file]\n", rdr_head->fl_name, rdr_head->mode);
 					
-				}
-				else
-					printf("fl_name: [%s]\tmode: [%s]\n", res->rdr->fl_name, res->rdr->mode);
-				res->rdr = res->rdr->next;
-			}
-		}
-		else
+		// 		}
+		// 		else
+		// 			printf("fl_name: [%s]\tmode: [%s]\n", rdr_head->fl_name, rdr_head->mode);
+		// 		rdr_head = rdr_head->next;
+		// 	}
+		// }
+		if (res->value)
 		{
 			if (!ft_strcmp(res->type, "CMD"))
 			{
@@ -155,22 +162,22 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 {
 	t_sh	*res;
 	t_token	*tkn;
-	int		i;
 
 	if (!*input || is_quote_closed(input))
 		return (NULL);
 	input = ft_strtrim(input, " \t");
 	tkn = parse_input(NULL, input, NULL, 0);
-	if (check_syntax(tkn, prms))
+	if (check_syntax(tkn))
 		return (NULL);
-	print_tkn_exp(tkn, 0);
+	// print_tkn_exp(tkn, 0);
 	ft_expand(&tkn, prms);
 	here_doc(tkn, prms);
 	rmv_quotes(tkn);
-	print_tkn_exp(tkn, 1);
+	// print_tkn_exp(tkn, 1);
 	res = ft_tokenization(NULL, tkn, NULL, 0);
 	if (!ft_strcmp(input, "exit"))
 		clean_exit();
+	printf("size is: [%d]\n", ft_sh_sz(&res));
 	print_sh_token(res, NULL, NULL, 0);
 	return (res);
 }

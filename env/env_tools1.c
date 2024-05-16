@@ -6,7 +6,7 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 23:52:07 by srachidi          #+#    #+#             */
-/*   Updated: 2024/04/05 03:38:50 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/04/23 14:57:04 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,10 @@ char	*ft_env_srch(char	*key, t_env	**env)
 	while (head)
 	{
 		if (ft_strcmp(head->key, key) == 0)
-			return (head->value);
+		{
+			if (head->value != NULL)
+				return (head->value);
+		}
 		head = head->next;
 	}
 	return (NULL);

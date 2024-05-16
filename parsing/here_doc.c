@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 19:11:49 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/14 18:24:10 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/14 20:42:27 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@ char	*get_fl_name(t_parms *prm, int *fd)
 {
 	char	*fl_name;
 
-	fl_name = ft_strjoin("/tmp/.hr_fl_", ft_itoa(prm->n_file));
+	fl_name = ft_pstrjoin("/tmp/.hr_fl_", ft_itoa(prm->n_file));
 	while (!access(fl_name, F_OK))
 	{
 		prm->n_file++;
-		fl_name = ft_strjoin("/tmp/.hr_fl_", ft_itoa(prm->n_file));
+		fl_name = ft_pstrjoin("/tmp/.hr_fl_", ft_itoa(prm->n_file));
 	}
 	*fd = open(fl_name, O_CREAT | O_RDWR, 0600);
 	if (fd < 0)
@@ -62,8 +62,6 @@ void	read_heredoc(t_token *tkn, t_parms *prm, char *limit, int quots)
 
 void	here_doc(t_token *tkn, t_parms *prm)
 {
-	int	i;
-
 	while (tkn)
 	{
 		if (tkn->type == '<' && ft_len(tkn->token) > 1)

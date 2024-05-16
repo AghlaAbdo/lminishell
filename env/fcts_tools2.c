@@ -6,7 +6,7 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 23:46:01 by srachidi          #+#    #+#             */
-/*   Updated: 2024/04/05 03:39:39 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/04/06 09:57:37 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ int	ft_strcmp(char *s1, char *s2)
 	int	i;
 
 	i = 0;
+	if (!s1 || !s2)
+		return (-1);
 	while (s1[i] && s2[i])
 	{
 		if (s1[i] != s2[i])

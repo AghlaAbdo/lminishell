@@ -1,34 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   blt_in_env.c                                       :+:      :+:    :+:   */
+/*   leg_tools2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/05 00:28:47 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/10 09:10:08 by srachidi         ###   ########.fr       */
+/*   Created: 2024/04/23 18:37:29 by srachidi          #+#    #+#             */
+/*   Updated: 2024/04/23 18:40:39 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../execution.h"
 
-int	ft_env(t_sh *sh, t_parms *param)
-{
-	t_sh	*head;
-	t_env	*phead;
 
-	head = sh;
-	phead = param->env;
-	if (ft_tlen(head->value) == 1)
+void	ft_exprt_error(t_parms *param, char *s)
+{
+	write(2, "export: `", 9);
+	write(2, s, ft_len(s));
+	write(2, "': not a valid identifier\n", 26);
+	param->ext_stts = 1;
+}
+
+int ft_insrt_strcmp(const char *s1, const char *s2)
+{
+	while (*s1 && *s1 == *s2)
 	{
-		ft_env_prnt(&phead);
-		param->ext_stts = 0;
+		s1++;
+		s2++;
 	}
-	else
-	{
-		param->ext_stts = 127;
-		write(2, "\033[1;31m error : env command should take ", 41);
-		write(2, "no arguments or options !\033[0m\n", 31);
-	}
-	return (param->ext_stts);
+	return *(unsigned char *)s1 - *(unsigned char *)s2;
 }

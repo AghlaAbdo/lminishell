@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 16:32:36 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/14 19:20:26 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/14 20:43:14 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ static char	*expand_here(char *word, t_parms *prm, int i)
 	res = check_vlid_var(prm, word, i);
 	if (res)
 		return (res);
-	while (word[j] && (word[j] == '_' || (word[j] >= 'a' && word[j] <= 'z'))
+	while (word[j] && ((word[j] == '_' || (word[j] >= 'a' && word[j] <= 'z'))
 		|| (word[j] >= 'A' && word[j] <= 'Z')
-		|| (word[j] >= '0' && word[j] <= '9'))
+		|| (word[j] >= '0' && word[j] <= '9')))
 		j++;
 	value = ft_env_srch(var, &prm->env);
 	if (value)
@@ -34,7 +34,7 @@ static char	*expand_here(char *word, t_parms *prm, int i)
 		prm->len = ft_len(value);
 		if (!word[j])
 			return (value);
-		res = ft_strjoin(value, word + j);
+		res = ft_pstrjoin(value, word + j);
 		return (res);
 	}
 	return (word + j);
@@ -43,7 +43,6 @@ static char	*expand_here(char *word, t_parms *prm, int i)
 char	*expand_heredoc(char *token, t_parms *prms)
 {
 	int		i;
-	int		len;
 
 	i = 0;
 	while (token[i])
@@ -51,7 +50,7 @@ char	*expand_heredoc(char *token, t_parms *prms)
 		if (token[i] == '$')
 		{
 			prms->len = 0;
-			token = ft_strjoin(get_prev(token, i), expand_here(token, prms, i));
+			token = ft_pstrjoin(get_prev(token, i), expand_here(token, prms, i));
 			while (prms->len-- > 1)
 				i++;
 		}

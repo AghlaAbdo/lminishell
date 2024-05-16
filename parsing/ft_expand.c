@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:29:54 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/14 19:25:42 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/16 15:30:15 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,50 @@ char	*split_value(t_token **tkn, char *value, char *bef, char *aft)
 	}
 	rmv_char(bef + i);
 	i = 0;
-	(*tkn)->token = ft_strjoin(bef, arr[i]);
+	(*tkn)->token = ft_pstrjoin(bef, arr[i]);
 	(*tkn)->type = 'V';
 	while (arr[++i + 1] && (*tkn))
 	{
 		ft_token_insrt(tkn, ft_token_new(arr[i], 'V', 0));
 		(*tkn) = (*tkn)->next;
 	}
-	value = ft_strjoin(arr[i], aft);
+	value = ft_pstrjoin(arr[i], aft);
 	ft_token_insrt(tkn, ft_token_new(value, 'L', ft_len(arr[i])));
 	return (NULL);
+}
+
+int	check_splt(t_token *tkn)
+{
+	t_token	*prv;
+	t_token	*curr;
+
+	prv = tkn;
+	curr = tkn;
+	while (prv && prv->prev)
+	{
+		printf("prv token: [%s]\tprev: [%s]\n", prv->token, prv->prev->token);
+		if (!prv->prev || prv->prev->type == '|')
+			break;
+		prv = prv->prev;
+	}
+	while (prv && prv != tkn)
+	{
+		printf("next token: [%s]\n", prv->token);
+		if (prv->type == '<' || prv->type == '>')
+			prv = prv->next->next;
+		else
+		{
+		printf("here\n");
+			if (!ft_strcmp(prv->token, "export"))
+			{
+				prv = curr;
+				return (1);
+			}
+			else
+				return (0);
+		}
+	}
+	return (0);
 }
 
 char	*expand_it(t_token **tkn, char *word, t_parms *prm, int i)
@@ -52,9 +86,9 @@ char	*expand_it(t_token **tkn, char *word, t_parms *prm, int i)
 	res = check_vlid_var(prm, word, i);
 	if (res)
 		return (res);
-	while (word[j] && (word[j] == '_' || (word[j] >= 'a' && word[j] <= 'z'))
+	while (word[j] && ((word[j] == '_' || (word[j] >= 'a' && word[j] <= 'z'))
 		|| (word[j] >= 'A' && word[j] <= 'Z')
-		|| (word[j] >= '0' && word[j] <= '9'))
+		|| (word[j] >= '0' && word[j] <= '9')))
 		j++;
 	var = ft_env_srch(var, &prm->env);
 	if (var && prm->c != '"' && (ft_strchr(var, ' ') || ft_strchr(var, '\t')))
@@ -64,7 +98,7 @@ char	*expand_it(t_token **tkn, char *word, t_parms *prm, int i)
 		prm->len = ft_len(var);
 		if (!word[j])
 			return (var);
-		res = ft_strjoin(var, word + j);
+		res = ft_pstrjoin(var, word + j);
 		return (res);
 	}
 	return (word + j);
@@ -85,7 +119,7 @@ int	expand_quotes(t_parms *prms, char **token, int *i)
 			res = expand_it(NULL, *token, prms, *i);
 			if (!res)
 				return (1);
-			(*token) = ft_strjoin(get_prev((*token), *i), res);
+			(*token) = ft_pstrjoin(get_prev((*token), *i), res);
 			while (prms->len-- > 1)
 				(*i)++;
 		}
@@ -113,7 +147,7 @@ char	*expand_tkn(t_token *tkn, t_parms *prms, char *token, int i)
 			res = expand_it(&tkn, token, prms, i);
 			if (!res)
 				return (NULL);
-			token = ft_strjoin(get_prev(token, i), res);
+			token = ft_pstrjoin(get_prev(token, i), res);
 			while (prms->len-- > 1)
 				i++;
 		}

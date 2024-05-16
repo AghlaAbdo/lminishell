@@ -6,11 +6,12 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 23:52:29 by srachidi          #+#    #+#             */
-/*   Updated: 2024/04/05 03:39:31 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/04/24 10:00:43 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../main/minishell.h"
+#include <stdio.h>
 
 void	ft_env_new(t_env **env, char *key, char *value)
 {
@@ -71,5 +72,42 @@ void	ft_env_prnt(t_env **env)
 	{
 		printf("%s=%s\n", head->key, head->value);
 		head = head->next;
+	}
+}
+
+int	ft_only_quotes(char *s)
+{
+	int	i;
+
+	i = -1;
+	if (!s)
+		return (0);
+	while (s[++i])
+	{
+		if (s[i] != '"' && s[i] != '\'')
+			return (0);
+	}
+	return (1);
+}
+
+void	ft_env_prnt_fexprt(t_env **env)
+{
+	t_env	*head;
+
+	if (!*env || !env)
+		return ;
+	head = *env;
+	while (head)
+	{
+		if (head->value == NULL || (ft_len(head->value) == 0 && ft_strcmp(head->key, "OLDPWD") == 0))
+			printf("declare -x %s\n", head->key);
+		else if (head->value != NULL && ft_only_quotes(head->value) && ft_len(head->value) == 2)
+			printf("declare -x %s=%s\n", head->key, head->value);
+		else if (head->value != NULL && ft_len(head->value) == 0)
+			printf("declare -x %s=\"%s\"\n", head->key, head->value);
+		else
+			printf("declare -x %s=\"%s\"\n", head->key, head->value);
+		head = head->next;
+
 	}
 }

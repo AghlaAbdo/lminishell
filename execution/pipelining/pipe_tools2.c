@@ -1,18 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fcts_tools1.c                                      :+:      :+:    :+:   */
+/*   pipe_tools2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/24 02:56:58 by srachidi          #+#    #+#             */
-/*   Updated: 2024/04/06 10:02:28 by srachidi         ###   ########.fr       */
+/*   Created: 2024/05/02 14:48:41 by srachidi          #+#    #+#             */
+/*   Updated: 2024/05/04 09:10:33 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../main/minishell.h"
+#include "../execution.h"
 
-char	*ft_strncpy(char *dst, char *src, size_t len)
+int	ft_sprtor(char c)
+{
+	return (c == ' ' || c == '\t' || c == ':');
+}
+
+char	*ft_pp_strncpy(char *dst, char *src, size_t len)
 {
 	size_t	i;
 
@@ -28,7 +33,7 @@ char	*ft_strncpy(char *dst, char *src, size_t len)
 	return (dst);
 }
 
-int	ft_wrd_cnt(char *s, char sep)
+int	ft_pp_wrd_cnt(char *s)
 {
 	int	i;
 	int	nb_wd;
@@ -37,20 +42,20 @@ int	ft_wrd_cnt(char *s, char sep)
 	nb_wd = 0;
 	while (s[i])
 	{
-		while (s[i] && s[i] == sep)
+		while (s[i] && ft_sprtor(s[i]))
 			i++;
-		if (s[i] && s[i] != sep)
+		if (s[i] && !ft_sprtor(s[i]))
 		{
 			nb_wd++;
 			i++;
 		}
-		while (s[i] && s[i] != sep)
+		while (s[i] && !ft_sprtor(s[i]))
 			i++;
 	}
 	return (nb_wd);
 }
 
-char	*ft_allocopy(char *s, char sep)
+char	*ft_pp_allocopy(char *s)
 {
 	int		i;
 	char	*word;
@@ -58,16 +63,16 @@ char	*ft_allocopy(char *s, char sep)
 	i = 0;
 	if (!s)
 		return (NULL);
-	while (s[i] && s[i] != sep)
+	while (s[i] && !ft_sprtor(s[i]))
 		i++;
 	word = ft_malloc(i + 1, 0);
 	if (!word)
 		return (NULL);
-	word = ft_strncpy(word, s, i);
+	word = ft_pp_strncpy(word, s, i);
 	return (word);
 }
 
-char	**ft_splt(char *str, char sep)
+char	**ft_pp_split(char *str, int flag)
 {
 	int		i;
 	int		j;
@@ -75,23 +80,23 @@ char	**ft_splt(char *str, char sep)
 
 	j = 0;
 	i = 0;
-	if (!str)
-		return (NULL);
-	res = ft_malloc(sizeof(char *) * (ft_wrd_cnt(str, sep) + 1), 0);
+	res = ft_malloc(sizeof(char *) * (ft_pp_wrd_cnt(str) + 1), 0);
 	if (!res)
 		return (NULL);
-	while (str[i] && j < ft_wrd_cnt(str, sep))
+	while (str[i] && j < ft_pp_wrd_cnt(str))
 	{
-		while (str[i] && str[i] == sep)
+		while (str[i] && ft_sprtor(str[i]))
 			i++;
-		if (str[i] && str[i] != sep)
+		if (str[i] && !ft_sprtor(str[i]))
 		{
-			res[j] = ft_allocopy(&str[i], sep);
+			res[j] = ft_pp_allocopy(&str[i]);
 			if (!res[j++])
 				return (NULL);
 		}
-		while (str[i] && str[i] != sep)
+		while (str[i] && !ft_sprtor(str[i]))
 			i++;
 	}
+	if (flag == 1)
+		free(str);
 	return (res[j] = NULL, res);
 }

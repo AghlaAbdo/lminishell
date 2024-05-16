@@ -6,26 +6,30 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 16:22:36 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/14 18:48:46 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/16 11:24:59 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-void	add_in(t_sh **sh, t_token *tkn)
+t_rdr	*add_in(t_sh **sh, t_token *tkn)
 {
 	t_rdr	*rdr;
+	int		count;
 
+	(void)sh;
+	count = 0;
 	rdr = NULL;
 	while (tkn && tkn->type != '|')
 	{
 		if (tkn->type == '<' || tkn->type == '>')
 		{
 			ft_rdr_addb(&rdr, ft_rdr_new(tkn->next->token, tkn->token));
+			count++;
 		}
 		tkn = tkn->next;
 	}
-	ft_sh_addb(sh, ft_sh_new(rdr, NULL, "REDIR"));
+	return (rdr);
 }
 
 int	count_cmd(t_token *tkn)
@@ -46,9 +50,11 @@ int	count_cmd(t_token *tkn)
 
 t_sh	*ft_tokenization(t_sh *sh, t_token *tkn, char **cmd, int i)
 {
+	t_rdr *rdr;
+	
 	while (tkn)
 	{
-		add_in(&sh, tkn);
+		rdr = add_in(&sh, tkn);
 		cmd = (char **)ft_malloc((count_cmd(tkn) + 1) * sizeof(char *), 0);
 		i = 0;
 		while (tkn && tkn->type != '|')
@@ -60,8 +66,13 @@ t_sh	*ft_tokenization(t_sh *sh, t_token *tkn, char **cmd, int i)
 				cmd[i++] = tkn->token;
 			tkn = tkn->next;
 			cmd[i] = NULL;
-			if (cmd[0] && (!tkn || tkn->type == '|'))
-				ft_sh_addb(&sh, ft_sh_new(NULL, cmd, "CMD"));
+			if ((!tkn || tkn->type == '|'))
+			{
+				if (!cmd[0])
+					ft_sh_addb(&sh, ft_sh_new(rdr, NULL, "CMD"));
+				else
+					ft_sh_addb(&sh, ft_sh_new(rdr, cmd, "CMD"));
+			}
 		}
 		if (tkn && tkn->type == '|')
 			ft_sh_addb(&sh, ft_sh_new(NULL, &tkn->token, "PIPE"));

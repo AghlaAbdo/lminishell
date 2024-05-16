@@ -6,13 +6,13 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 01:22:02 by thedon            #+#    #+#             */
-/*   Updated: 2024/05/14 18:49:10 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/14 20:22:53 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-char	*ft_strjoin(char *s1, char const *s2)
+char	*ft_pstrjoin(char *s1, char const *s2)
 {
 	char	*str;
 	int		i;

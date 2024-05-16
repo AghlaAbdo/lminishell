@@ -6,11 +6,11 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 21:32:49 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/09 20:05:40 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/14 20:09:52 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../main/minishell.h"
 
 int	ft_sh_sz(t_sh **sh)
 {
@@ -38,6 +38,8 @@ t_sh	*ft_sh_new(t_rdr *rdr, char **value, char *type)//!y9adro yezado members so
 		return (NULL);
 	new_node->value = value;
 	new_node->type = type;
+	new_node->in_fd = -1;
+	new_node->out_fd = -1;
 	new_node->rdr = rdr;
 	new_node->next = NULL;
 	return (new_node);
@@ -71,7 +73,7 @@ void	ft_sh_rmv(t_sh **sh, char *value)
 	prev = NULL;
 	if (*sh == NULL)
 		return ;
-	while (current != NULL && ft_strcmp(*current->value, value) != 0)
+	while (current != NULL && ft_strcmp(current->value[0], value) != 0)
 	{
 		prev = current;
 		current = current->next;

@@ -1,14 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ../minishell.h                                        :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/24 02:16:22 by srachidi          #+#    #+#             */
-/*   Updated: 2024/04/05 00:49:16 by srachidi         ###   ########.fr       */
+/*   Created: 2024/05/14 19:53:21 by aaghla            #+#    #+#             */
+/*   Updated: 2024/05/15 10:29:06 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -17,6 +18,7 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdlib.h>
+#include <limits.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -25,15 +27,17 @@ typedef struct	s_rdr
 	char			*fl_name;
 	char			*mode;
 	struct s_rdr	*next;
-}					t_rdr;
+}	t_rdr;
 
 //? MAIN struct
 typedef struct s_sh
 {
-	char		**value;
-	char		*type;
-	t_rdr		*rdr;
-	struct s_sh	*next;
+	char			**value;
+	char			*type;
+	int				in_fd;
+	int				out_fd;
+	struct s_rdr	*rdr;
+	struct s_sh		*next;
 }	t_sh;
 
 //? struct that holds the env variables
@@ -44,21 +48,20 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
-//?	For readline history
-typedef struct	s_histr
-{
-	char			*line;
-	struct s_histr	*next;
-}				t_histr;
-
 //? params holder struct
 typedef struct s_parms
 {
 	int		ext_stts;
 	char	**envp;
 	t_env	*env;
-	t_histr	*histr;
 
+	t_env	*exprt_env;
+	char	*pwd;
+	char	*oldpwd;
+	int		ppc_idx;
+	int		(*pp_chain)[2];
+	int		child_stts[2];
+	
 	size_t	n_file;
 	char	*word;
 	char	c;
@@ -96,12 +99,19 @@ char	**ft_env_to_dp(t_env **env); // ? link_list to a *envp[] (for execve)
 void	ft_env_updt(t_env **env, char *key, char *new_vl); //? update a env var
 t_env	*ft_env_dup(t_env	**env); //? duplicate the initial link_list
 t_env	*ft_env_sort(t_env	**env); //?sort the link_list
-
+void	ft_env_prnt_fexprt(t_env **env);
+void	ft_env_insrt(t_env **head, char *key, char *value);
+int		ft_env_exists(t_env	**env, char *key);
 
 // SH TOOLS
 int 	ft_sh_sz(t_sh **sh);
 t_sh	*ft_sh_new(t_rdr *rdr, char **value, char *type);
 void	ft_sh_addb(t_sh **sh, t_sh *new_sh);
 void	ft_sh_rmv(t_sh **sh, char *value);
+
+// Rdr tools
+t_rdr	*ft_rdr_new(char *name, char *mode);
+void	ft_rdr_addb(t_rdr **rdr, t_rdr *n_node);
+void	prnt_rdr(t_rdr *head);//!exists in pipelining file
 
 #endif

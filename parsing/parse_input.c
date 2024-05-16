@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 06:44:23 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/14 18:30:13 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/14 20:42:03 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	check_word(char *word)
 	return (0);
 }
 
-void	get_rest_word(char *input, int *i, int *j)
+void	get_rest_word(char *input, int *i)
 {
 	char	c;
 
@@ -66,7 +66,7 @@ void	get_word(t_token **token, char *input, int *i, int *j)
 				(*i)++;
 			while (input[++(*i)] && input[*i] != c)
 				;
-			get_rest_word(input, i, j);
+			get_rest_word(input, i);
 			ft_token_addb(token,
 				ft_token_new(get_token(input + *j, *i - *j), 'w', 0));
 			*j = *i;
