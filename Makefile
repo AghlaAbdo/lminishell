@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+         #
+#    By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/08 09:21:55 by srachidi          #+#    #+#              #
-#    Updated: 2024/05/15 08:28:50 by srachidi         ###   ########.fr        #
+#    Updated: 2024/05/17 20:18:52 by aaghla           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,7 @@ SRC := 	main/main.c \
 		parsing/ft_expand_tools.c			\
 		parsing/ft_itoa.c					\
 		parsing/ft_expand_heredoc.c			\
+		parsing/t_var_tools.c			\
 		execution/executor.c \
 		execution/built_ins/blt_in_env.c \
 		execution/built_ins/blt_in_pwd.c \

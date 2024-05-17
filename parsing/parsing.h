@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:40:41 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/16 21:03:25 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/17 11:33:24 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,15 @@ typedef struct s_token
 	struct s_token	*prev;
 }				t_token;
 
+// for var quote removal
+typedef struct s_var
+{
+	char			*wrd;
+	char			type;
+	struct	s_var	*next;
+	struct	s_var	*prev;
+}	t_var;
+
 t_sh	*ft_parser(char *input, t_parms *prms);
 char	**my_split(char const *s, char c);
 char	*ft_pstrjoin(char *s1, char const *s2);
@@ -46,6 +55,10 @@ t_token	*parse_input(t_token *token, char *input, char *word, int i);
 t_token	*ft_token_new(char *word, char type, int len);
 void	ft_token_addb(t_token **head, t_token *new);
 void	ft_token_insrt(t_token **head, t_token *new);
+
+//	t_var tools
+t_var	*ft_var_new(char *wrd, char type);
+void	ft_var_addb(t_var **head, t_var *new);
 
 //	Expanding
 void	ft_expand(t_token **token, t_parms *prm);

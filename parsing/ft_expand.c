@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:29:54 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/16 21:08:38 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/17 20:08:13 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,8 @@ void	ft_expand(t_token **token, t_parms *prms)
 	while (tkn)
 	{
 		if ((!tkn->prev || ft_strcmp(tkn->prev->token, "<<"))
-			&& ft_strchr(tkn->token, '$'))
+			&& ft_strchr(tkn->token, '$') && !ft_strchr(tkn->token, '"')
+			&& !ft_strchr(tkn->token, '\''))
 		{
 			i = 0;
 			res = tkn->token;
@@ -189,3 +190,47 @@ void	ft_expand(t_token **token, t_parms *prms)
 		tkn = tkn->next;
 	}
 }
+
+// void	add_str(t_var **var, char *token, int i)
+// {
+// 	int	j;
+
+// 	j = 0;
+// 	while (token[i] && token[i] != '$')
+// 		i++;
+		
+// }
+
+// char	*expand_tkn(t_token **tkn, t_parms *prm, char *token, int i)
+// {
+// 	t_var	*var;
+
+// 	var = NULL;
+// 	while (token[i])
+// 	{
+// 		while (token[i] && token[i] != '$')
+// 		{
+// 			i++
+// 		}
+// 	}
+// }
+
+// void	ft_expand(t_token **token, t_parms *prm)
+// {
+// 	t_token	*tkn;
+// 	char	*res;
+
+// 	tkn = *token;
+// 	while (tkn)
+// 	{
+// 		if ((!tkn->prev || ft_strcmp(tkn->prev->token, "<<"))
+// 			&& ft_strchr(tkn->token, '$'))
+// 		{
+// 			res = tkn->token;
+// 			res = expand_tkn(tkn, prm, res, 0);
+// 			if (res)
+// 				tkn->token = res;
+// 		}
+// 		tkn = tkn->next;
+// 	}
+// }

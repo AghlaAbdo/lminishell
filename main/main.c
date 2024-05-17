@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 02:15:05 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/15 15:12:14 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/17 20:09:05 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	main(int ac, char *av[], char *ep[])
 		sh = ft_parser(input, &holder);
 		//TODO shel = ft_parser(input, holder); //!PARSIG + error handling + explanding
 		// sh = ft_exec_parser(input);
-		// ft_exec(sh, &holder);
+		ft_exec(sh, &holder);
 		printf("\033[35m-------> Exit status : %d <-------\033[1;31m\n", holder.ext_stts);
 		free(input);
 	}
