@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 02:15:05 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/17 20:09:05 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/18 19:09:39 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*ft_line(int ext_stts, t_parms *param)
 
 	
 	if (!ext_stts)
-		line = readline("\033[1;32m{🐚 \e[1;37mstatus:\e[0m ✅\033[1;32m}>==$ \033[0m");
+		line = readline("lminishell-0.1 ");
 	else
 		line = readline("\033[1;31m{🐚 \e[1;37mstatus:\e[0m 🚫\033[1;31m}>==$ \033[0m");
 	if (!line)
@@ -77,8 +77,8 @@ int	main(int ac, char *av[], char *ep[])
 		sh = ft_parser(input, &holder);
 		//TODO shel = ft_parser(input, holder); //!PARSIG + error handling + explanding
 		// sh = ft_exec_parser(input);
-		ft_exec(sh, &holder);
-		printf("\033[35m-------> Exit status : %d <-------\033[1;31m\n", holder.ext_stts);
+		// ft_exec(sh, &holder);
+		// printf("\033[35m-------> Exit status : %d <-------\033[1;31m\n", holder.ext_stts);
 		free(input);
 	}
 	//!============================================================================================

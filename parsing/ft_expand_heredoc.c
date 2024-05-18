@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 16:32:36 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/17 11:34:17 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/18 18:25:43 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char	*expand_heredoc(char *token, t_parms *prms)
 		if (token[i] == '$')
 		{
 			prms->len = 0;
-			token = ft_pstrjoin(get_prev(token, i, 0), expand_here(token, prms, i));
+			token = ft_pstrjoin(get_prev(token, i), expand_here(token, prms, i));
 			while (prms->len-- > 1)
 				i++;
 		}

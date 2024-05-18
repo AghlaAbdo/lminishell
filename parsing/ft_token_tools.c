@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 06:33:02 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/14 18:19:15 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/18 19:43:38 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,11 @@ void	ft_token_insrt(t_token **head, t_token *new)
 		new->next = NULL;
 		return ;
 	}
+	new->next = (*head)->next;
+	new->prev = *head;
+	if ((*head) && (*head)->next)
+		(*head)->prev = new;
 	next = (*head)->next;
 	(*head)->next = new;
-	new->next = next;
+// 	new->prev = *head;
 }

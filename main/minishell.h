@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 19:53:21 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/17 10:37:50 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/18 18:02:22 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ typedef struct s_parms
 	int		(*pp_chain)[2];
 	int		child_stts[2];
 	
+	void	*var;
+	void	*tkn;
 	size_t	n_file;
 	char	*word;
 	char	c;

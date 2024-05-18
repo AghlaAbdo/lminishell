@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:40:41 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/17 11:33:24 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/18 19:27:56 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,13 @@ void	ft_token_insrt(t_token **head, t_token *new);
 //	t_var tools
 t_var	*ft_var_new(char *wrd, char type);
 void	ft_var_addb(t_var **head, t_var *new);
+void	ft_var_insrt(t_var **head, t_var *new);
 
 //	Expanding
 void	ft_expand(t_token **token, t_parms *prm);
-char	*expand_it(t_token **tkn, char *word, t_parms *prm, int i);
-char	*expand_tkn(t_token *tkn, t_parms *prms, char *token, int i);
-char	*get_prev(char *word, int i, char c);
+// char	*expand_it(char *word, t_parms *prm, int i, char c);
+// char	*expand_tkn(t_parms *prm, char *token, int i, char c);
+char	*get_prev(char *word, int i);
 char	*ft_trim(char *word, int j);
 char	*get_n_var(t_parms *prm, char *word, char *var, int i);
 void	skip_sngl_quot(char	*token, int *i);

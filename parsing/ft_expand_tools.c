@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 21:07:30 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/17 20:08:18 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/18 11:33:26 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@ char	*ft_trim(char *word, int j)
 	int		i;
 	int		count;
 
+	// while (word[j] && word[j] != '$')
+	// 	j++;
+	// if (!word[j])
+	// 	return (NULL);
 	i = j;
 	count = 0;
 	while (word[i] && ((word[i] == '_' || (word[i] >= 'a' && word[i] <= 'z'))
@@ -32,11 +36,7 @@ char	*ft_trim(char *word, int j)
 	while (word[j] && ((word[j] == '_' || (word[j] >= 'a' && word[j] <= 'z'))
 		|| (word[j] >= 'A' && word[j] <= 'Z')
 		|| (word[j] >= '0' && word[j] <= '9')))
-	{
-		res[i] = word[j];
-		i++;
-		j++;
-	}
+		res[i++] = word[j++];
 	res[i] = '\0';
 	return (res);
 }
@@ -69,17 +69,16 @@ void	skip_sngl_quot(char	*token, int *i)
 	}
 }
 
-char	*get_prev(char *word, int i, char c)
+char	*get_prev(char *word, int i)
 {
-	t_var	*var;
+	char	tmp;
+	char	*res;
 
-	var = NULL;
-	(void)c;
-	word = my_strdup(word);
+	tmp = word[i];
 	word[i] = '\0';
-	if (!word[i])
-		ft_var_addb(&var, ft_var_new(word, 'S'));
-	return (word);
+	res = my_strdup(word);
+	word[i] = tmp;
+	return (res);
 }
 
 char	*check_vlid_var(t_parms *prm, char *word, int i)
