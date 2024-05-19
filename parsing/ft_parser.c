@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:54:38 by thedon            #+#    #+#             */
-/*   Updated: 2024/05/17 20:13:00 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/19 19:14:21 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,7 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 	if (check_syntax(tkn))
 		return (NULL);
 	// print_tkn_exp(tkn, 0);
-	ft_expand(&tkn, prms);
+	ft_expand(tkn, prms);
 	here_doc(tkn, prms);
 	rmv_quotes(tkn);
 	// print_tkn_exp(tkn, 1);

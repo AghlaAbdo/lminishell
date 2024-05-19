@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:29:54 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/18 20:22:30 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/19 20:22:11 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,24 +248,22 @@ char *splt_var(t_parms *prm, t_var **var_tt, char *var, char *bef, char *aft)
 	(void)prm;
 	(void)aft;
 	(void)var_tt;
-	printf("wassap!!\n");
 	var_t = (t_var *)prm->var;
 	arr = my_split(var, ' ');
 	i = 0;
 	var_t->wrd = ft_pstrjoin(bef, arr[i]);
-	printf("var_t value join: [%s]\n", var_t->wrd);
 	var_t->type = 'N';
 	tmp = var_t;
-		printf("\t\tvalue: [%s]\n", var_t->wrd);
+	prm->v_len = 0;
 	while (arr[++i +1] )
 	{
+		prm->v_len++;
 		ft_var_insrt(&var_t, ft_var_new(arr[i], 'N'));
 		var_t = var_t->next;
-		printf("\t\tvalue: [%s]\n", var_t->wrd);
 	}
+	prm->l_len = ft_len(arr[i]);
 	aft = ft_pstrjoin(arr[i], aft);
-	ft_var_insrt(&var_t, ft_var_new(aft, 'N'));
-	printf("tmp value: [%s]\n", tmp->wrd);
+	ft_var_insrt(&var_t, ft_var_new(aft, 'L'));
 	return (NULL);
 }
 
@@ -284,7 +282,7 @@ char *expand_it(t_var **var_t, char *word, t_parms *prm, int i, char c)
 	while (word[j] && ((word[j] == '_' || (word[j] >= 'a' && word[j] <= 'z')) || (word[j] >= 'A' && word[j] <= 'Z') || (word[j] >= '0' && word[j] <= '9')))
 		j++;
 	var = ft_env_srch(var, &prm->env);
-	if (var && c == 'V' && !check_splt(prm->tkn) && (ft_strchr(var, ' ') || ft_strchr(var, '\t')))
+	if (var && (c == 'V'  || c == 'N' || c == 'L') && (ft_strchr(var, ' ') || ft_strchr(var, '\t')))
 		return (splt_var(prm, var_t, var, get_prev(word, i), word + j));
 	if (var)
 	{
@@ -297,7 +295,7 @@ char *expand_it(t_var **var_t, char *word, t_parms *prm, int i, char c)
 	return (word + j);
 }
 
-char *expand_tkn(t_var **var_t, t_parms *prm, char *token, int i, char c)
+char *expand_quot(t_var **var_t, t_parms *prm, char *token, int i, char c)
 {
 	// char	*var;
 	char *res;
@@ -305,10 +303,17 @@ char *expand_tkn(t_var **var_t, t_parms *prm, char *token, int i, char c)
 
 	res = "";
 	j = 0;
+	if ((*var_t)->type == 'L')
+		while (prm->l_len-- > 0)
+		{
+			printf("tkn skipped: [%c]\n", token[i++]);
+		}
+			// i++;
 	while (token[i])
 	{
 		if (token[i] == '$')
 		{
+			prm->len = 0;
 			res = expand_it(var_t, token, prm, i, c);
 			if (!res)
 				return (NULL);
@@ -339,7 +344,81 @@ int	ft_var_sz(t_var **var)
 	}
 	return (i);
 }
+int	ft_token_sz(t_token **var)
+{
+	int		i;
+	t_token	*head;
+
+	if (!var)
+		return (-1);
+	head = *var;
+	i = 0;
+	while (head)
+	{
+		head = head->next;
+		i++;
+	}
+	return (i);
+}
 //!---------------------------
+
+void	join_vars(t_token **tkn, t_var **var, t_parms *prm, int *flag)
+{
+	char	*res;
+	int		count;
+
+	count = 0;
+	res = "";
+	while ((*var) && (*var)->type != 'N')
+	{
+		res = ft_pstrjoin(res, (*var)->wrd);
+		count++;
+		*var = (*var)->next;
+	}
+	if (*var && (*var)->type == 'N')
+	{
+		res = ft_pstrjoin(res, (*var)->wrd);
+		count++;
+		*var = (*var)->next;
+	}
+	if (count && *flag)
+	{
+		ft_token_addb(tkn, ft_token_new(res, 'V', 0));
+		prm->t_len++;
+	}
+	else
+	{
+		(*tkn)->token = res;
+		prm->t_len++;
+		*flag = 1;
+	}
+}
+
+void	add_vars(t_parms *prm, t_var *var)
+{
+	char	*res;
+	t_token	*tkn;
+	int		flag;
+
+	flag = 0;
+	res = "";
+	tkn = (t_token *)prm->tkn;
+	prm->t_len = 0;
+	printf("token size bef: [%d]\n", ft_token_sz(&tkn));
+	// ft_token_rmv(&tkn);
+	while (var)
+	{
+		join_vars(&tkn, &var, prm, &flag);
+		while (var && var->type == 'N')
+		{
+			ft_token_addb(&tkn, ft_token_new(var->wrd, 'V', 0));
+			prm->t_len++;
+			var = var->next;
+			flag = 1;
+		}
+	}
+	printf("token size aft: [%d]\n", ft_token_sz(&tkn));
+}
 
 char *split_tkn(t_token *tkn, t_parms *prm, char *token, int i)
 {
@@ -354,7 +433,6 @@ char *split_tkn(t_token *tkn, t_parms *prm, char *token, int i)
 	{
 		add_word(&var, token, &i);
 		add_quote(&var, token, &i, token[i]);
-		// add_var(&var, token, &i);
 	}
 	tmp = var;
 	while (tmp)
@@ -367,14 +445,21 @@ char *split_tkn(t_token *tkn, t_parms *prm, char *token, int i)
 	while (var)
 	{
 		prm->var = (t_var *)var;
-		if (var->type == 'V' || var->type == 'D')
+		if (var->type == 'V' || var->type == 'D' || var->type == 'N' || var->type == 'L')
 		{
-			res = expand_tkn(&var, prm, var->wrd, 0, var->type);
+			res = expand_quot(&var, prm, var->wrd, 0, var->type);
 			if (res)
 				var->wrd = res;
+			printf("prm->len: %d\n", prm->len);
+			while(prm->v_len-- > 0)
+			{
+				printf("skipped: [%s]\n", var->wrd);
+				var = var->next;
+			}
 		}
 		var = var->next;
 	}
+	add_vars(prm, tmp);
 	printf("\n--------------- After expanding ---------------\n");
 	// exit(0);
 	printf("tmp size: %d\n", ft_var_sz(&tmp));
@@ -383,16 +468,17 @@ char *split_tkn(t_token *tkn, t_parms *prm, char *token, int i)
 		printf("tmp: [%s]\t\ttype: [%c]\n", tmp->wrd, tmp->type);
 		tmp = tmp->next;
 	}
+	printf("-----------------------------------------------\n");
 	// exit(0);
 	return (NULL);
 }
 
-void ft_expand(t_token **token, t_parms *prm)
+void ft_expand(t_token *token, t_parms *prm)
 {
 	t_token *tkn;
 	char *res;
 
-	tkn = *token;
+	tkn = token;
 	while (tkn)
 	{
 		prm->tkn = (t_token *)tkn;
@@ -402,7 +488,13 @@ void ft_expand(t_token **token, t_parms *prm)
 			res = split_tkn(tkn, prm, res, 0);
 			if (res)
 				tkn->token = res;
+			while (prm->t_len-- > 0)
+			{
+				// printf("ft_expand skipped: [%s]\n", tkn->token);
+				tkn = tkn->next;
+			}
 		}
+		if (tkn)
 		tkn = tkn->next;
 	}
 }

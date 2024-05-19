@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:08:34 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/18 19:34:36 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/19 14:35:52 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,9 @@ void	ft_var_insrt(t_var **head, t_var *new)
 		new->next = NULL;
 		return ;
 	}
-	// printf("head: [%s]\n", (*head)->wrd);
-	// if ((*head)->next)
-	// 	printf("head next: [%s]\n", (*head)->next->wrd);
-	// printf("new: [%s]\n", new->wrd);
 	next = (*head)->next;
+	if (next)
+		next->prev = new;
 	(*head)->next = new;
 	new->next = next;
 	new->prev = *head;

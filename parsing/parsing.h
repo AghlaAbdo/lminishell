@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:40:41 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/18 19:27:56 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/19 19:13:36 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ t_token	*parse_input(t_token *token, char *input, char *word, int i);
 t_token	*ft_token_new(char *word, char type, int len);
 void	ft_token_addb(t_token **head, t_token *new);
 void	ft_token_insrt(t_token **head, t_token *new);
+void	ft_token_rmv(t_token **head);
 
 //	t_var tools
 t_var	*ft_var_new(char *wrd, char type);
@@ -62,7 +63,7 @@ void	ft_var_addb(t_var **head, t_var *new);
 void	ft_var_insrt(t_var **head, t_var *new);
 
 //	Expanding
-void	ft_expand(t_token **token, t_parms *prm);
+void	ft_expand(t_token *token, t_parms *prm);
 // char	*expand_it(char *word, t_parms *prm, int i, char c);
 // char	*expand_tkn(t_parms *prm, char *token, int i, char c);
 char	*get_prev(char *word, int i);

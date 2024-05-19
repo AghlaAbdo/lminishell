@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 19:53:21 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/18 18:02:22 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/19 18:05:29 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,9 @@ typedef struct s_parms
 	char	*word;
 	char	c;
 	int		len;
+	int		l_len;
+	int		v_len;
+	int		t_len;
 	int		i_qrm;
 }	t_parms;
 
