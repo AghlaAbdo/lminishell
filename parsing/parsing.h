@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:40:41 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/19 19:13:36 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/20 19:07:18 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ typedef struct s_token
 {
 	char			*token;
 	char			type;
-	int				lst_len;
-	int				skp;
+	// int				lst_len;
+	// int				skp;
 	struct s_token	*next;
 	struct s_token	*prev;
 }				t_token;
@@ -64,13 +64,15 @@ void	ft_var_insrt(t_var **head, t_var *new);
 
 //	Expanding
 void	ft_expand(t_token *token, t_parms *prm);
-// char	*expand_it(char *word, t_parms *prm, int i, char c);
-// char	*expand_tkn(t_parms *prm, char *token, int i, char c);
+char	*expand_var(t_var **var_t, t_parms *prm, char *token, char *res);
+char	*expand_it(char *wd, t_parms *prm, int i);
+void	join_vars(t_token **tkn, t_var **var, t_parms *prm, int *flag);
 char	*get_prev(char *word, int i);
 char	*ft_trim(char *word, int j);
 char	*get_n_var(t_parms *prm, char *word, char *var, int i);
-void	skip_sngl_quot(char	*token, int *i);
-char	*check_vlid_var(t_parms *prm, char *word, int i);
+char	*splt_var(t_parms *prm, char *var, char *bef, char *aft);
+int		check_splt(t_token *tkn);
+char	*check_vlid_var(t_parms *prm, char *wd, int i, int *j);
 char	*expand_heredoc(char *token, t_parms *prms);
 
 //	Handle_quotes

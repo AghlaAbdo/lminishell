@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 16:22:36 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/16 11:24:59 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/20 16:25:02 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,20 @@ t_rdr	*add_in(t_sh **sh, t_token *tkn)
 {
 	t_rdr	*rdr;
 	int		count;
+	int		flag;
 
 	(void)sh;
 	count = 0;
 	rdr = NULL;
 	while (tkn && tkn->type != '|')
 	{
+		flag = 0;
+		printf("token: [%s]\ttype: [%c]\n", tkn->token, tkn->type);
 		if (tkn->type == '<' || tkn->type == '>')
 		{
-			ft_rdr_addb(&rdr, ft_rdr_new(tkn->next->token, tkn->token));
+			if (tkn->next->type == 'N' || !*(tkn->next->token))
+				flag = 1;
+			ft_rdr_addb(&rdr, ft_rdr_new(tkn->next->token, tkn->token, flag));
 			count++;
 		}
 		tkn = tkn->next;
@@ -50,8 +55,8 @@ int	count_cmd(t_token *tkn)
 
 t_sh	*ft_tokenization(t_sh *sh, t_token *tkn, char **cmd, int i)
 {
-	t_rdr *rdr;
-	
+	t_rdr	*rdr;
+
 	while (tkn)
 	{
 		rdr = add_in(&sh, tkn);

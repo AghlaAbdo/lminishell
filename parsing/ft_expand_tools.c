@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 21:07:30 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/18 11:33:26 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/20 20:16:39 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,13 @@ char	*ft_trim(char *word, int j)
 	int		i;
 	int		count;
 
-	// while (word[j] && word[j] != '$')
-	// 	j++;
-	// if (!word[j])
-	// 	return (NULL);
 	i = j;
 	count = 0;
+	if (word[i] == '?')
+		return ("$?");
 	while (word[i] && ((word[i] == '_' || (word[i] >= 'a' && word[i] <= 'z'))
-		|| (word[i] >= 'A' && word[i] <= 'Z')
-		|| (word[i] >= '0' && word[i] <= '9')))
+			|| (word[i] >= 'A' && word[i] <= 'Z')
+			|| (word[i] >= '0' && word[i] <= '9')))
 	{
 		i++;
 		count++;
@@ -34,8 +32,8 @@ char	*ft_trim(char *word, int j)
 	res = ft_malloc((count +1) * sizeof(char), 0);
 	i = 0;
 	while (word[j] && ((word[j] == '_' || (word[j] >= 'a' && word[j] <= 'z'))
-		|| (word[j] >= 'A' && word[j] <= 'Z')
-		|| (word[j] >= '0' && word[j] <= '9')))
+			|| (word[j] >= 'A' && word[j] <= 'Z')
+			|| (word[j] >= '0' && word[j] <= '9')))
 		res[i++] = word[j++];
 	res[i] = '\0';
 	return (res);
@@ -58,17 +56,6 @@ char	*get_n_var(t_parms *prm, char *word, char *var, int i)
 	return (word + i + 2);
 }
 
-void	skip_sngl_quot(char	*token, int *i)
-{
-	if (token[*i] == '\'')
-	{
-		(*i)++;
-		while (token[*i] && token[*i] != '\'')
-			(*i)++;
-		(*i)++;
-	}
-}
-
 char	*get_prev(char *word, int i)
 {
 	char	tmp;
@@ -81,20 +68,73 @@ char	*get_prev(char *word, int i)
 	return (res);
 }
 
-char	*check_vlid_var(t_parms *prm, char *word, int i)
+int	dollar_var(char *wd, int *i)
+{
+	int	j;
+
+	j = 0;
+	while (wd[j] && wd[j] == '$')
+	{
+		j++;
+		(*i)++;
+	}
+	if (!wd[j])
+		return (1);
+	(*i)--;
+	return (0);
+}
+
+char	*check_vlid_var(t_parms *prm, char *wd, int i, int *j)
 {
 	char	*var;
 
-	var = ft_trim(word, i +1);
-	if (word[i +1] >= '0' && word[i +1] <= '9')
-		return (get_n_var(prm, word, var, i));
-	if (word[i +1] != '_' && !((word[i +1] >= 'a' && word[i +1] <= 'z')
-			|| (word[i +1] >= 'A' && word[i +1] <= 'Z')))
+	if (dollar_var(wd + i, &i))
+		return ("");
+	var = ft_trim(wd, i +1);
+	while (wd[*j] && ((wd[*j] == '_' || (wd[*j] >= 'a' && wd[*j] <= 'z'))
+			|| (wd[*j] >= 'A' && wd[*j] <= 'Z')
+			|| (wd[*j] >= '0' && wd[*j] <= '9')))
+		(*j)++;
+	if (!ft_strcmp(var, "$?"))
 	{
 		prm->len = 2;
-		return (word + i);
+		return (ft_pstrjoin(ft_itoa(prm->ext_stts), wd + i + 2));
 	}
-	if (!*var || *(word + i + 1) == '"')
-		return (word + i +1);
+	if (wd[i +1] >= '0' && wd[i +1] <= '9')
+		return (get_n_var(prm, wd, var, i));
+	if (wd[i +1] != '_' && !((wd[i +1] >= 'a' && wd[i +1] <= 'z')
+			|| (wd[i +1] >= 'A' && wd[i +1] <= 'Z')))
+	{
+		prm->len = 2;
+		return (wd + i);
+	}
+	if (!*var || *(wd + i + 1) == '"')
+		return (wd + i +1);
 	return (NULL);
+}
+
+int	check_splt(t_token *tkn)
+{
+	t_token	*prv;
+
+	prv = tkn;
+	while (prv && prv->prev)
+	{
+		if (!prv->prev || prv->prev->type == '|')
+			break ;
+		prv = prv->prev;
+	}
+	while (prv && prv != tkn)
+	{
+		if (prv->type == '<' || prv->type == '>')
+			prv = prv->next->next;
+		else
+		{
+			if (!ft_strcmp(prv->token, "export"))
+				return (1);
+			else
+				return (0);
+		}
+	}
+	return (0);
 }

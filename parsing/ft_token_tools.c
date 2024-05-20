@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 06:33:02 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/19 18:19:39 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/20 14:35:23 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,13 @@ t_token	*ft_token_new(char *word, char type, int len)
 {
 	t_token	*new;
 
+	(void)len;
 	new = ft_malloc(sizeof(t_token), 0);
 	if (!new)
 		return (NULL);
 	new->token = word;
 	new->type = type;
-	new->lst_len = len;
+	// new->lst_len = len;
 	new->next = NULL;
 	new->prev = NULL;
 	return (new);

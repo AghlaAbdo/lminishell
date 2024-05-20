@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 02:15:05 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/18 19:09:39 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/20 20:21:21 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,17 @@
 //!=========================
 void prnt_rdr(t_rdr *head)
 {
-	printf("+-------------------+---------+\n");
-	printf("|   File Name	   |  Mode   |\n");
-	printf("+-------------------+---------+\n");
+	printf("+------------------+---------+---------+\n");
+	printf("|   File Name	   |  Mode   |  Flag   |\n");
+	printf("+------------------+---------+---------+\n");
 	t_rdr *current = head;
 
 	while (current != NULL)
 	{
-		printf("| %-17s| %-8s|\n", current->fl_name, current->mode);
+		printf("| [%s]\t\t| %-8s| %-8d|\n", current->fl_name, current->mode, current->flag);
 		current = current->next;
 	}
-	printf("+-------------------+---------+\n");
+	printf("+------------------+---------+---------+\n");
 }
 //!=========================
 

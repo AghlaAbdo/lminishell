@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 16:32:36 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/18 18:25:43 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/20 19:12:38 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,9 @@ static char	*expand_here(char *word, t_parms *prm, int i)
 
 	j = i +1;
 	var = ft_trim(word, j);
-	res = check_vlid_var(prm, word, i);
+	res = check_vlid_var(prm, word, i, &j);
 	if (res)
 		return (res);
-	while (word[j] && ((word[j] == '_' || (word[j] >= 'a' && word[j] <= 'z'))
-		|| (word[j] >= 'A' && word[j] <= 'Z')
-		|| (word[j] >= '0' && word[j] <= '9')))
-		j++;
 	value = ft_env_srch(var, &prm->env);
 	if (value)
 	{
@@ -50,7 +46,8 @@ char	*expand_heredoc(char *token, t_parms *prms)
 		if (token[i] == '$')
 		{
 			prms->len = 0;
-			token = ft_pstrjoin(get_prev(token, i), expand_here(token, prms, i));
+			token = ft_pstrjoin(get_prev(token, i),
+					expand_here(token, prms, i));
 			while (prms->len-- > 1)
 				i++;
 		}

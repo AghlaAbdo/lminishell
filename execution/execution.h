@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 23:01:41 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/15 09:30:37 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/20 16:04:50 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,4 @@ void	ft_norm_dup2_in(t_sh *curr_sh, t_parms *param);
 t_sh	*ft_exec_parser(char *line);
 void	p2d(char **var);
 int		ft_pp_chain_len(t_sh *sh);
-t_rdr	*ft_rdr_new(char *fl_name, char *mode);
-void	ft_rdr_addb(t_rdr **sh, t_rdr *new_sh);
 #endif

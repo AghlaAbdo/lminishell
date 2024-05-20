@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 19:53:21 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/19 18:05:29 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/20 16:00:19 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 
 typedef struct	s_rdr
 {
+	int				flag;
 	char			*fl_name;
 	char			*mode;
 	struct s_rdr	*next;
@@ -116,7 +117,7 @@ void	ft_sh_addb(t_sh **sh, t_sh *new_sh);
 void	ft_sh_rmv(t_sh **sh, char *value);
 
 // Rdr tools
-t_rdr	*ft_rdr_new(char *name, char *mode);
+t_rdr	*ft_rdr_new(char *fl_name, char *mode, int flag);
 void	ft_rdr_addb(t_rdr **rdr, t_rdr *n_node);
 void	prnt_rdr(t_rdr *head);//!exists in pipelining file
 

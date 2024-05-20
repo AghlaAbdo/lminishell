@@ -6,7 +6,7 @@
 #    By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/08 09:21:55 by srachidi          #+#    #+#              #
-#    Updated: 2024/05/17 20:18:52 by aaghla           ###   ########.fr        #
+#    Updated: 2024/05/20 13:23:01 by aaghla           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,18 +22,18 @@ READLINE_I = $(shell brew --prefix readline)/include
 # ---------------------
 O_DR = objs/
 
-SRC := 	main/main.c \
-		main/ft_parstester.c \
-		main/grbg_cllctor.c \
-		env/env_tools1.c \
-		env/env_tools2.c \
-		env/env_tools3.c \
-		env/env_tools4.c \
-		env/fcts_tools1.c \
-		env/fcts_tools2.c \
-		env/fcts_tools3.c \
-		env/rdr_tools/rdr_tools1.c \
-		env/sh_tools/sh_tools1.c \
+SRC := 	main/main.c							\
+		main/ft_parstester.c				\
+		main/grbg_cllctor.c					\
+		env/env_tools1.c					\
+		env/env_tools2.c					\
+		env/env_tools3.c					\
+		env/env_tools4.c					\
+		env/fcts_tools1.c					\
+		env/fcts_tools2.c					\
+		env/fcts_tools3.c					\
+		env/rdr_tools/rdr_tools1.c			\
+		env/sh_tools/sh_tools1.c			\
 		parsing/ft_parser.c					\
 		parsing/my_split.c					\
 		parsing/tools.c						\
@@ -46,28 +46,28 @@ SRC := 	main/main.c \
 		parsing/tokenization.c				\
 		parsing/ft_rdr_tools.c				\
 		parsing/ft_expand_tools.c			\
+		parsing/ft_expand_tools2.c			\
 		parsing/ft_itoa.c					\
 		parsing/ft_expand_heredoc.c			\
-		parsing/t_var_tools.c			\
-		execution/executor.c \
-		execution/built_ins/blt_in_env.c \
-		execution/built_ins/blt_in_pwd.c \
-		execution/built_ins/blt_in_echo.c \
-		execution/built_ins/blt_in_cd.c \
-		execution/built_ins/blt_in_exit.c \
-		execution/legacy_tools/leg_tools1.c \
-		execution/legacy_tools/leg_tools2.c \
-		execution/built_ins/blt_in_export.c \
-		execution/built_ins/blt_in_unset.c \
-		execution/pipelining/other_cmd.c \
-		execution/pipelining/pipe_tools1.c \
-		execution/pipelining/pipe_tools2.c \
-		execution/pipelining/pipe_tools3.c \
-		execution/pipelining/pipeliner.c \
-		execution/pipelining/pipe_tools4.c \
-		execution/pipelining/pipe_tools5.c \
-		execution/pipelining/pipe_tools6.c \
-		# parsing/test.c #!te9der tzid file dyalk haka !!!!
+		parsing/t_var_tools.c				\
+		execution/executor.c				\
+		execution/built_ins/blt_in_env.c	\
+		execution/built_ins/blt_in_pwd.c	\
+		execution/built_ins/blt_in_echo.c	\
+		execution/built_ins/blt_in_cd.c		\
+		execution/built_ins/blt_in_exit.c 	\
+		execution/legacy_tools/leg_tools1.c	\
+		execution/legacy_tools/leg_tools2.c	\
+		execution/built_ins/blt_in_export.c	\
+		execution/built_ins/blt_in_unset.c	\
+		execution/pipelining/other_cmd.c	\
+		execution/pipelining/pipe_tools1.c	\
+		execution/pipelining/pipe_tools2.c	\
+		execution/pipelining/pipe_tools3.c	\
+		execution/pipelining/pipeliner.c	\
+		execution/pipelining/pipe_tools4.c	\
+		execution/pipelining/pipe_tools5.c	\
+		execution/pipelining/pipe_tools6.c	\
 
 CLR_RMV		:= \033[0m
 RED			:= \033[1;31m
