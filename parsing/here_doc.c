@@ -6,11 +6,37 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 19:11:49 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/14 20:42:27 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/21 19:00:21 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
+
+void	rmv_char(char *token)
+{
+	char	*res;
+	char	c;
+
+	res = token;
+	while (*token)
+	{
+		if (*token == '\'' || *token == '"')
+		{
+			c = *token;
+			token++;
+			while (*token != c)
+				*res++ = *token++;
+			token++;
+		}
+		if (*token && *token != '\'' && *token != '"')
+		{
+			*res = *token;
+			res++;
+			token++;
+		}
+	}
+	*res = '\0';
+}
 
 char	*get_fl_name(t_parms *prm, int *fd)
 {

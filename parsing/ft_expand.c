@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:29:54 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/21 12:50:44 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/21 19:14:02 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ static void	add_quote(t_var **var, char *token, int *i, char c)
 		(*i)++;
 	tmp_c = token[*i];
 	token[*i] = '\0';
-	// printf("\n\tto be added: [%s]\n\n", token + j +1);
 	if (token[0] != '\'' && ft_strchr(token + j +1, '$'))
 		ft_var_addb(var, ft_var_new(my_strdup(token + j +1), 'D'));
 	else if (token[0])
@@ -128,10 +127,7 @@ void	ft_expand(t_token *token, t_parms *prm)
 			res = tkn->token;
 			split_tkn(prm, NULL, res, 0);
 			while (prm->t_len-- > 1)
-			{
-				printf("ft_expand skipped: [%s]\n", tkn->token);
 				tkn = tkn->next;
-			}
 		}
 		if (tkn)
 			tkn = tkn->next;

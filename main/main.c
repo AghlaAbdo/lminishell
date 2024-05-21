@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 02:15:05 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/20 20:21:21 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/21 18:56:26 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	ft_parms_init(t_parms *holder, int ac, char *av[], char *ep[])
 	holder->envp = ep;
 	holder->env = ft_env_crt(ep);
 	holder->exprt_env = ft_env_dup(&holder->env);
+	holder->n_file = 0;
 	ft_env_rmv(&holder->exprt_env, "OLDPWD");
 	ft_env_new(&holder->exprt_env, "OLDPWD", "");
 	holder->exprt_env = ft_env_sort(&holder->exprt_env);

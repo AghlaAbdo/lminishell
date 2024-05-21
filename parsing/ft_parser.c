@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:54:38 by thedon            #+#    #+#             */
-/*   Updated: 2024/05/21 12:53:55 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/21 19:16:43 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	clean_exit(void)
 {
 	ft_malloc(0, 1);
 	printf("\n\t-------------------------------------------------\n");
-	system("leaks minishell");
+	// system("leaks minishell");
 	// sleep(3);
 	exit(0);
 }
@@ -180,6 +180,6 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 	if (!ft_strcmp(input, "exit"))
 		clean_exit();
 	// printf("size is: [%d]\n", ft_sh_sz(&res));
-	print_sh_token(res, NULL, NULL, 0);
+	// print_sh_token(res, NULL, NULL, 0);
 	return (res);
 }

@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:40:41 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/20 19:07:18 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/21 19:15:16 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ char	*check_vlid_var(t_parms *prm, char *wd, int i, int *j);
 char	*expand_heredoc(char *token, t_parms *prms);
 
 //	Handle_quotes
-void	rmv_quotes(t_token *tkn);
 void	rmv_char(char *token);
 
 // Here_doc
