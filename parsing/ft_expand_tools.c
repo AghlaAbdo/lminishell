@@ -6,38 +6,11 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 21:07:30 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/20 20:16:39 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/21 12:50:56 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
-
-char	*ft_trim(char *word, int j)
-{
-	char	*res;
-	int		i;
-	int		count;
-
-	i = j;
-	count = 0;
-	if (word[i] == '?')
-		return ("$?");
-	while (word[i] && ((word[i] == '_' || (word[i] >= 'a' && word[i] <= 'z'))
-			|| (word[i] >= 'A' && word[i] <= 'Z')
-			|| (word[i] >= '0' && word[i] <= '9')))
-	{
-		i++;
-		count++;
-	}
-	res = ft_malloc((count +1) * sizeof(char), 0);
-	i = 0;
-	while (word[j] && ((word[j] == '_' || (word[j] >= 'a' && word[j] <= 'z'))
-			|| (word[j] >= 'A' && word[j] <= 'Z')
-			|| (word[j] >= '0' && word[j] <= '9')))
-		res[i++] = word[j++];
-	res[i] = '\0';
-	return (res);
-}
 
 char	*get_n_var(t_parms *prm, char *word, char *var, int i)
 {

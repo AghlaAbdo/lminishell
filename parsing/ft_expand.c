@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:29:54 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/20 20:13:24 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/21 12:50:44 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static void	add_quote(t_var **var, char *token, int *i, char c)
 		(*i)++;
 	tmp_c = token[*i];
 	token[*i] = '\0';
-	printf("\n\tto be added: [%s]\n\n", token + j +1);
+	// printf("\n\tto be added: [%s]\n\n", token + j +1);
 	if (token[0] != '\'' && ft_strchr(token + j +1, '$'))
 		ft_var_addb(var, ft_var_new(my_strdup(token + j +1), 'D'));
 	else if (token[0])
@@ -88,13 +88,13 @@ static void	split_tkn(t_parms *prm, t_var *var, char *token, int i)
 		add_quote(&var, token, &i, token[i]);
 	}
 	tmp = var;
-	printf("\n--------------- After Split ---------------\n");
-	while (tmp)
-	{
-		printf("tmp value: [%s]\ttype: [%c]\n", tmp->wrd, tmp->type);
-		tmp = tmp->next;
-	}
-	printf("\n-------------------------------------------\n");
+	// printf("\n--------------- After Split ---------------\n");
+	// while (tmp)
+	// {
+	// 	printf("tmp value: [%s]\ttype: [%c]\n", tmp->wrd, tmp->type);
+	// 	tmp = tmp->next;
+	// }
+	// printf("\n-------------------------------------------\n");
 	tmp = var;
 	while (var)
 	{

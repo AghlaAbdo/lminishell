@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 13:06:27 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/20 20:03:11 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/21 12:51:25 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,35 @@ char	*splt_var(t_parms *prm, char *var, char *bef, char *aft)
 	return (NULL);
 }
 
-char	*check_n_file(t_parms *prm, char *value, char *wd, int i, int j)
+// char	*check_vars(t_parms *prm, char *wd, int i, int j)
+// {
+// 	t_token	*tkn;
+// 	char	*value;
+// 	char	*var;
+
+// 	i = 0;
+// 	while (wd[i])
+// 	{
+// 		if (wd[i] == '$')
+// 	}
+// }
+
+char	*check_n_file(t_parms *prm, char *wd, int i, int j)
 {
 	t_token	*tkn;
+	t_var	*var_t;
+	char	*value;
 	char	*var;
 
-	var = my_strdup(wd +i);
+	value = ft_env_srch(ft_trim(wd, i +1), &prm->env);
+	var = my_strdup(wd + i);
 	i = 0;
 	while (var[i] && var[i] != ' ' && var[i] != 9)
 		i++;
 	var[i] = '\0';
 	tkn = (t_token *)prm->tkn;
-	if (ft_strchr(value, ' ') || ft_strchr(value, 9))
+	var_t = (t_var *)prm->var;
+	if (var_t->type!= 'D' && (ft_strchr(value, ' ') || ft_strchr(value, 9)))
 	{
 		prm->len = ft_len(var);
 		tkn->type = 'N';
@@ -55,11 +72,11 @@ char	*check_n_file(t_parms *prm, char *value, char *wd, int i, int j)
 	}
 	else if (value)
 	{
-		prm->len = ft_len(var);
+		prm->len = ft_len(value);
 		return (ft_pstrjoin(value, wd + j));
 	}
 	else
-		return (wd+j);
+		return (wd + j);
 }
 
 char	*expand_it(char *wd, t_parms *prm, int i)
@@ -75,13 +92,9 @@ char	*expand_it(char *wd, t_parms *prm, int i)
 	res = check_vlid_var(prm, wd, i, &j);
 	if (res)
 		return (res);
-	// while (wd[j] && ((wd[j] == '_' || (wd[j] >= 'a' && wd[j] <= 'z'))
-	// 		|| (wd[j] >= 'A' && wd[j] <= 'Z')
-	// 		|| (wd[j] >= '0' && wd[j] <= '9')))
-	// 	j++;
 	var = ft_env_srch(var, &prm->env);
 	if (tkn->prev && (tkn->prev->type == '>' || tkn->prev->type == '<'))
-		return (check_n_file(prm, var, wd, i, j));
+		return (check_n_file(prm, wd, i, j));
 	if (var && (prm->c == 'V' || prm->c == 'N' || prm->c == 'L')
 		&& (ft_strchr(var, ' ') || ft_strchr(var, '\t'))
 		&& !check_splt(prm->tkn))
@@ -113,7 +126,7 @@ char	*expand_var(t_var **var_t, t_parms *prm, char *token, char *res)
 			token = ft_pstrjoin(get_prev(token, i), res);
 			while (prm->len-- > 1)
 			{
-				printf("\tskipped: [%c]\n", token[i]);
+				// printf("\tskipped: [%c]\n", token[i]);
 				i++;
 			}
 		}
