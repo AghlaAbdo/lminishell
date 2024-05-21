@@ -70,7 +70,7 @@ char	**ft_get_locations(char *path, char *cmd)
 	return (pthnms);
 }
 
-char	*ft_path_parser(char **envp, char *cmd)
+char	*ft_path_parser(char **envp, char *cmd, t_parms *param)
 {
 	char	*path;
 	char	**bin_dirs;
@@ -79,7 +79,10 @@ char	*ft_path_parser(char **envp, char *cmd)
 	i = -1;
 	if (ft_is_there_slash(cmd))
 		return (cmd);
-	path = ft_get_path(envp);
+	if (!(*envp))
+		path = ft_env_srch("PATH", &param->env);
+	else
+		path = ft_get_path(envp);
 	bin_dirs = ft_get_locations(path, cmd);
 	while (bin_dirs[++i])
 	{
@@ -87,5 +90,5 @@ char	*ft_path_parser(char **envp, char *cmd)
 			return (bin_dirs[i]);
 	}
 	return (NULL);
-}
 
+}

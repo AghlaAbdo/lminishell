@@ -6,7 +6,7 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 23:52:07 by srachidi          #+#    #+#             */
-/*   Updated: 2024/04/23 14:57:04 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/16 18:04:21 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,18 @@ void	ft_env_addb(t_env **lst, t_env *newn)
 	newn->next = NULL;
 }
 
-t_env	*ft_env_lstnew(void *key, void *value)
+t_env	*ft_env_lstnew(void *key, void *value, int vsbl)
 {
 	t_env	*new_node;
 
+	if (!key)
+		return (0);
 	new_node = ft_malloc(sizeof(t_env), 0);
 	if (!new_node)
 		return (NULL);
 	new_node->key = key;
 	new_node->value = value;
+	new_node->visible = vsbl;
 	new_node->next = NULL;
 	return (new_node);
 }
@@ -50,6 +53,8 @@ char	*ft_env_eqls(char *res[])
 	char	*out;
 	char	*tmp;
 
+	if (!res || !(*res))
+		return (0);
 	i = 0;
 	out = NULL;
 	while (res[++i])
@@ -63,13 +68,31 @@ char	*ft_env_eqls(char *res[])
 	return (out);
 }
 
-t_env	*ft_env_crt(char *ep[])
+t_env	*ft_env_crt(char *ep[], int flg)
 {
 	int		i;
 	int		j;
+	t_env	*head = NULL;
 	char	**res;
-	t_env	*head;
 
+	if (!(*ep))
+	{
+		if (!flg)
+		{
+			ft_env_addb(&head, ft_env_lstnew("PWD", getcwd(NULL, MAXPATHLEN), 1));
+			ft_env_addb(&head, ft_env_lstnew("SHLVL", "1", 1));
+			ft_env_addb(&head, ft_env_lstnew("_", "/usr/bin/env", 1));
+			ft_env_addb(&head, ft_env_lstnew("PATH", "/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.", 0));
+		}
+		else
+		{
+			ft_env_addb(&head, ft_env_lstnew("OLDPWD", NULL, 1));
+			ft_env_addb(&head, ft_env_lstnew("PWD", getcwd(NULL, MAXPATHLEN), 1));
+			ft_env_addb(&head, ft_env_lstnew("PATH", "/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.", 0));
+			ft_env_addb(&head, ft_env_lstnew("SHLVL", "1", 1));
+		}
+		return (head);
+	}
 	i = -1;
 	j = 2;
 	head = NULL;
@@ -77,10 +100,10 @@ t_env	*ft_env_crt(char *ep[])
 	{
 		res = ft_splt(ep[i], '=');
 		if (ft_tlen(res) == 2)
-			ft_env_addb(&head, ft_env_lstnew(res[0], res[1]));
+			ft_env_addb(&head, ft_env_lstnew(res[0], res[1], 1));
 		else if (ft_tlen(res) > 2)
 		{
-			ft_env_addb(&head, ft_env_lstnew(res[0], ft_env_eqls(res)));
+			ft_env_addb(&head, ft_env_lstnew(res[0], ft_env_eqls(res), 1));
 		}
 	}
 	return (head);
@@ -90,6 +113,8 @@ char	*ft_env_srch(char	*key, t_env	**env)
 {
 	t_env	*head;
 
+	if (!env || !(*env))
+		return (0);
 	head = *env;
 	while (head)
 	{

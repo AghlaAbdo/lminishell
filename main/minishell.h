@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 19:53:21 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/20 16:00:19 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/21 19:39:51 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include <limits.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+#include <sys/param.h>
 
 typedef struct	s_rdr
 {
@@ -46,6 +47,7 @@ typedef struct s_env
 {
 	char			*key;
 	char			*value;
+	int				visible;
 	struct s_env	*next;
 }	t_env;
 
@@ -62,7 +64,7 @@ typedef struct s_parms
 	int		ppc_idx;
 	int		(*pp_chain)[2];
 	int		child_stts[2];
-	
+
 	void	*var;
 	void	*tkn;
 	size_t	n_file;
@@ -93,10 +95,10 @@ char	*ft_sdup(char *s1);
 
 
 //! env var class methods
-t_env	*ft_env_crt(char *ep[]); //? create a linked list based on the *envp[]
+t_env	*ft_env_crt(char *ep[], int flg); //? create a linked list based on the *envp[]
 void	ft_env_addb(t_env **lst, t_env *newn);
 int		ft_env_sz(t_env	**env);
-t_env	*ft_env_lstnew(void *key, void *value);
+t_env	*ft_env_lstnew(void *key, void *value, int vsbl);
 char	*ft_env_srch(char	*key, t_env	**env); //?search for a specifec value
 void	ft_env_prnt(t_env **env); //? print out the link_list
 void	ft_env_new(t_env **env, char *key, char *value); //? add new env var
@@ -119,6 +121,6 @@ void	ft_sh_rmv(t_sh **sh, char *value);
 // Rdr tools
 t_rdr	*ft_rdr_new(char *fl_name, char *mode, int flag);
 void	ft_rdr_addb(t_rdr **rdr, t_rdr *n_node);
-void	prnt_rdr(t_rdr *head);//!exists in pipelining file
-
+void	prnt_rdr(t_rdr *head);//!exists in main file
+void	prnt_sh(t_sh *head);
 #endif

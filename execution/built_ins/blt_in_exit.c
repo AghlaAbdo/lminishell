@@ -6,7 +6,7 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 17:51:20 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/10 09:11:43 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/16 18:23:39 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int ft_only_digits(char *s)
 {
 	int	i;
 
+	if (!s)
+		return (-1);
 	i = 0;
 	if (s[i] == '+' || s[i] == '-')
 		i++;
@@ -33,6 +35,8 @@ int	ft_exit(char **cmd, t_parms *param)
 {
 	long long	ex_sts;
 
+	if (!cmd || !(*cmd))
+		return (0);
 	param->ext_stts = 1;
 	ex_sts = 0;
 	printf("exit\n");

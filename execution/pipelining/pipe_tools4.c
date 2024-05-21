@@ -38,8 +38,16 @@ void	ft_norm_ext_stts(t_parms * param)
 	read(param->child_stts[0], &ex_stts, sizeof(ex_stts));
 	if (ex_stts == 127)
 		param->ext_stts = 127;
+	else if (ex_stts == 256)
+		param->ext_stts = 1;
 	else
-		param->ext_stts = ex_stts;
+	{
+		if (param->ext_stts == 256)
+			param->ext_stts = 1;
+		else
+			param->ext_stts = ex_stts;
+	}
+	
 	close(param->child_stts[0]);
 	
 }

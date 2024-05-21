@@ -6,12 +6,11 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 00:29:16 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/13 10:01:55 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/17 07:46:52 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../execution.h"
-#include <stdio.h>
 
 static int	ft_is_option(char	*cmd)
 {
@@ -35,12 +34,14 @@ static void	ft_norm_pwd(t_parms *param, char *str, int es, int flag)
 int	ft_pwd(t_sh *sh, t_parms *param)
 {
 	char	*path;
-	size_t	size;
+	char	*svpath;
 
-	(void)param;
 	path = NULL;
-	size = 0;
-	path = getcwd(NULL, size);
+	svpath = ft_sdup(param->pwd);
+	// path = getcwd(NULL, MAXPATHLEN);
+	path = ft_gt_pth(NULL, 0);
+	if (!path)
+		path = svpath;
 	if (!sh || !param)
 		return (1);
 	if (path != NULL)

@@ -6,7 +6,7 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 00:18:50 by srachidi          #+#    #+#             */
-/*   Updated: 2024/04/05 03:39:32 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/16 18:07:10 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	**ft_env_to_dp(t_env **env)
 	t_env	*head;
 	int		i;
 
+	if (!env || !(*env))
+		return (0);
 	i = 0;
 	if (!env || !*env)
 		return (NULL);
@@ -37,7 +39,7 @@ void	ft_env_updt(t_env **env, char *key, char *nw_vl)
 	t_env	*head;
 	char	*new;
 
-	if (!env || !*env)
+	if (!env || !(*env))
 		return ;
 	head = *env;
 	new = ft_sdup(nw_vl);
@@ -52,15 +54,23 @@ void	ft_env_updt(t_env **env, char *key, char *nw_vl)
 	}
 }
 
-t_env	*ft_env_dup(t_env	**env)
-{
-	t_env	*head;
-	t_env	*res;
+// t_env	*ft_env_dup(t_env	**env)
+// {
+// 	t_env	*head;
+// 	t_env	*res;
 
-	head = *env;
-	res = ft_env_crt(ft_env_to_dp(env));
-	return (res);
-}
+// 	if (!env || !(*env))
+// 		return (0);
+// 	head = *env;
+// 	res = ft_env_crt(ft_env_to_dp(env));
+// 	// if (!res)
+// 	// {
+// 	// 	ft_env_addb(&res, ft_env_lstnew("OLDPWD", NULL));
+// 	// 	ft_env_addb(&res, ft_env_lstnew("aSDFGHNJ", getcwd(NULL, MAXPATHLEN)));
+// 	// 	ft_env_addb(&res, ft_env_lstnew("SHLVL", "1"));
+// 	// }
+// 	return (res);
+// }
 
 void	ft_swap(t_env *n1, t_env *n2)
 {
@@ -81,6 +91,8 @@ t_env	*ft_env_sort(t_env **env)
 	t_env	*c_node;
 	t_env	*n_node;
 
+	if (!env || !(*env))
+		return (0);
 	head = *env;
 	c_node = head;
 	while (c_node)

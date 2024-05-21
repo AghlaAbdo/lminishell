@@ -6,7 +6,7 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 23:46:01 by srachidi          #+#    #+#             */
-/*   Updated: 2024/04/06 09:57:37 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/16 18:08:05 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ char	*ft_strdup(char *s1)
 	return (tp);
 }
 
-//! ftm (added m means that the function is modified from the original !!)
 char	*ftm_sjoin(char *s1, char *s2)
 {
 	char	*j_s;

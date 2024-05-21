@@ -6,11 +6,12 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 09:59:20 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/10 09:12:17 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/17 19:58:44 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../execution.h"
+#include <stdio.h>
 
 static int ft_isthere_equal(char *s)
 {
@@ -58,7 +59,6 @@ void	ft_key_value_export(char *s, t_parms *param, int eq_indx)
 
 void	ft_equal_exists(char *s, t_parms *param, int eq_indx)
 {
-
 	if (ft_valid_identifier(ft_substr(s, 0, eq_indx)))
 	{
 		if (eq_indx == ft_len(s) - 1

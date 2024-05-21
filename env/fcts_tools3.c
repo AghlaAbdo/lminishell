@@ -6,7 +6,7 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 02:43:14 by srachidi          #+#    #+#             */
-/*   Updated: 2024/04/05 03:39:39 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/16 18:08:41 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*ft_sdup(char *s1)
 	size_t	lenx;
 	size_t	i;
 
+	if (!s1)
+		return (0);
 	i = 0;
 	lenx = ft_len(s1);
 	tp = (char *) ft_malloc(lenx + 1, 0);
