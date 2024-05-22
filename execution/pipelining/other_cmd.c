@@ -64,18 +64,22 @@ void	ft_norm_other_cmd(t_sh *sh, t_parms *param, int err)
 	{
 		write(2, sh->value[0], ft_len(sh->value[0]));
 		write(2, ": command not found\n", 21);
+		printf("here\n");
 		param->ext_stts = 127;
+		exit(param->ext_stts);
 	}
 	else if (err == EACCES)
 	{
 		write(2, sh->value[0], ft_len(sh->value[0]));
 		write(2, ": permission denied\n", 21);
 		param->ext_stts = 126;
+		exit(param->ext_stts);
 	}
 	else
 	{
 		perror("execve");
 		param->ext_stts = 1;
+		exit(param->ext_stts);
 	}
 }
 

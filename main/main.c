@@ -107,17 +107,10 @@ int	main(int ac, char *av[], char *ep[])
 	{
 		input = ft_line(holder.ext_stts, &holder);
 		sh = ft_parser(input, &holder);
-		//TODO shel = ft_parser(input, holder); //!PARSIG + error handling + explanding
 		ft_exec(sh, &holder);
-		// sh = ft_exec_parser(input);
-		printf("-------> Exit status : %d <-------\n", holder.ext_stts);
 		free(input);
 	}
-	//!============================================================================================
-
-	//!============================================================================================
-	rl_clear_history(); //!ignore this error mark
-	// atexit(z);
+	rl_clear_history();
 	ft_malloc(0, 1);
 	return (0);
 }

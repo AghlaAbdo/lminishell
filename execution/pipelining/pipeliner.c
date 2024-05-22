@@ -16,6 +16,7 @@
 static void	ft_fst_pp_executer(t_sh *sh, t_parms *param, t_sh *curr_sh)
 {
 	char	*bin_file;
+	(void)sh;
 	fprintf(stderr, "---------------------FIRST CMD : %s ---------------------\n", curr_sh->value[0]);
 	bin_file = ft_path_parser(param->envp, curr_sh->value[0], param);
 	if (!bin_file && ft_is_builtin(curr_sh->value[0]) != 1)
@@ -29,7 +30,7 @@ static void	ft_fst_pp_executer(t_sh *sh, t_parms *param, t_sh *curr_sh)
 	ft_norm_close(param->pp_chain, param->ppc_idx);
 	ft_norm_dclose(curr_sh->in_fd,curr_sh->out_fd);
 	if (ft_is_builtin(curr_sh->value[0]))
-		exit(ft_router(sh, param));
+		exit(ft_router(curr_sh, param));
 	if (execve(bin_file, curr_sh->value, ft_env_to_dp(&param->env)) == -1)
 		ft_perror("execve");
 }
@@ -37,6 +38,7 @@ static void	ft_fst_pp_executer(t_sh *sh, t_parms *param, t_sh *curr_sh)
 static void	ft_lst_pp_executer(t_sh *sh, t_parms *param, t_sh *curr_sh)
 {
 	char	*bin_file;
+	(void)sh;
 	fprintf(stderr, "---------------------LAST CMD : %s ---------------------\n", curr_sh->value[0]);
 	bin_file = ft_path_parser(param->envp, curr_sh->value[0], param);
 	if (!bin_file)
@@ -50,7 +52,7 @@ static void	ft_lst_pp_executer(t_sh *sh, t_parms *param, t_sh *curr_sh)
 	ft_norm_close(param->pp_chain, param->ppc_idx - 1);
 	ft_norm_dclose(curr_sh->in_fd,curr_sh->out_fd);
 	if (ft_is_builtin(curr_sh->value[0]))
-		exit(ft_router(sh, param));
+			exit(ft_router(curr_sh, param));
 	if (execve(bin_file, curr_sh->value, ft_env_to_dp(&param->env)) == -1)
 		ft_perror("execve");
 }
@@ -58,6 +60,7 @@ static void	ft_lst_pp_executer(t_sh *sh, t_parms *param, t_sh *curr_sh)
 static void	ft_mid_pp_executer(t_sh *sh, t_parms *param, t_sh *curr_sh)
 {
 	char	*bin_file;
+	(void)sh;
 	fprintf(stderr, "---------------------MIDDLE CMD : %s ---------------------\n", curr_sh->value[0]);
 	bin_file = ft_path_parser(param->envp, curr_sh->value[0], param);
 	if (!bin_file)
@@ -66,7 +69,7 @@ static void	ft_mid_pp_executer(t_sh *sh, t_parms *param, t_sh *curr_sh)
 	ft_norm_dup2_out(curr_sh, param);
 	ft_norm_sclose(param->pp_chain, param->ppc_idx);
 	if (ft_is_builtin(curr_sh->value[0]))
-		exit(ft_router(sh, param));
+		exit(ft_router(curr_sh, param));
 	if (execve(bin_file, curr_sh->value, ft_env_to_dp(&param->env)) == -1)
 		ft_perror("execve");
 }

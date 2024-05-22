@@ -12,8 +12,8 @@
 
 NAME = minishell
 CC = cc
-FLAGS = -g -fsanitize=address -Wall -Werror -Wextra
-# FLAGS = -Wall -Werror -Wextra
+# FLAGS = -g -fsanitize=address -Wall -Werror -Wextra
+FLAGS = -Wall -Werror -Wextra
 RM = rm -rf
 LIB = -lreadline
 # ---------------------

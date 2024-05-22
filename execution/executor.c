@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "execution.h"
+#include <stdio.h>
 
 static int	ft_handle_built_redirs(t_sh *sh, t_parms *param)
 {

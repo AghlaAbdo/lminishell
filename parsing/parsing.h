@@ -46,7 +46,7 @@ char	*ft_strtrim(char const *s1, char const *set);
 char	*my_strdup(const char *s1);
 char	*ft_itoa(int n);
 
-void	clean_exit(void);
+// void	clean_exit(void);
 
 //	Parsing input
 t_token	*parse_input(t_token *token, char *input, char *word, int i);
