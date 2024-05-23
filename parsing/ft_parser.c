@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:54:38 by thedon            #+#    #+#             */
-/*   Updated: 2024/05/21 19:16:43 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/23 21:52:48 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 // 	exit(0);
 // }
 
-int	is_quote_closed(char *input)
+int	is_quote_closed(t_parms *prm, char *input)
 {
 	char	c;
 	int	i;
@@ -37,6 +37,7 @@ int	is_quote_closed(char *input)
 			if (input[i] != c)
 			{
 				printf("syntax error: unclosed quotes\n");
+				prm->ext_stts = 1;
 				return (1);
 			}
 		}
@@ -45,10 +46,11 @@ int	is_quote_closed(char *input)
 	return (0);
 }
 
-int	check_syntax(t_token *tkn)
+int	check_syntax(t_parms *prm, t_token *tkn)
 {
 	if (*tkn->token == '|')
 	{
+		prm->ext_stts = 258;
 		printf("lminishell: syntax error near unexpected token\n");
 		return (1);
 	}
@@ -60,6 +62,7 @@ int	check_syntax(t_token *tkn)
 			|| ((tkn->type == '>' || tkn->type == '<') && (!tkn->next || (tkn->next
 			&& (tkn->next->type == '<' || tkn->next->type == '>')))))
 		{
+			prm->ext_stts = 258;
 			printf("lminishell: syntax error near unexpected token\n");
 			return (1);
 		}
@@ -162,16 +165,19 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 {
 	t_sh	*res;
 	t_token	*tkn;
+	// t_token	*exp;
 
-	if (!*input || is_quote_closed(input))
+	if (!*input || is_quote_closed(prms, input))
 		return (NULL);
 	input = ft_strtrim(input, " \t");
 	if (!input || !*input)
 		return (NULL);
+	// tkn = (t_token **)ft_malloc(sizeof(t_token), 0);
 	tkn = parse_input(NULL, input, NULL, 0);
-	if (check_syntax(tkn))
+	if (check_syntax(prms, tkn))
 		return (NULL);
 	// print_tkn_exp(tkn, 0);
+	// exp = *tkn;
 	ft_expand(tkn, prms);
 	here_doc(tkn, prms);
 	// rmv_quotes(tkn);
@@ -180,6 +186,6 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 	// if (!ft_strcmp(input, "exit"))
 	// 	clean_exit();
 	// printf("size is: [%d]\n", ft_sh_sz(&res));
-	// print_sh_token(res, NULL, NULL, 0);
+	print_sh_token(res, NULL, NULL, 0);
 	return (res);
 }

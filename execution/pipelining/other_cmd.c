@@ -64,7 +64,7 @@ void	ft_norm_other_cmd(t_sh *sh, t_parms *param, int err)
 	{
 		write(2, sh->value[0], ft_len(sh->value[0]));
 		write(2, ": command not found\n", 21);
-		printf("here\n");
+		// printf("here\n");
 		param->ext_stts = 127;
 		exit(param->ext_stts);
 	}

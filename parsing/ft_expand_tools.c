@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 21:07:30 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/21 12:50:56 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/23 15:36:07 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,28 +41,41 @@ char	*get_prev(char *word, int i)
 	return (res);
 }
 
-int	dollar_var(char *wd, int *i)
+char	*dollar_var(t_parms *prm, char *wd, int *i)
 {
+	t_var	*var;
 	int	j;
 
+	var = (t_var *)prm->var;
 	j = 0;
+	(void)prm;
 	while (wd[j] && wd[j] == '$')
 	{
 		j++;
 		(*i)++;
 	}
+	if (!wd[j] && j == 1 && (!var->next || var->next->is_f))
+	{
+		prm->len = j +1;
+		return ("$");
+	}
 	if (!wd[j])
-		return (1);
+	{
+		prm->len = j + 1;
+		return ("");
+	}
 	(*i)--;
-	return (0);
+	return (NULL);
 }
 
 char	*check_vlid_var(t_parms *prm, char *wd, int i, int *j)
 {
 	char	*var;
+	char	*res;
 
-	if (dollar_var(wd + i, &i))
-		return ("");
+	res = dollar_var(prm, wd + i, &i);
+	if (res)
+		return (res);
 	var = ft_trim(wd, i +1);
 	while (wd[*j] && ((wd[*j] == '_' || (wd[*j] >= 'a' && wd[*j] <= 'z'))
 			|| (wd[*j] >= 'A' && wd[*j] <= 'Z')

@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:17:23 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/21 19:45:29 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/22 10:38:54 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	ft_fst_pp_executer(t_sh *sh, t_parms *param, t_sh *curr_sh)
 {
 	char	*bin_file;
 	(void)sh;
-	fprintf(stderr, "---------------------FIRST CMD : %s ---------------------\n", curr_sh->value[0]);
+	// fprintf(stderr, "---------------------FIRST CMD : %s ---------------------\n", curr_sh->value[0]);
 	bin_file = ft_path_parser(param->envp, curr_sh->value[0], param);
 	if (!bin_file && ft_is_builtin(curr_sh->value[0]) != 1)
 		ft_norm_nfound_cmd(curr_sh);
@@ -39,7 +39,7 @@ static void	ft_lst_pp_executer(t_sh *sh, t_parms *param, t_sh *curr_sh)
 {
 	char	*bin_file;
 	(void)sh;
-	fprintf(stderr, "---------------------LAST CMD : %s ---------------------\n", curr_sh->value[0]);
+	// fprintf(stderr, "---------------------LAST CMD : %s ---------------------\n", curr_sh->value[0]);
 	bin_file = ft_path_parser(param->envp, curr_sh->value[0], param);
 	if (!bin_file)
 		ft_norm_child_stts(curr_sh, param, 127);
@@ -61,7 +61,7 @@ static void	ft_mid_pp_executer(t_sh *sh, t_parms *param, t_sh *curr_sh)
 {
 	char	*bin_file;
 	(void)sh;
-	fprintf(stderr, "---------------------MIDDLE CMD : %s ---------------------\n", curr_sh->value[0]);
+	// fprintf(stderr, "---------------------MIDDLE CMD : %s ---------------------\n", curr_sh->value[0]);
 	bin_file = ft_path_parser(param->envp, curr_sh->value[0], param);
 	if (!bin_file)
 		ft_norm_nfound_cmd(curr_sh);

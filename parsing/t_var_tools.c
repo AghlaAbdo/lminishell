@@ -6,13 +6,13 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:08:34 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/19 14:35:52 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/23 15:01:18 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-t_var	*ft_var_new(char *wrd, char type)
+t_var	*ft_var_new(char *wrd, char type, int is_f)
 {
 	t_var	*new;
 
@@ -21,6 +21,7 @@ t_var	*ft_var_new(char *wrd, char type)
 		return (NULL);
 	new->wrd = wrd;
 	new->type = type;
+	new->is_f = is_f;
 	new->next = NULL;
 	new->prev = NULL;
 	return (new);

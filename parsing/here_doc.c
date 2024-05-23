@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 19:11:49 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/21 19:00:21 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/23 15:43:02 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void	read_heredoc(t_token *tkn, t_parms *prm, char *limit, int quots)
 		write(fd, "\n", 1);
 		free(line);
 	}
+	close(fd);
 	free(line);
 	tkn->next->token = fl_name;
 }

@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 13:06:27 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/21 12:51:25 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/23 18:53:46 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ char	*splt_var(t_parms *prm, char *var, char *bef, char *aft)
 	while (arr[++i +1])
 	{
 		prm->v_len++;
-		ft_var_insrt(&var_t, ft_var_new(arr[i], 'N'));
+		ft_var_insrt(&var_t, ft_var_new(arr[i], 'N', 0));
 		var_t = var_t->next;
 	}
 	prm->l_len = ft_len(arr[i]);
 	aft = ft_pstrjoin(arr[i], aft);
-	ft_var_insrt(&var_t, ft_var_new(aft, 'L'));
+	ft_var_insrt(&var_t, ft_var_new(aft, 'L', 0));
 	return (NULL);
 }
 
@@ -151,16 +151,29 @@ void	join_vars(t_token **tkn, t_var **var, t_parms *prm, int *flag)
 		res = ft_pstrjoin(res, (*var)->wrd);
 		*var = (*var)->next;
 	}
+		printf("res to add: [%s]\t*flag: %d\n", res, *flag);
 	if (*flag)
 	{
-		ft_token_insrt(tkn, ft_token_new(res, 'V', 0));
-		*tkn = (*tkn)->next;
-		prm->t_len++;
+		if (res && *res)
+		{
+			ft_token_insrt(tkn, ft_token_new(res, 'V', 0));
+			*tkn = (*tkn)->next;
+			prm->t_len++;
+			*flag = 1;
+		}
 	}
 	else
 	{
-		(*tkn)->token = res;
-		prm->t_len++;
-		*flag = 1;
+		if (res && *res)
+		{
+			(*tkn)->token = res;
+			prm->t_len++;
+		}
+		else
+		{
+		printf("what about here?\n");
+			ft_token_rmv(tkn);
+		}
+			*flag = 1;
 	}
 }

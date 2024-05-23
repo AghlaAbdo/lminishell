@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 06:33:02 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/20 14:35:23 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/23 18:47:34 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,13 @@ void	ft_token_rmv(t_token **head)
 		if (prev)
 			prev->next = next;
 	}
-	else
+	else if (prev)
+	{
+		prev->next = NULL;
 		*head = NULL;
+	}
+	else
+	{
+		*head = NULL;
+	}
 }
