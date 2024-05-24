@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:08:34 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/23 15:01:18 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/24 19:23:52 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,31 @@ void	ft_var_insrt(t_var **head, t_var *new)
 	(*head)->next = new;
 	new->next = next;
 	new->prev = *head;
+}
+
+void	ft_var_rmv(t_var **head)
+{
+	t_var	*prev;
+	t_var	*next;
+
+	if (!head || !*head)
+		return ;
+	prev = (*head)->prev;
+	next = (*head)->next;
+	if (next)
+	{
+		*head = next;
+		next->prev = prev;
+		if (prev)
+			prev->next = next;
+	}
+	else if (prev)
+	{
+		*head = NULL;
+		prev->next = NULL;
+	}
+	else
+	{
+		*head = NULL;
+	}
 }

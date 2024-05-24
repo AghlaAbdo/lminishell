@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:40:41 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/23 21:52:22 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/24 19:53:47 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,15 +58,16 @@ t_token	*parse_input(t_token *token, char *input, char *word, int i);
 t_token	*ft_token_new(char *word, char type, int len);
 void	ft_token_addb(t_token **head, t_token *new);
 void	ft_token_insrt(t_token **head, t_token *new);
-void	ft_token_rmv(t_token **head);
+void	ft_token_rmv(t_token **head, t_token *rmv);
 
 //	t_var tools
 t_var	*ft_var_new(char *wrd, char type, int is_f);
 void	ft_var_addb(t_var **head, t_var *new);
 void	ft_var_insrt(t_var **head, t_var *new);
+void	ft_var_rmv(t_var **head);
 
 //	Expanding
-void	ft_expand(t_token *tkn, t_parms *prm);
+void	ft_expand(t_token **token, t_parms *prm);
 char	*expand_var(t_var **var_t, t_parms *prm, char *token, char *res);
 char	*expand_it(char *wd, t_parms *prm, int i);
 void	join_vars(t_token **tkn, t_var **var, t_parms *prm, int *flag);

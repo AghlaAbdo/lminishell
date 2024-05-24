@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 06:33:02 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/23 18:47:34 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/24 21:04:23 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,29 +68,42 @@ void	ft_token_insrt(t_token **head, t_token *new)
 	new->prev = *head;
 }
 
-void	ft_token_rmv(t_token **head)
+void	ft_token_rmv(t_token **head, t_token *rmv)
 {
 	t_token	*prev;
 	t_token	*next;
+	t_token	*curr;
 
-	if (!head || !*head)
+	if (!head || !*head || !rmv)
 		return ;
-	prev = (*head)->prev;
-	next = (*head)->next;
-	if (next)
+	if (*head == rmv)
 	{
-		*head = next;
-		next->prev = prev;
-		if (prev)
+		*head = NULL;
+		return ;
+	}
+	curr = *head;
+	while (curr->next && curr->next != rmv)
+		curr = curr->next;
+	if (curr->next == rmv)
+	{
+	printf("\ncurr: [%s]\trmv: [%s]\n\n", curr->next->token, rmv->token);
+		prev = curr->next->prev;
+		next = curr->next->next;
+		if (next)
+		{
+			curr->next = next;
+			next->prev = prev;
+			if (prev)
+				prev->next = next;
+		}
+		else if (prev)
+		{
+			curr->next = NULL;
 			prev->next = next;
-	}
-	else if (prev)
-	{
-		prev->next = NULL;
-		*head = NULL;
-	}
-	else
-	{
-		*head = NULL;
+		}
+		else
+		{
+			curr->next = NULL;
+		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:54:38 by thedon            #+#    #+#             */
-/*   Updated: 2024/05/23 21:52:48 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/24 20:24:50 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,8 @@ void	print_sh_token(t_sh *res, char *line, char *here, int fd)
 	(void)fd;
 	t_rdr	*rdr_head;//!by_sala7
 
-	rdr_head = res->rdr;//!by_sala7 hint kenti kat incremente l head  o kiwsalni NULL 
+	if (res)
+		rdr_head = res->rdr;//!by_sala7 hint kenti kat incremente l head  o kiwsalni NULL 
 	printf("\n\t-------- SH Token result --------\n\n");
 	while (res)
 	{
@@ -178,7 +179,7 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 		return (NULL);
 	// print_tkn_exp(tkn, 0);
 	// exp = *tkn;
-	ft_expand(tkn, prms);
+	ft_expand(&tkn, prms);
 	here_doc(tkn, prms);
 	// rmv_quotes(tkn);
 	// print_tkn_exp(tkn, 1);
