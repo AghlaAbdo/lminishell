@@ -6,11 +6,12 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 23:52:07 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/16 18:04:21 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/24 21:20:08 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../main/minishell.h"
+#include <stdio.h>
 
 void	ft_env_addb(t_env **lst, t_env *newn)
 {
@@ -61,7 +62,10 @@ char	*ft_env_eqls(char *res[])
 	{
 		tmp = res[i];
 		if (out == NULL)
+		{
 			out = ftm_sjoin(res[i], res[i + 1]);
+			i++;
+		}
 		else
 			out = ftm_sjoin(out, res[i]);
 	}
@@ -99,12 +103,13 @@ t_env	*ft_env_crt(char *ep[], int flg)
 	while (ep[++i])
 	{
 		res = ft_splt(ep[i], '=');
+		
 		if (ft_tlen(res) == 2)
 			ft_env_addb(&head, ft_env_lstnew(res[0], res[1], 1));
+		else if (ft_tlen(res) == 1)
+			ft_env_addb(&head, ft_env_lstnew(res[0], "", 1));
 		else if (ft_tlen(res) > 2)
-		{
 			ft_env_addb(&head, ft_env_lstnew(res[0], ft_env_eqls(res), 1));
-		}
 	}
 	return (head);
 }

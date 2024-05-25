@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 02:15:05 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/21 19:59:24 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/25 18:57:05 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "../execution/execution.h"
 #include "../parsing/parsing.h"
+#include <stdio.h>
+#include <sys/param.h>
 
 //!=========================
 void prnt_rdr(t_rdr *head)
@@ -62,10 +64,12 @@ void prnt_env(t_env *head)
 
 void	ft_parms_init(t_parms *holder, int ac, char *av[], char *ep[])
 {
+	char pwd[MAXPATHLEN];
+
 	(void)ac;
 	(void)av;
-
-	holder->pwd = getcwd(NULL, MAXPATHLEN);
+	getcwd(pwd, MAXPATHLEN);
+	holder->pwd = pwd;
 	holder->oldpwd = NULL;
 	holder->ext_stts = 0;
 	holder->envp = ep;
@@ -108,6 +112,7 @@ int	main(int ac, char *av[], char *ep[])
 		input = ft_line(holder.ext_stts, &holder);
 		sh = ft_parser(input, &holder);
 		ft_exec(sh, &holder);
+		// printf("-->%d\n", holder.ext_stts);
 		free(input);
 	}
 	rl_clear_history();

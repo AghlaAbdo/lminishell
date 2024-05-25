@@ -6,11 +6,12 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 09:15:52 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/14 18:24:50 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/24 08:21:32 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../execution.h"
+#include <stdio.h>
 
 int	ft_pp_chain_len(t_sh *sh)
 {
@@ -33,7 +34,7 @@ int	ft_pp_chain_len(t_sh *sh)
 void	ft_norm_ext_stts(t_parms * param)
 {
 	int	ex_stts;
-
+	
 	close(param->child_stts[1]);
 	read(param->child_stts[0], &ex_stts, sizeof(ex_stts));
 	if (ex_stts == 127)
@@ -47,18 +48,16 @@ void	ft_norm_ext_stts(t_parms * param)
 		else
 			param->ext_stts = ex_stts;
 	}
-	
 	close(param->child_stts[0]);
-	
 }
 
 void	ft_norm_child_stts(t_sh *curr_sh, t_parms * param, int stts)
 {
+	(void)param;
+	(void)stts;
 	write(2, curr_sh->value[0], ft_len(curr_sh->value[0]));
 	write(2, ": command not found\n", 21);
-	write(param->child_stts[1], &stts, sizeof(stts));
-	close(param->child_stts[0]);
-	close(param->child_stts[1]);
+	printf("hnaaaaaaaaaaaaaaa\n");
 	exit(127);
 }
 
@@ -92,7 +91,7 @@ int	(*ft_pp_chain_creator(t_sh *sh))[2]
 				i--;
 			}
 			free(pp_chain);
-			perror("muli-pipe creation faild");
+			perror("muli-pipe creation failed");
 		}
 	}
 	return (pp_chain);

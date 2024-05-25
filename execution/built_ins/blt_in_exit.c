@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../execution.h"
+#include <stdio.h>
 
 int ft_only_digits(char *s)
 {
@@ -45,8 +46,18 @@ int	ft_exit(char **cmd, t_parms *param)
 		param->ext_stts = 0;
 		exit (ex_sts);
 	}
-	else if (ft_tlen(cmd) > 2)
+	else if (ft_tlen(cmd) > 2 && ft_only_digits(cmd[1]))
+	{
 		write(2, "exit: too many arguments\n", 26);
+		param->ext_stts = 1;
+		return (param->ext_stts);
+	}
+	else if (ft_tlen(cmd) > 2 && !ft_only_digits(cmd[1]))
+	{
+		write(2, cmd[1], ft_len(cmd[1]));
+		write(2, " : numeric argument required\n", 29);
+		exit(255);
+	}
 	else if (ft_tlen(cmd) == 2)
 	{
 		if (!ft_only_digits(cmd[1]))

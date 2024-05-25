@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 23:01:41 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/21 19:40:32 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/24 18:04:38 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "../main/minishell.h"
 #include <errno.h>
 #include <fcntl.h>
+#include <sys/stat.h>
 
 char		*ft_strjoin(char *s1, char *s2);
 long long	ft_ext_atoi(char *s);
@@ -26,6 +27,8 @@ int			ft_only_quotes(char *s);
 int			ft_insrt_strcmp(const char *s1, const char *s2);
 size_t		ft_strlcpy(char *dst, char *src, size_t dstsize);
 size_t		ft_strlcat(char *dst, char *src, size_t dstsize);
+int			ft_is_there_slash(char *cmd);
+int			ft_is_dir(char *path);
 
 //?main function
 void	ft_exec(t_sh *sh, t_parms *param);
@@ -65,6 +68,7 @@ void	ft_open_close(t_sh *sh, t_rdr *rdrs, t_parms *param, int flg);
 void	ft_close_ppchain(t_parms *param, t_sh *sh);
 void	ft_redirs_bad_inf(t_rdr * rdrs, t_sh *sh, t_parms *param, int err);
 void	ft_sngl_cmd_rdr_strms(t_sh *sh);
+int	ft_handle_built_redirs(t_sh *sh, t_parms *param);
 
 //!just for interactive testing
 t_sh	*ft_exec_parser(char *line);

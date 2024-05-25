@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../execution.h"
+#include <stdio.h>
 
 static void	ft_putstr(char *s)
 {

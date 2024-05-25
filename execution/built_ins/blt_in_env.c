@@ -6,7 +6,7 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 00:28:47 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/17 19:27:10 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/25 18:15:42 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	ft_env(t_sh *sh, t_parms *param)
 	else
 	{
 		param->ext_stts = 127;
-		write(2, "\033[1;31m error : env command should take ", 41);
+		write(2, "\033[1;31m subject error : env command should take ", 49);
 		write(2, "no arguments or options !\033[0m\n", 31);
 	}
 	return (param->ext_stts);

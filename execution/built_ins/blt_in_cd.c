@@ -6,24 +6,22 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 11:32:45 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/16 18:20:32 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/25 18:54:28 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../execution.h"
 
-char	*ft_gt_pth(char *tojoin, int doit)//!checked
+char	*ft_gt_pth(char *tojoin, int doit)
 {
 	static char	sv_pwd[MAXPATHLEN];
-	char		*cwd;
-	
-	(void)doit;
-	cwd = NULL;
-	cwd = getcwd(cwd, MAXPATHLEN);
-	if (!cwd)//!failed
+	char		cwd[MAXPATHLEN];
+
+	if (getcwd(cwd, MAXPATHLEN) == NULL)
 	{
 		if (doit)
 		{
+			printf("doit\n");
 			if (errno == ENOENT)
 			{
 				printf("cd: error retrieving current directory: getcwd:");
@@ -33,12 +31,12 @@ char	*ft_gt_pth(char *tojoin, int doit)//!checked
 			ft_strlcat(sv_pwd, tojoin  , MAXPATHLEN);
 		}
 	}
-	else//!success
+	else
 		ft_strlcpy(sv_pwd, cwd, MAXPATHLEN); 
 	return (ft_sdup(sv_pwd));
 }
 
-static void	ft_cd_no_params(t_sh *sh, t_parms *param)//!checked
+static void	ft_cd_no_params(t_sh *sh, t_parms *param)
 {
 	char	*path;
 
@@ -46,7 +44,7 @@ static void	ft_cd_no_params(t_sh *sh, t_parms *param)//!checked
 		return ;
 	param->ext_stts = 1;
 	path = ft_env_srch("HOME", &param->env);
-	param->oldpwd = ft_gt_pth(sh->value[1], 1);
+	param->oldpwd = ft_gt_pth(NULL, 0);
 
 	if (!ft_env_srch("OLDPWD", &param->env))
 		ft_env_new(&param->env, "OLDPWD", param->oldpwd);
@@ -60,51 +58,24 @@ static void	ft_cd_no_params(t_sh *sh, t_parms *param)//!checked
 		write(2, "cd: HOME not set\n", 18);
 	else
 	{
-		param->pwd = ft_gt_pth(sh->value[1], 1);
-		ft_env_updt(&param->env, "PWD", param->pwd);
-		ft_env_updt(&param->exprt_env, "PWD", param->pwd);
+		char *ppp = ft_gt_pth(NULL,0);
+		ft_env_updt(&param->env, "PWD", ppp);
+		ft_env_updt(&param->exprt_env, "PWD", ppp);
 		param->ext_stts = 0;
 	}
 }
 
-static void	ft_cd_swap(char **old, char **curr)
+static void	ft_previous_location(void)
 {
-	char	*swap;
-
-	swap = *old;
-	*old = *curr;
-	*curr = swap;
-}
-
-static void	ft_previous_location(t_sh *sh, t_parms *param)//!checked
-{
-	if (!sh || !param)
-		return ;
-	if (!param->oldpwd)
-		write(2, "cd: OLDPWD not set\n", 20);
-	else
-	{
-		if (chdir(param->oldpwd) == -1)
-			perror("cd");
-		else
-		{
-			ft_cd_swap(&param->oldpwd, &param->pwd);
-			ft_env_updt(&param->env, "PWD", param->pwd);
-			ft_env_updt(&param->env, "OLDPWD", param->oldpwd);
-			ft_env_updt(&param->exprt_env, "PWD", param->pwd);
-			ft_env_updt(&param->exprt_env, "OLDPWD", param->oldpwd);
-			printf("%s\n", param->pwd);
-			param->ext_stts = 0;
-		}
-	}
+	write(2, "\033[1;31m subject error : cd with only ", 38);
+	write(2, "a relative or absolute path !\033[0m\n", 35);
 }
 
 static void	ft_new_path(t_sh *sh, t_parms *param)//!checked
 {
 	if (!sh || !param)
 		return ;
-	param->oldpwd = getcwd(NULL, MAXPATHLEN);
-	// param->oldpwd = ft_gt_pth(sh->value[1], 0);
+	param->oldpwd = ft_gt_pth(sh->value[1], 1);
 	if (!ft_env_srch("OLDPWD", &param->env))
 		ft_env_new(&param->env, "OLDPWD", param->oldpwd);
 	else
@@ -133,9 +104,8 @@ int	ft_cd(t_sh *sh, t_parms *param)
 	if (ft_tlen(sh->value) == 1 || ft_strcmp(sh->value[1], "~") == 0)
 		ft_cd_no_params(sh, param);
 	else if (ft_strcmp(sh->value[1], "-") == 0)
-		ft_previous_location(sh, param);
+		ft_previous_location();
 	else
 		ft_new_path(sh, param);
-	// prnt_env(param->env);
 	return (param->ext_stts);
 }

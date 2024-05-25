@@ -6,7 +6,7 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 14:44:48 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/02 15:49:28 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/24 21:20:29 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	ft_is_there_slash(char *cmd)
 	i = -1;
 	while (cmd[++i])
 	{
-		if (cmd[i] == '/' || cmd[i] == '.')
+		if (cmd[i] == '/' || cmd[i] == '.' || (cmd[i] == '.' && cmd[i + 1] == '.'))
 			return (1);
 	}
 	return (0);
@@ -75,6 +75,7 @@ char	*ft_path_parser(char **envp, char *cmd, t_parms *param)
 	char	*path;
 	char	**bin_dirs;
 	int		i;
+	(void)envp;
 
 	i = -1;
 	if (ft_is_there_slash(cmd))
@@ -82,7 +83,7 @@ char	*ft_path_parser(char **envp, char *cmd, t_parms *param)
 	if (!(*envp))
 		path = ft_env_srch("PATH", &param->env);
 	else
-		path = ft_get_path(envp);
+		path = ft_get_path(ft_env_to_dp(&param->env));
 	bin_dirs = ft_get_locations(path, cmd);
 	while (bin_dirs[++i])
 	{
@@ -90,5 +91,4 @@ char	*ft_path_parser(char **envp, char *cmd, t_parms *param)
 			return (bin_dirs[i]);
 	}
 	return (NULL);
-
 }

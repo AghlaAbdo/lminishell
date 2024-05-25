@@ -3,20 +3,95 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 09:53:35 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/21 19:45:22 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/25 19:23:10 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 #include <stdio.h>
 
-static int	ft_handle_built_redirs(t_sh *sh, t_parms *param)
+static int	ft_blt_rdrs_bad_inf(t_rdr * rdrs, t_sh *sh, t_parms *param, int err)
+{
+	if (err == 2)
+	{
+		write(2, rdrs->fl_name, ft_len(rdrs->fl_name));
+		write(2, ": No such file or directory\n", 28);
+		ft_close_ppchain(param, sh);
+		close(sh->out_fd);
+		param->ext_stts = 1;
+	}
+	else if (err == 3)
+	{
+		write(2, rdrs->fl_name, ft_len(rdrs->fl_name));
+		write(2, ": Permission denied\n", 21);
+		ft_close_ppchain(param, sh);
+		close(sh->out_fd);
+		param->ext_stts = 1;
+	}
+	return (-2);
+}
+
+static int	ft_blt_opn_cls(t_sh *sh, t_rdr *rdrs, t_parms *param, int flg)
+{
+	if (!flg)
+	{
+		sh->out_fd = open(rdrs->fl_name, O_WRONLY | O_TRUNC | O_CREAT, 0644);
+		if (sh->out_fd == -1)
+		{
+			if (ft_is_dir(rdrs->fl_name) == 1)
+			{
+				param->ext_stts = 1;
+				return (-2);
+			}
+			if (access(rdrs->fl_name, W_OK) == -1)
+				return (ft_blt_rdrs_bad_inf(rdrs, sh, param, 3));
+			else
+				return (ft_blt_rdrs_bad_inf(rdrs, sh, param, errno));
+		}
+	}
+	else if (flg == 1)
+	{
+		sh->in_fd = open(rdrs->fl_name, O_RDONLY);
+		if (sh->in_fd == -1)
+		{
+			if (ft_is_dir(rdrs->fl_name) == 1)
+			{
+				param->ext_stts = 1;
+				return (-2);
+			}
+			if (access(rdrs->fl_name, R_OK) == -1)
+				return (ft_blt_rdrs_bad_inf(rdrs, sh, param, 3));
+			else
+				return (ft_blt_rdrs_bad_inf(rdrs, sh, param, errno));
+		}
+	}
+	else if (flg == 2)
+	{
+		if (sh->out_fd != -1)
+				close(sh->in_fd);
+		sh->out_fd = open(rdrs->fl_name, O_WRONLY | O_APPEND | O_CREAT, 0644);
+		if (sh->out_fd == -1)
+		{
+			if (ft_is_dir(rdrs->fl_name) == 1)
+			{
+				param->ext_stts = 1;
+				return (-2);
+			}
+			if (access(rdrs->fl_name, R_OK) == -1)
+				return (ft_blt_rdrs_bad_inf(rdrs, sh, param, 3));
+			else
+				return (ft_blt_rdrs_bad_inf(rdrs, sh, param, errno));
+		}
+	}
+	return (0);
+}
+
+int	ft_handle_built_redirs(t_sh *sh, t_parms *param)
 {
 	t_rdr	*rdrs;
-
 	if (sh->rdr == NULL)
 		return (0);
 	rdrs = sh->rdr;
@@ -25,11 +100,20 @@ static int	ft_handle_built_redirs(t_sh *sh, t_parms *param)
 		if (!rdrs->flag)
 		{
 			if (!ft_strcmp(rdrs->mode, ">"))
-				ft_open_close(sh, rdrs, param, 0);
+			{
+				if (ft_blt_opn_cls(sh, rdrs, param, 0) == -2)
+					return (-2);
+			}
 			else if (!ft_strcmp(rdrs->mode, "<"))
-				ft_open_close(sh, rdrs, param, 1);
+			{
+				if (ft_blt_opn_cls(sh, rdrs, param, 1) == -2)
+					return (-2);
+			}
 			else if (!ft_strcmp(rdrs->mode, ">>"))
-				ft_open_close(sh, rdrs, param, 2);
+			{
+				if (ft_blt_opn_cls(sh, rdrs, param, 2) == -2)
+					return (-2);
+			}
 		}
 		else
 		{
@@ -63,7 +147,7 @@ int	ft_router(t_sh *sh, t_parms *param)
 		else if (ft_strcmp(head->value[0], "cd") == 0)
 			ex_stts = ft_cd(sh, param);
 		else if (ft_strcmp(head->value[0], "exit") == 0)
-			ft_exit(sh->value, param);
+			ex_stts = ft_exit(sh->value, param);
 		else if (ft_strcmp(head->value[0], "export") == 0)
 			ex_stts = ft_export(sh, param);
 		else if (ft_strcmp(head->value[0], "unset") == 0)
@@ -89,7 +173,7 @@ void	ft_exec(t_sh *sh, t_parms *param)
 	int	sv_in;
 	int	sv_out;
 	int	ambgs_rdr;
-	
+
 	ambgs_rdr = -1;
 	if (!sh || !param)
 		return ;
@@ -98,16 +182,23 @@ void	ft_exec(t_sh *sh, t_parms *param)
 		perror("in dup");
 	sv_out = dup(STDOUT_FILENO);
 	if (sv_out == -1)
-		perror("out dup");
+	{
+		perror("lminishell :");
+		close (sv_in);
+	}
 	if (ft_sh_sz(&sh) == 1)
 	{
 		if (ft_is_builtin(sh->value[0]) == 1 && sh->rdr != NULL)
 			ambgs_rdr = ft_handle_built_redirs(sh, param);
-		if (ambgs_rdr <= 0 )
+		if (ambgs_rdr == -2)
+			return (ft_norm_dclose(sv_in, sv_out));
+		if (ambgs_rdr == 0 || ambgs_rdr == -1)
 			ft_router(sh, param);
 		ft_rstr_dflt_strm(sv_in, sv_out);
 	}
 	else
-
+	{
+		ft_norm_dclose(sv_in, sv_out);
 		ft_piper(sh, param);
+	}
 }

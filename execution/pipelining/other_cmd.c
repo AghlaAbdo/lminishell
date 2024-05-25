@@ -30,7 +30,6 @@ void	ft_sngl_cmd_rdr_strms(t_sh *sh)
 static void	ft_handle_redirs(t_sh *sh, t_parms *param)
 {
 	t_rdr	*rdrs;
-	(void)param;
 
 	if (sh->rdr == NULL)
 		return ;
@@ -57,50 +56,43 @@ static void	ft_handle_redirs(t_sh *sh, t_parms *param)
 	}
 	ft_sngl_cmd_rdr_strms(sh);
 }
-
-void	ft_norm_other_cmd(t_sh *sh, t_parms *param, int err)
-{
-	if (err == 14)
-	{
-		write(2, sh->value[0], ft_len(sh->value[0]));
-		write(2, ": command not found\n", 21);
-		// printf("here\n");
-		param->ext_stts = 127;
-		exit(param->ext_stts);
-	}
-	else if (err == EACCES)
-	{
-		write(2, sh->value[0], ft_len(sh->value[0]));
-		write(2, ": permission denied\n", 21);
-		param->ext_stts = 126;
-		exit(param->ext_stts);
-	}
-	else
-	{
-		perror("execve");
-		param->ext_stts = 1;
-		exit(param->ext_stts);
-	}
-}
-
 int	ft_other_cmd(t_sh *sh, t_parms *param)
 {
-	char *bin_file;
-	pid_t pid;
+	char	*bin_file;
+	pid_t	pid;
+	int		ex_sts;
 
 	pid = fork();
+	ex_sts = 0;
 	if (pid == -1)
-		perror("single command execution !");
-	bin_file = ft_path_parser(param->envp, sh->value[0], param);
+		perror("lminishell ");
 	if (pid == 0)
 	{
+		if (ft_len(sh->value[0]) == 0)
+			exit(0);
+		if (!ft_is_there_slash(sh->value[0]))
+			bin_file = ft_path_parser(param->envp, sh->value[0], param);
+		else
+		{
+			if (!access(sh->value[0], F_OK))
+			{
+				if (access(sh->value[0], X_OK) != 0)
+					exit(126);
+			}
+			bin_file = sh->value[0];
+			if (ft_is_dir(bin_file) == 1)
+				exit (126);
+		}
 		if (sh->rdr != NULL)
 			ft_handle_redirs(sh, param);
-		if (execve(bin_file, sh->value, param->envp) == -1)
-			ft_norm_other_cmd(sh, param, errno);
+		execve(bin_file, sh->value, ft_env_to_dp(&param->env));
+		write(2, "lminishell ", 12);
+		write(2, sh->value[0], ft_len(sh->value[0]));
+		write(2, ": command not found\n", 21);
+		exit(127);
 	}
-	wait(&param->ext_stts);
-	if (param->ext_stts == 256)
-		return (1);
+	wait(&ex_sts);
+	if (WIFEXITED(ex_sts))
+		param->ext_stts = WEXITSTATUS(ex_sts);
 	return (param->ext_stts);
 }

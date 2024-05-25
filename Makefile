@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+         #
+#    By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/08 09:21:55 by srachidi          #+#    #+#              #
-#    Updated: 2024/05/21 19:38:19 by aaghla           ###   ########.fr        #
+#    Updated: 2024/05/25 17:04:37 by srachidi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 CC = cc
-# FLAGS = -g -fsanitize=address -Wall -Werror -Wextra
-FLAGS = -Wall -Werror -Wextra
+FLAGS = -g -fsanitize=address -Wall -Werror -Wextra
+FLAGS = #-Wall -Werror -Wextra
 RM = rm -rf
 LIB = -lreadline
 # ---------------------
