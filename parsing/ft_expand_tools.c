@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 21:07:30 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/23 15:36:07 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/25 18:58:35 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,11 +99,13 @@ char	*check_vlid_var(t_parms *prm, char *wd, int i, int *j)
 	return (NULL);
 }
 
-int	check_splt(t_token *tkn)
+int	check_splt(t_token *tkn, char *value)
 {
 	t_token	*prv;
 
 	prv = tkn;
+	if (!ft_strchr(value, ' ') && !ft_strchr(value, 9))
+		return (1);
 	while (prv && prv->prev)
 	{
 		if (!prv->prev || prv->prev->type == '|')

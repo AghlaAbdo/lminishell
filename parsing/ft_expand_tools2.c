@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 13:06:27 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/24 21:05:49 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/25 19:11:13 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,12 @@ char	*expand_it(char *wd, t_parms *prm, int i)
 	if (res)
 		return (res);
 	var = ft_env_srch(var, &prm->env);
+	if (prm->c != 'D')
+		var = ft_strtrim(var, " \t");
 	if (tkn->prev && (tkn->prev->type == '>' || tkn->prev->type == '<'))
 		return (check_n_file(prm, wd, i, j));
 	if (var && (prm->c == 'V' || prm->c == 'N' || prm->c == 'L')
-		&& (ft_strchr(var, ' ') || ft_strchr(var, '\t'))
-		&& !check_splt(prm->tkn))
+		&& !check_splt(prm->tkn, var))
 		return (splt_var(prm, var, get_prev(wd, i), wd + j));
 	if (var)
 	{
@@ -136,14 +137,22 @@ char	*expand_var(t_var **var_t, t_parms *prm, char *token, char *res)
 	return (token);
 }
 
-void	join_vars(t_token **tkn, t_var **var, t_parms *prm, int *flag)
+// join strings and vars that have not been splited, if there is a var that have /
+//		been splited it joins the first word with all the strings before, and joins /
+//		the last word with the rest after it.
+//	'flag' is to check wether there have been a var splited to replace the first part /
+//		with the current token, then insert the rest in sep
+void	join_vars(t_token **tkn, t_token **curr, t_var **var, t_parms *prm, int *flag)
 {
 	char	*res;
 	t_token	*rmv;
+	t_var	*var_t;
 
+	var_t = (t_var *)prm->var;
+	(void)tkn;
 	res = "";
 	rmv = (t_token *)prm->tkn;
-	printf("\tt\tto rmv: [%s]\n", rmv->token);
+	// printf("\tvar: [%s][%c]\tto rmv: [%s]\n",var_t->wrd, var_t->type, rmv->token);
 	while ((*var) && (*var)->type != 'N')
 	{
 		res = ft_pstrjoin(res, (*var)->wrd);
@@ -154,31 +163,28 @@ void	join_vars(t_token **tkn, t_var **var, t_parms *prm, int *flag)
 		res = ft_pstrjoin(res, (*var)->wrd);
 		*var = (*var)->next;
 	}
-		printf("res to add: [%s]\t*flag: %d\n", res, *flag);
-	// if (*flag)
-	// {
-	// 	if (res && *res)
-	// 	{
-	// 		ft_token_insrt(tkn, ft_token_new(res, 'V', 0));
-	// 		*tkn = (*tkn)->next;
-	// 		prm->t_len++;
-	// 	}
-	// 	else
-	// 		ft_token_rmv(tkn, rmv);
-	// 	*flag = 1;
-	// }
-	// else
-	// {
+		// printf("res to add: [%s]\t*flag: %d\n", res, *flag);
+	if (*flag)
+	{
 		if (res && *res)
 		{
-			(*tkn)->token = res;
+			ft_token_insrt(curr, ft_token_new(res, 'V', 0));
+			*curr = (*curr)->next;
 			prm->t_len++;
 		}
 		else
-		{
-		printf("what about here?\n");
 			ft_token_rmv(tkn, rmv);
+		*flag = 1;
+	}
+	else
+	{
+		if ((res && *res )|| var_t->type != 'V')
+		{
+			(*curr)->token = res;
+			prm->t_len++;
 		}
-			*flag = 1;
-	// }
+		else
+			ft_token_rmv(tkn, rmv);
+		*flag = 1;
+	}
 }

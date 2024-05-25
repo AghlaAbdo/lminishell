@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:29:54 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/24 20:29:27 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/25 20:24:26 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,21 +18,21 @@
 static void	add_vars(t_token **tkn, t_parms *prm, t_var *var)
 {
 	char	*res;
-	t_token	*token;
+	t_token	*curr;
 	int		flag;
 
-	printf("add_vars called?\n");
+	// printf("add_vars called?\n");
 	flag = 0;
 	res = "";
-	token = (t_token *)prm->tkn;
+	curr = (t_token *)prm->tkn;
 	prm->t_len = 0;
 	while (var)
 	{
-		join_vars(tkn, &var, prm, &flag);
+		join_vars(tkn, &curr, &var, prm, &flag);
 		while (var && var->type == 'N')
 		{
-			ft_token_insrt(&token, ft_token_new(var->wrd, 'V', 0));
-			token = token->next;
+			ft_token_insrt(&curr, ft_token_new(var->wrd, 'V', 0));
+			curr = curr->next;
 			prm->t_len++;
 			var = var->next;
 			flag = 1;
@@ -116,11 +116,7 @@ static void	split_tkn(t_token **tkn, t_parms *prm, t_var *var, char *token)
 			prm->c = var->type;
 			res = expand_var(&var, prm, var->wrd, "");
 			if (res)
-			{
 				var->wrd = res;
-				// if (!*res)
-				// 	ft_token_rmv(tkn);
-			}
 			while (var && prm->v_len-- > 1)
 				var = var->next;
 		}
@@ -131,47 +127,21 @@ static void	split_tkn(t_token **tkn, t_parms *prm, t_var *var, char *token)
 
 void	ft_expand(t_token **token, t_parms *prm)
 {
-	char	*res;       
-	// t_token	*tmp;
+	char	*res;
 	t_token	*tkn;
-	int		flag;
 
 	tkn = *token;
-	flag = 0;
 	while (tkn)
 	{
 		prm->tkn = (t_token *)(tkn);
 		if ((!(tkn)->prev || ft_strcmp((tkn)->prev->token, "<<")))
 		{
-			res = (tkn)->token;
+			res = tkn->token;
 			split_tkn(token, prm, NULL, res);
-			// if (!flag)
-			// {
-			// 	tmp = tkn;
-			// 	flag = 1;
-			// }
-			// tmp2 = tkn;
-			// printf("\n---------- after split_tkn ----------\n");
-			// while (tmp2)
-			// {
-			// 	printf("token: [%s]\n", tmp2->token);
-			// 	tmp2 = tmp2->next;
-			// }
-			// printf("\n---------- after split_tkn ----------\n");
 			while (tkn && prm->t_len-- > 1)
-				tkn = (tkn)->next;
+				tkn = tkn->next;
 		}
 		if (tkn)
-			tkn = (tkn)->next;
+			tkn = tkn->next;
 	}
-	// *tkn = tmp;
-	// ft_token_rmv(tkn);
-	// tkn = tmp;
-	// printf("------------- tokens in ft_expand -----------\n");
-	// while ((*tmp))
-	// {
-	// 	printf("token: [%s]\n", (*tmp)->token);
-	// 	(*tmp) = (*tmp)->next;
-	// }
-	// return (tmp);
 }

@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:54:38 by thedon            #+#    #+#             */
-/*   Updated: 2024/05/24 20:24:50 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/25 20:20:24 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,6 +187,6 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 	// if (!ft_strcmp(input, "exit"))
 	// 	clean_exit();
 	// printf("size is: [%d]\n", ft_sh_sz(&res));
-	print_sh_token(res, NULL, NULL, 0);
+	// print_sh_token(res, NULL, NULL, 0);
 	return (res);
 }

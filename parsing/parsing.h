@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:40:41 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/24 19:53:47 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/25 18:22:05 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,12 @@ void	ft_var_rmv(t_var **head);
 void	ft_expand(t_token **token, t_parms *prm);
 char	*expand_var(t_var **var_t, t_parms *prm, char *token, char *res);
 char	*expand_it(char *wd, t_parms *prm, int i);
-void	join_vars(t_token **tkn, t_var **var, t_parms *prm, int *flag);
+void	join_vars(t_token **tkn, t_token **curr, t_var **var, t_parms *prm, int *flag);
 char	*get_prev(char *word, int i);
 char	*ft_trim(char *word, int j);
 char	*get_n_var(t_parms *prm, char *word, char *var, int i);
 char	*splt_var(t_parms *prm, char *var, char *bef, char *aft);
-int		check_splt(t_token *tkn);
+int		check_splt(t_token *tkn, char *value);
 char	*check_vlid_var(t_parms *prm, char *wd, int i, int *j);
 char	*expand_heredoc(char *token, t_parms *prms);
 

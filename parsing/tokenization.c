@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 16:22:36 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/24 10:54:34 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/25 20:25:02 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,8 @@ t_sh	*ft_tokenization(t_sh *sh, t_token *tkn, char **cmd, int i)
 {
 	t_rdr	*rdr;
 
-	printf("\tbef\n");
 	while (tkn)
 	{
-	printf("\tin\n");
 		rdr = add_in(&sh, tkn);
 		cmd = (char **)ft_malloc((count_cmd(tkn) + 1) * sizeof(char *), 0);
 		i = 0;

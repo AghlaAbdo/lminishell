@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 06:33:02 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/24 21:04:23 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/25 14:14:32 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,32 +78,33 @@ void	ft_token_rmv(t_token **head, t_token *rmv)
 		return ;
 	if (*head == rmv)
 	{
-		*head = NULL;
+		prev = (*head)->prev;
+		next = (*head)->next;
+		*head = next;
+		if (prev)
+			prev->next = next;
+		if (next)
+			next->prev = prev;
 		return ;
 	}
 	curr = *head;
-	while (curr->next && curr->next != rmv)
+	while (curr && curr != rmv)
 		curr = curr->next;
-	if (curr->next == rmv)
+	if (curr == rmv)
 	{
-	printf("\ncurr: [%s]\trmv: [%s]\n\n", curr->next->token, rmv->token);
-		prev = curr->next->prev;
-		next = curr->next->next;
+		prev = curr->prev;
+		next = curr->next;
 		if (next)
 		{
-			curr->next = next;
+			curr = next;
 			next->prev = prev;
 			if (prev)
 				prev->next = next;
 		}
 		else if (prev)
 		{
-			curr->next = NULL;
-			prev->next = next;
-		}
-		else
-		{
-			curr->next = NULL;
+			curr = next;
+			prev->next = curr;
 		}
 	}
 }
