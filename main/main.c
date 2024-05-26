@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 02:15:05 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/25 18:57:05 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/26 18:32:38 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,12 +87,13 @@ char	*ft_line(int ext_stts, t_parms *param)
 	char	*line;
 	
 	if (!ext_stts)
-		line = readline("lminishell-0.1$ ");
+		line = readline("lminishell-0.0$ ");
 	else
 		line = readline("lminishell-0.1$ ");
 	if (!line)
 	{
 		printf("exit\n");
+		sleep(9);
 		exit(param->ext_stts);
 	}
 	if (line)

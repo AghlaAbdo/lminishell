@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 19:53:21 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/24 19:03:14 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/26 09:46:50 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,10 @@ typedef struct s_parms
 	char	c;
 	int		len;
 	int		l_len;
-	int		v_len;
 	int		t_len;
-	int		i_qrm;
+	int		v_len;
+	int		v_bef;
+	int		v_aft;
 }	t_parms;
 
 

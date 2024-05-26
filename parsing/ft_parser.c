@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:54:38 by thedon            #+#    #+#             */
-/*   Updated: 2024/05/25 20:20:24 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/26 22:01:05 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,14 +162,53 @@ void	print_sh_token(t_sh *res, char *line, char *here, int fd)
 	
 }
 
+int	check_for_resources(char *input, t_parms *prm)
+{
+	char	c;
+	int	count;
+	int	i;
+
+	i = 0;
+	count = 0;
+	while (input[i])
+	{
+		c = input[i];
+		if (c == '"' || c == '\'')
+		{
+			i++;
+			while (input[i] && input[i] != c)
+				i++;
+			i++;
+		}
+		if (input[i] == '|' && input[i +1] == '|')
+		{
+			prm->ext_stts = 258;
+			printf("lminishell: syntax error near unexpected tokennnn\n");
+			return (1);
+		}
+		else if (input[i] == '|')
+			count++;
+		i++;
+	}
+	if (count > 600)
+	{
+		printf("lminishell: Resource temporarily unavailable\n");
+		prm->ext_stts = 1;
+		return (1);
+	}
+	return (0);
+}
+
 t_sh	*ft_parser(char *input, t_parms *prms)
 {
 	t_sh	*res;
 	t_token	*tkn;
 	// t_token	*exp;
 
-	if (!*input || is_quote_closed(prms, input))
+	if (!input || !*input || is_quote_closed(prms, input))
 		return (NULL);
+	// if (check_for_resources(input, prms))
+	// 	return (NULL);
 	input = ft_strtrim(input, " \t");
 	if (!input || !*input)
 		return (NULL);

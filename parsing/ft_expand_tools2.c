@@ -6,33 +6,51 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 13:06:27 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/25 19:11:13 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/26 14:09:45 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-char	*splt_var(t_parms *prm, char *var, char *bef, char *aft)
+char	*splt_var(t_parms *prm, char **arr, char *bef, char *aft)
 {
-	char	**arr;
 	t_var	*var_t;
 	int		i;
 
 	var_t = (t_var *)prm->var;
-	arr = my_split(var, ' ');
 	i = 0;
-	var_t->wrd = ft_pstrjoin(bef, arr[i]);
 	var_t->type = 'N';
 	prm->v_len = 0;
+	if (prm->v_bef)
+	{
+		var_t->wrd = bef;
+		ft_var_insrt(&var_t, ft_var_new(arr[i], 'N', 0));
+		prm->v_len++;
+		var_t = var_t->next;
+	}
+	else
+		var_t->wrd = ft_pstrjoin(bef, arr[i]);
 	while (arr[++i +1])
 	{
 		prm->v_len++;
 		ft_var_insrt(&var_t, ft_var_new(arr[i], 'N', 0));
 		var_t = var_t->next;
 	}
-	prm->l_len = ft_len(arr[i]);
-	aft = ft_pstrjoin(arr[i], aft);
-	ft_var_insrt(&var_t, ft_var_new(aft, 'L', 0));
+	if (prm->v_aft)
+	{
+		prm->v_len++;
+		prm->l_len = 0;
+		ft_var_insrt(&var_t, ft_var_new(arr[i], 'N', 0));
+		var_t = var_t->next;
+		ft_var_insrt(&var_t, ft_var_new(aft, 'L', 0));
+	}
+	else
+	{
+		prm->l_len = ft_len(arr[i]);
+		aft = ft_pstrjoin(arr[i], aft);
+		ft_var_insrt(&var_t, ft_var_new(aft, 'L', 0));
+	}
+	prm->v_len++;
 	return (NULL);
 }
 
@@ -93,18 +111,21 @@ char	*expand_it(char *wd, t_parms *prm, int i)
 	if (res)
 		return (res);
 	var = ft_env_srch(var, &prm->env);
-	if (prm->c != 'D')
+	if (var && (var[0] == ' ' || var[0] == 9))
+		prm->v_bef = 1;
+	if (var && (var[ft_len(var) -1] == ' ' || var[ft_len(var) -1] == 9))
+		prm->v_aft = 1;
+	if (var && prm->c != 'D')
 		var = ft_strtrim(var, " \t");
 	if (tkn->prev && (tkn->prev->type == '>' || tkn->prev->type == '<'))
 		return (check_n_file(prm, wd, i, j));
 	if (var && (prm->c == 'V' || prm->c == 'N' || prm->c == 'L')
 		&& !check_splt(prm->tkn, var))
-		return (splt_var(prm, var, get_prev(wd, i), wd + j));
+		return (splt_var(prm, my_split(var, ' '), get_prev(wd, i), wd + j));
 	if (var)
-	{
 		prm->len = ft_len(var);
+	if (var)
 		return (ft_pstrjoin(var, wd + j));
-	}
 	return (wd + j);
 }
 
@@ -121,15 +142,14 @@ char	*expand_var(t_var **var_t, t_parms *prm, char *token, char *res)
 		if (token[i] == '$')
 		{
 			prm->len = 0;
+			prm->v_bef = 0;
+			prm->v_aft = 0;
 			res = expand_it(token, prm, i);
 			if (!res)
 				return (NULL);
 			token = ft_pstrjoin(get_prev(token, i), res);
 			while (prm->len-- > 1)
-			{
-				// printf("\tskipped: [%c]\n", token[i]);
 				i++;
-			}
 		}
 		if (token[i] && token[i] != '$')
 			i++;

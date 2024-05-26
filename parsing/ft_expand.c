@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:29:54 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/25 20:24:26 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/26 11:32:44 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,11 +114,14 @@ static void	split_tkn(t_token **tkn, t_parms *prm, t_var *var, char *token)
 			|| var->type == 'N' || var->type == 'L')
 		{
 			prm->c = var->type;
+			prm->v_len = 0;
 			res = expand_var(&var, prm, var->wrd, "");
 			if (res)
 				var->wrd = res;
 			while (var && prm->v_len-- > 1)
+			{
 				var = var->next;
+			}
 		}
 		var = var->next;
 	}
@@ -137,6 +140,7 @@ void	ft_expand(t_token **token, t_parms *prm)
 		if ((!(tkn)->prev || ft_strcmp((tkn)->prev->token, "<<")))
 		{
 			res = tkn->token;
+			prm->t_len = 0;
 			split_tkn(token, prm, NULL, res);
 			while (tkn && prm->t_len-- > 1)
 				tkn = tkn->next;

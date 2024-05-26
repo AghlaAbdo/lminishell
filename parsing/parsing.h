@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:40:41 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/25 18:22:05 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/26 10:58:03 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	join_vars(t_token **tkn, t_token **curr, t_var **var, t_parms *prm, int *fl
 char	*get_prev(char *word, int i);
 char	*ft_trim(char *word, int j);
 char	*get_n_var(t_parms *prm, char *word, char *var, int i);
-char	*splt_var(t_parms *prm, char *var, char *bef, char *aft);
+char	*splt_var(t_parms *prm, char **arr, char *bef, char *aft);
 int		check_splt(t_token *tkn, char *value);
 char	*check_vlid_var(t_parms *prm, char *wd, int i, int *j);
 char	*expand_heredoc(char *token, t_parms *prms);
