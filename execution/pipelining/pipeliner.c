@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 07:28:47 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/26 20:05:10 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/27 15:45:03 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,16 @@ void	ft_close_ppchain(t_parms *param, t_sh *sh)
 
 	i = 1;
 	sz = ft_pp_chain_len(sh);
-	printf("sz = %d\n", sz);
 	pp_chain = param->pp_chain;
-	while (i < sz)
+	if (sz == 1)
 	{
-		ft_norm_sclose(pp_chain, i);
-		i++;
+		printf("sz = %d\n", sz);
+		ft_norm_dclose(pp_chain[0][0], pp_chain[0][1]);
+	}
+	else
+	{
+		while (i < sz)
+			ft_norm_sclose(pp_chain, i++);
 	}
 	return;
 }
@@ -294,6 +298,9 @@ void	ft_piper(t_sh *sh, t_parms *param)
 	ft_close_ppchain(param, sh);
 	while (waitpid(pid, &status, 0) != -1)
 		;
+	while (waitpid(-1, NULL, 0) != -1)
+		;
+	printf("did here ?\n");
 	if (WIFEXITED(status))
 		param->ext_stts = WEXITSTATUS(status);
 }

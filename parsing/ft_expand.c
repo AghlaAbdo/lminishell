@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:29:54 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/26 11:32:44 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/27 18:11:08 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,9 +119,7 @@ static void	split_tkn(t_token **tkn, t_parms *prm, t_var *var, char *token)
 			if (res)
 				var->wrd = res;
 			while (var && prm->v_len-- > 1)
-			{
 				var = var->next;
-			}
 		}
 		var = var->next;
 	}

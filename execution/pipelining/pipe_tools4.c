@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 09:15:52 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/26 19:46:33 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/27 15:30:30 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,15 +78,12 @@ int	(*ft_pp_chain_creator(t_sh *sh))[2]
 	int		i;
 
 	i = -1;
-	printf("been here in chain\n");
 	pp_nbr = ft_pp_chain_len(sh);
-	printf("pp_nbr: %d\n", pp_nbr);
 	pp_chain = ft_malloc(pp_nbr * sizeof(int [2]), 0);
 	while (++i < pp_nbr)
 	{
 		if (pipe(pp_chain[i]) == -1)
 		{
-			printf("filed here?\n");
 			while (i >= 0)
 			{
 				close(pp_chain[i][0]);

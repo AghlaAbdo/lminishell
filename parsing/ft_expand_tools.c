@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 21:07:30 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/26 10:22:54 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/27 18:11:51 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ char	*get_n_var(t_parms *prm, char *word, char *var, int i)
 	cpy[(i) +2] = '\0';
 	cpy++;
 	prm->len = ft_len(var);
-	// prm->v_len = 0;
 	if (!prm->len)
 		prm->len = 2;
 	value = ft_env_srch(cpy, &prm->env);
