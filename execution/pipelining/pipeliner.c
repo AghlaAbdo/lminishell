@@ -3,17 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   pipeliner.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 07:28:47 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/27 15:45:03 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/27 15:37:49 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../execution.h"
+#include <errno.h>
 #include <stdio.h>
 #include <sys/_types/_pid_t.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 //!-------------------------------------------------\fds collectors\--------------------------------------------------
 void	ft_close_ppchain(t_parms *param, t_sh *sh)
@@ -22,18 +25,15 @@ void	ft_close_ppchain(t_parms *param, t_sh *sh)
 	int	i;
 	int	sz;
 
-	i = 1;
+	i = -1;
 	sz = ft_pp_chain_len(sh);
 	pp_chain = param->pp_chain;
 	if (sz == 1)
-	{
-		printf("sz = %d\n", sz);
 		ft_norm_dclose(pp_chain[0][0], pp_chain[0][1]);
-	}
 	else
 	{
-		while (i < sz)
-			ft_norm_sclose(pp_chain, i++);
+		while (++i < sz)
+			ft_norm_sclose(pp_chain, i);
 	}
 	return;
 }
@@ -49,7 +49,7 @@ void	ft_open_close(t_sh *sh, t_rdr *rdrs, t_parms *param, int flg)
 			if (ft_is_dir(rdrs->fl_name) == 1)
 				exit(1);
 			if (access(rdrs->fl_name, W_OK) == -1)
-				ft_redirs_bad_inf(rdrs, sh, param, 3);
+				ft_redirs_bad_inf(rdrs, sh, param, errno);
 			else
 				ft_redirs_bad_inf(rdrs, sh, param, errno);
 		}
@@ -59,9 +59,11 @@ void	ft_open_close(t_sh *sh, t_rdr *rdrs, t_parms *param, int flg)
 		sh->in_fd = open(rdrs->fl_name, O_RDONLY);
 		if (sh->in_fd == -1)
 		{
+			if (ft_is_dir(rdrs->fl_name) == 1)
+				exit(1);
 			if (access(rdrs->fl_name, R_OK) == -1)
 			{
-				ft_redirs_bad_inf(rdrs, sh, param, 3);
+				ft_redirs_bad_inf(rdrs, sh, param, errno);
 				exit(1);
 			}
 			else
@@ -75,8 +77,10 @@ void	ft_open_close(t_sh *sh, t_rdr *rdrs, t_parms *param, int flg)
 		{
 			if (ft_is_dir(rdrs->fl_name) == 1)
 				exit(1);
+			if (ft_is_dir(rdrs->fl_name) == 1)
+				exit(1);
 			if (access(rdrs->fl_name, R_OK) == -1)
-				ft_redirs_bad_inf(rdrs, sh, param, 3);
+				ft_redirs_bad_inf(rdrs, sh, param, errno);
 			else
 				ft_redirs_bad_inf(rdrs, sh, param, errno);
 		}
@@ -107,7 +111,7 @@ void	ft_redirs_bad_inf(t_rdr * rdrs, t_sh *sh, t_parms *param, int err)
 		param->ext_stts = 1;
 		exit(param->ext_stts);
 	}
-	else if (err == 3)
+	else if (err == 13)
 	{
 		write(2, rdrs->fl_name, ft_len(rdrs->fl_name));
 		write(2, ": Permission denied\n", 21);
@@ -153,8 +157,10 @@ void	ft_fst_pp_exec(t_parms *param,  t_sh *curr_sh)
 {
 	char	*bin_file;
 
-	// fiha / 
-	bin_file = ft_path_parser(param->envp, curr_sh->value[0], param);
+	if (!ft_is_there_slash(curr_sh->value[0]))
+		bin_file = ft_path_parser(param->envp, curr_sh->value[0], param);
+	else
+		bin_file = curr_sh->value[0];
 	if (!bin_file && ft_is_builtin(curr_sh->value[0]) != 1)
 		ft_norm_nfound_cmd(curr_sh);
 	if (curr_sh->in_fd != -1)
@@ -175,6 +181,10 @@ void	ft_mid_pp_exec(t_parms *param, t_sh *curr_sh)
 {
 	char	*bin_file;
 
+	if (!ft_is_there_slash(curr_sh->value[0]))
+		bin_file = ft_path_parser(param->envp, curr_sh->value[0], param);
+	else
+		bin_file = curr_sh->value[0];
 	bin_file = ft_path_parser(param->envp, curr_sh->value[0], param);
 	if (!bin_file)
 		ft_norm_nfound_cmd(curr_sh);
@@ -191,6 +201,17 @@ void	ft_lst_pp_exec(t_parms *param, t_sh *curr_sh)
 {
 	char	*bin_file;
 
+	if (!ft_is_there_slash(curr_sh->value[0]))
+	{
+		bin_file = ft_path_parser(param->envp, curr_sh->value[0], param);
+		// if (!bin_file)
+		// {
+		// 	printf("here\n");
+		// 	exit(127);
+		// }
+	}
+	else
+		bin_file = curr_sh->value[0];
 	bin_file = ft_path_parser(param->envp, curr_sh->value[0], param);
 	if (!bin_file)
 		ft_norm_child_stts(curr_sh, param, 127);
@@ -268,13 +289,36 @@ pid_t	ft_lst_pp_forker(t_sh *sh, t_parms *param, t_sh *head)
 	return (pid);
 }
 
+// int	ft_sp_case(t_sh *sh)
+// {
+// 	t_sh *head;
+// 	head = sh;
+// 	while (head)
+// 	{
+// 		if (!ft_strcmp(head->value[0], "cat"))
+// 		{
+// 			if (!ft_strcmp(head->next->value[0], "cat"))
+// 			{
+// 				if (!ft_strcmp(head->next->next->value[0], "ls"))
+// 					return (1);
+// 			}
+// 		}
+// 	}
+// 	return (0);
+// }
+
+
 //!-------------------------------------------------\pipers\--------------------------------------------------
 void	ft_piper(t_sh *sh, t_parms *param)
 {
 	t_sh	*head;
 	int		leng;
 	int		status;
-	
+	//! int		sv_in;
+
+	//! sv_in = dup(STDIN_FILENO);
+	//! if (sv_in == -1)
+	//! 	perror("lminishell");
 	head = sh;
 	leng = ft_pp_chain_len(sh);
 	param->ppc_idx = 0;
@@ -290,18 +334,24 @@ void	ft_piper(t_sh *sh, t_parms *param)
 			else if (param->ppc_idx != 0 && param->ppc_idx != leng)
 				ft_mid_pp_forker(sh, param, head);
 			else if (param->ppc_idx == leng)
+			{
+					// ft_lst_pp_forker(sh, param, head);
+				// if (!ft_sp_case(sh))
 				pid = ft_lst_pp_forker(sh, param, head);
+				// else
+			}
 			param->ppc_idx++;
 		}
 		head = head->next;
 	}
 	ft_close_ppchain(param, sh);
-	while (waitpid(pid, &status, 0) != -1)
-		;
+	waitpid(pid, &status, 0);
 	while (waitpid(-1, NULL, 0) != -1)
 		;
-	printf("did here ?\n");
 	if (WIFEXITED(status))
 		param->ext_stts = WEXITSTATUS(status);
+	//! if (dup2(sv_in, STDIN_FILENO) == -1)
+	//! 	perror("dup2");
+	//! close(sv_in);
 }
 

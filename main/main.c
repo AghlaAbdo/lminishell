@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 02:15:05 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/26 18:32:38 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/27 16:04:37 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "../execution/execution.h"
 #include "../parsing/parsing.h"
-#include <stdio.h>
-#include <sys/param.h>
+
 
 //!=========================
 void prnt_rdr(t_rdr *head)
@@ -82,23 +81,29 @@ void	ft_parms_init(t_parms *holder, int ac, char *av[], char *ep[])
 	ft_env_rmv(&holder->env, "OLDPWD");
 }
 
-char	*ft_line(int ext_stts, t_parms *param)
+char	*ft_line(t_parms *param)
 {
 	char	*line;
 	
-	if (!ext_stts)
-		line = readline("lminishell-0.0$ ");
-	else
-		line = readline("lminishell-0.1$ ");
+	line = readline("lminishell-0.1$ ");
 	if (!line)
 	{
 		printf("exit\n");
-		sleep(9);
 		exit(param->ext_stts);
 	}
 	if (line)
 		add_history(line);
 	return (line);
+}
+void 	ft_handler(int sig)//!signal
+{
+	if (sig == SIGINT)
+	{
+		write(1, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+	}
 }
 
 int	main(int ac, char *av[], char *ep[])
@@ -107,13 +112,15 @@ int	main(int ac, char *av[], char *ep[])
 	char	*input;
 	t_sh	*sh;
 
+	rl_catch_signals = 0;//!signal
+	signal(SIGINT, ft_handler);//!signal
+	signal(SIGQUIT, SIG_IGN);//!signal
 	ft_parms_init(&holder, ac, av, ep);
 	while (1)
 	{
-		input = ft_line(holder.ext_stts, &holder);
+		input = ft_line(&holder);
 		sh = ft_parser(input, &holder);
 		ft_exec(sh, &holder);
-		// printf("-->%d\n", holder.ext_stts);
 		free(input);
 	}
 	rl_clear_history();

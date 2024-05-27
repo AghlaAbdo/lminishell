@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_tools4.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 09:15:52 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/27 15:30:30 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/26 19:25:18 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ void	ft_norm_child_stts(t_sh *curr_sh, t_parms * param, int stts)
 	(void)stts;
 	write(2, curr_sh->value[0], ft_len(curr_sh->value[0]));
 	write(2, ": command not found\n", 21);
-	printf("hnaaaaaaaaaaaaaaa\n");
 	exit(127);
 }
 

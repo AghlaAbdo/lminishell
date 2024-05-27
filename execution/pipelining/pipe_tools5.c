@@ -6,11 +6,12 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 09:59:00 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/14 19:31:30 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/26 13:23:25 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../execution.h"
+#include <stdio.h>
 
 void	ft_fds_collector(t_parms *param, int leng, int norm_i)
 {
@@ -42,6 +43,8 @@ void	ft_fds_collector(t_parms *param, int leng, int norm_i)
 
 int	ft_is_builtin(char *cmd)
 {
+	if (!cmd)
+		return (0);
 	return (!ft_strcmp(cmd, "env")
 			|| !ft_strcmp(cmd, "pwd")
 			|| !ft_strcmp(cmd, "echo")

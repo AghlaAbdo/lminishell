@@ -6,7 +6,7 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 23:01:41 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/24 18:04:38 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/27 15:57:30 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#include <signal.h>
 
 char		*ft_strjoin(char *s1, char *s2);
 long long	ft_ext_atoi(char *s);
@@ -75,4 +76,6 @@ t_sh	*ft_exec_parser(char *line);
 void	p2d(char **var);
 int		ft_pp_chain_len(t_sh *sh);
 void	prnt_env(t_env *head);
+void 	ft_handler(int sig);
+
 #endif
