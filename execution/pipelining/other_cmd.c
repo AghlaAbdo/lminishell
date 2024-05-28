@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   other_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 22:05:37 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/27 16:08:20 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/28 18:56:59 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ static void	ft_handle_redirs(t_sh *sh, t_parms *param)
 // 	}
 // }
 
-int g_inchild = 0;
 static void ft_handler_redirect(int sig)
 {
 	if (g_inchild)
@@ -117,8 +116,8 @@ int	ft_other_cmd(t_sh *sh, t_parms *param)
 			if (ft_is_dir(bin_file) == 1)
 				exit (126);
 		}
-		// if (sh->rdr != NULL)
-		// 	ft_handle_redirs(sh, param);
+		if (sh->rdr != NULL)
+			ft_handle_redirs(sh, param);
 		execve(bin_file, sh->value, ft_env_to_dp(&param->env));
 		write(2, "lminishell ", 12);
 		write(2, sh->value[0], ft_len(sh->value[0]));

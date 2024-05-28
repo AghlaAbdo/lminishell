@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:29:54 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/27 18:11:08 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/28 19:27:46 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	add_vars(t_token **tkn, t_parms *prm, t_var *var)
 		join_vars(tkn, &curr, &var, prm, &flag);
 		while (var && var->type == 'N')
 		{
-			ft_token_insrt(&curr, ft_token_new(var->wrd, 'V', 0));
+			ft_token_insrt(&curr, ft_token_new(var->wrd, 'V'));
 			curr = curr->next;
 			prm->t_len++;
 			var = var->next;
@@ -135,7 +135,7 @@ void	ft_expand(t_token **token, t_parms *prm)
 	while (tkn)
 	{
 		prm->tkn = (t_token *)(tkn);
-		if ((!(tkn)->prev || ft_strcmp((tkn)->prev->token, "<<")))
+		if (tkn->type != '>' && tkn->type != '<' && tkn->type != '|')
 		{
 			res = tkn->token;
 			prm->t_len = 0;

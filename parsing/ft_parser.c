@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:54:38 by thedon            #+#    #+#             */
-/*   Updated: 2024/05/26 22:01:05 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/28 19:27:59 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ int	check_syntax(t_parms *prm, t_token *tkn)
 			|| (tkn->next && *tkn->next->token == '|' && (*tkn->token == '>'
 			|| *tkn->token == '<' || *tkn->token == '|'))
 			|| ((tkn->type == '>' || tkn->type == '<') && (!tkn->next || (tkn->next
-			&& (tkn->next->type == '<' || tkn->next->type == '>')))))
+			&& (tkn->next->type == '<' || tkn->next->type == '>'))))
+			|| (tkn->type == '|' && !tkn->next))
 		{
 			prm->ext_stts = 258;
 			printf("lminishell: syntax error near unexpected token\n");

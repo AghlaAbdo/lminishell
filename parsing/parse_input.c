@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 06:44:23 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/14 20:42:03 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/28 19:29:29 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	get_word(t_token **token, char *input, int *i, int *j)
 				;
 			get_rest_word(input, i);
 			ft_token_addb(token,
-				ft_token_new(get_token(input + *j, *i - *j), 'w', 0));
+				ft_token_new(get_token(input + *j, *i - *j), 'w'));
 			*j = *i;
 			break ;
 		}
@@ -87,7 +87,7 @@ t_token	*parse_input(t_token *token, char *input, char *word, int i)
 		get_word(&token, input, &i, &j);
 		if (j != i)
 			ft_token_addb(&token,
-				ft_token_new(get_token(input + j, i - j), 'S', 0));
+				ft_token_new(get_token(input + j, i - j), 'S'));
 		while (input[i] && (input[i] == ' ' || input[i] == 9))
 			i++;
 		c = input[i];
@@ -97,7 +97,7 @@ t_token	*parse_input(t_token *token, char *input, char *word, int i)
 			while (input[i] && input[i] == c)
 				i++;
 			word = get_token(input + j, i - j);
-			ft_token_addb(&token, ft_token_new(word, check_word(word), 0));
+			ft_token_addb(&token, ft_token_new(word, check_word(word)));
 		}
 		while (input[i] && (input[i] == ' ' || input[i] == 9))
 			i++;

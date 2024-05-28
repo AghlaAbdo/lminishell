@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:40:41 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/26 10:58:03 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/28 15:44:32 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	*ft_itoa(int n);
 t_token	*parse_input(t_token *token, char *input, char *word, int i);
 
 //	t_hoken tools
-t_token	*ft_token_new(char *word, char type, int len);
+t_token	*ft_token_new(char *word, char type);
 void	ft_token_addb(t_token **head, t_token *new);
 void	ft_token_insrt(t_token **head, t_token *new);
 void	ft_token_rmv(t_token **head, t_token *rmv);

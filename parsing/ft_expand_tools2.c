@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 13:06:27 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/26 14:09:45 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/28 19:27:16 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,10 @@ char	*check_n_file(t_parms *prm, char *wd, int i, int j)
 	var[i] = '\0';
 	tkn = (t_token *)prm->tkn;
 	var_t = (t_var *)prm->var;
-	if (var_t->type!= 'D' && (ft_strchr(value, ' ') || ft_strchr(value, 9)))
+	if (var_t->type != 'D' && (ft_strchr(value, ' ') || ft_strchr(value, 9)))
 	{
-		prm->len = ft_len(var);
 		tkn->type = 'N';
-		return (var);
+		return (NULL);
 	}
 	else if (value)
 	{
@@ -169,7 +168,6 @@ void	join_vars(t_token **tkn, t_token **curr, t_var **var, t_parms *prm, int *fl
 	t_var	*var_t;
 
 	var_t = (t_var *)prm->var;
-	(void)tkn;
 	res = "";
 	rmv = (t_token *)prm->tkn;
 	// printf("\tvar: [%s][%c]\tto rmv: [%s]\n",var_t->wrd, var_t->type, rmv->token);
@@ -188,11 +186,11 @@ void	join_vars(t_token **tkn, t_token **curr, t_var **var, t_parms *prm, int *fl
 	{
 		if (res && *res)
 		{
-			ft_token_insrt(curr, ft_token_new(res, 'V', 0));
+			ft_token_insrt(curr, ft_token_new(res, 'V'));
 			*curr = (*curr)->next;
 			prm->t_len++;
 		}
-		else
+		else if (rmv->prev && rmv->prev->type != '>' && rmv->prev->type != '<')
 			ft_token_rmv(tkn, rmv);
 		*flag = 1;
 	}
@@ -203,8 +201,13 @@ void	join_vars(t_token **tkn, t_token **curr, t_var **var, t_parms *prm, int *fl
 			(*curr)->token = res;
 			prm->t_len++;
 		}
-		else
+		else if (rmv->prev && rmv->prev->type != '>' && rmv->prev->type != '<')
 			ft_token_rmv(tkn, rmv);
+		else
+		{
+			rmv->type = 'N';
+			// printf("rmv->type: [%c]\n", rmv->type);
+		}
 		*flag = 1;
 	}
 }

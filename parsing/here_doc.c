@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 19:11:49 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/23 15:43:02 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/27 21:53:32 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,21 @@ char	*get_fl_name(t_parms *prm, int *fd)
 	return (fl_name);
 }
 
+// void	my_handler(int sig)
+// {
+// 	// if ()
+// 	g_inchild = sig;
+// 	printf("sig = [%d]\n", sig);
+	
+// }
+
 void	read_heredoc(t_token *tkn, t_parms *prm, char *limit, int quots)
 {
 	char	*line;
 	char	*res;
 	char	*fl_name;
 	int		fd;
+	int		tmp;
 
 	fl_name = get_fl_name(prm, &fd);
 	prm->n_file++;
@@ -73,6 +82,15 @@ void	read_heredoc(t_token *tkn, t_parms *prm, char *limit, int quots)
 	while (1)
 	{
 		line = readline("> ");
+		tmp = g_inchild;
+		// signal(SIGINT, my_handler);
+		// printf("g_inchild: [%d]\n", g_inchild);
+		// 	printf("SIGINT: [%d]\n", SIGINT);
+		// if (g_inchild == SIGINT)
+		// {
+		// 	g_inchild = tmp;
+		// 	break ;
+		// }
 		if (!line || !ft_strcmp(line, limit))
 			break ;
 		res = line;
@@ -83,7 +101,7 @@ void	read_heredoc(t_token *tkn, t_parms *prm, char *limit, int quots)
 		free(line);
 	}
 	close(fd);
-	free(line);
+	// free(line);
 	tkn->next->token = fl_name;
 }
 

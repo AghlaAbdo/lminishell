@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 19:53:21 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/27 18:16:35 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/27 21:42:37 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <readline/history.h>
 #include <sys/param.h>
 
+extern int g_inchild;
 
 typedef struct	s_rdr
 {

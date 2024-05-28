@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 02:15:05 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/27 16:04:37 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/28 16:20:13 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,17 @@
 //!=========================
 void prnt_rdr(t_rdr *head)
 {
-	printf("+-------------------+---------+\n");
-	printf("|   File Name	   |  Mode   |\n");
-	printf("+-------------------+---------+\n");
+	printf("+-------------------+---------+---------+\n");
+	printf("|   File Name	    |  Mode             |\n");
+	printf("+-------------------+---------+---------+\n");
 	t_rdr *current = head;
 
 	while (current != NULL)
 	{
-		printf("| %-17s| %-8s|\n", current->fl_name, current->mode);
+		printf("| %-17s| %-8s|\t%d\n", current->fl_name, current->mode, current->flag);
 		current = current->next;
 	}
-	printf("+-------------------+---------+\n");
+	printf("+-------------------+---------+---------+\n");
 }
 void prnt_sh(t_sh *head)
 {
@@ -105,7 +105,7 @@ void 	ft_handler(int sig)//!signal
 		rl_redisplay();
 	}
 }
-
+int g_inchild = 0;
 int	main(int ac, char *av[], char *ep[])
 {
 	t_parms	holder;
