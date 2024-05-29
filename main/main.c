@@ -3,23 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 02:15:05 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/28 16:20:13 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/29 08:36:16 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "../execution/execution.h"
 #include "../parsing/parsing.h"
+#include <signal.h>
+#include <sys/signal.h>
 
 
 //!=========================
 void prnt_rdr(t_rdr *head)
 {
 	printf("+-------------------+---------+---------+\n");
-	printf("|   File Name	    |  Mode             |\n");
+	printf("|   File Name	   |  Mode   |  flag     |\n");
 	printf("+-------------------+---------+---------+\n");
 	t_rdr *current = head;
 
@@ -95,32 +97,47 @@ char	*ft_line(t_parms *param)
 		add_history(line);
 	return (line);
 }
-void 	ft_handler(int sig)//!signal
+
+void	h2(int s)
 {
-	if (sig == SIGINT)
+	if (s == SIGINT)
 	{
 		write(1, "\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
+		g_inchild = 1;
 	}
 }
-int g_inchild = 0;
+
+
 int	main(int ac, char *av[], char *ep[])
 {
 	t_parms	holder;
 	char	*input;
 	t_sh	*sh;
 
-	rl_catch_signals = 0;//!signal
-	signal(SIGINT, ft_handler);//!signal
-	signal(SIGQUIT, SIG_IGN);//!signal
+	if (!isatty(0))
+		return (1);
+	g_inchild= 0;
+	rl_catch_signals = 0;
+	signal(SIGINT, ft_handler);
+	signal(SIGQUIT, ft_handler);
 	ft_parms_init(&holder, ac, av, ep);
 	while (1)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGINT, h2);
 		input = ft_line(&holder);
+		if (g_inchild)
+			holder.ext_stts = 1;
+		g_inchild = 0;
+		signal(SIGINT, ft_handler);
+		signal(SIGQUIT, ft_handler);
 		sh = ft_parser(input, &holder);
+		g_inchild = 1;
 		ft_exec(sh, &holder);
+		g_inchild = 0;
 		free(input);
 	}
 	rl_clear_history();

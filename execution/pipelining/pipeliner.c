@@ -6,17 +6,11 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 07:28:47 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/27 15:37:49 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/29 09:03:57 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../execution.h"
-#include <errno.h>
-#include <stdio.h>
-#include <sys/_types/_pid_t.h>
-#include <sys/stat.h>
-#include <sys/wait.h>
-#include <unistd.h>
 
 //!-------------------------------------------------\fds collectors\--------------------------------------------------
 void	ft_close_ppchain(t_parms *param, t_sh *sh)
@@ -202,14 +196,7 @@ void	ft_lst_pp_exec(t_parms *param, t_sh *curr_sh)
 	char	*bin_file;
 
 	if (!ft_is_there_slash(curr_sh->value[0]))
-	{
 		bin_file = ft_path_parser(param->envp, curr_sh->value[0], param);
-		// if (!bin_file)
-		// {
-		// 	printf("here\n");
-		// 	exit(127);
-		// }
-	}
 	else
 		bin_file = curr_sh->value[0];
 	bin_file = ft_path_parser(param->envp, curr_sh->value[0], param);
@@ -289,42 +276,20 @@ pid_t	ft_lst_pp_forker(t_sh *sh, t_parms *param, t_sh *head)
 	return (pid);
 }
 
-// int	ft_sp_case(t_sh *sh)
-// {
-// 	t_sh *head;
-// 	head = sh;
-// 	while (head)
-// 	{
-// 		if (!ft_strcmp(head->value[0], "cat"))
-// 		{
-// 			if (!ft_strcmp(head->next->value[0], "cat"))
-// 			{
-// 				if (!ft_strcmp(head->next->next->value[0], "ls"))
-// 					return (1);
-// 			}
-// 		}
-// 	}
-// 	return (0);
-// }
-
-
 //!-------------------------------------------------\pipers\--------------------------------------------------
 void	ft_piper(t_sh *sh, t_parms *param)
 {
 	t_sh	*head;
 	int		leng;
 	int		status;
-	//! int		sv_in;
+	struct termios	state;
 
-	//! sv_in = dup(STDIN_FILENO);
-	//! if (sv_in == -1)
-	//! 	perror("lminishell");
 	head = sh;
 	leng = ft_pp_chain_len(sh);
 	param->ppc_idx = 0;
 	param->pp_chain = ft_pp_chain_creator(sh);
-
 	pid_t pid = -1;
+	tcgetattr(STDOUT_FILENO, &state);
 	while (head)
 	{
 		if (!ft_strcmp(head->type, "CMD"))
@@ -334,12 +299,7 @@ void	ft_piper(t_sh *sh, t_parms *param)
 			else if (param->ppc_idx != 0 && param->ppc_idx != leng)
 				ft_mid_pp_forker(sh, param, head);
 			else if (param->ppc_idx == leng)
-			{
-					// ft_lst_pp_forker(sh, param, head);
-				// if (!ft_sp_case(sh))
 				pid = ft_lst_pp_forker(sh, param, head);
-				// else
-			}
 			param->ppc_idx++;
 		}
 		head = head->next;
@@ -348,10 +308,8 @@ void	ft_piper(t_sh *sh, t_parms *param)
 	waitpid(pid, &status, 0);
 	while (waitpid(-1, NULL, 0) != -1)
 		;
-	if (WIFEXITED(status))
-		param->ext_stts = WEXITSTATUS(status);
-	//! if (dup2(sv_in, STDIN_FILENO) == -1)
-	//! 	perror("dup2");
-	//! close(sv_in);
+	ft_updt_stts(status, param, state);
+	// if (WIFEXITED(status))
+	// 	param->ext_stts = WEXITSTATUS(status);
 }
 

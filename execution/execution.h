@@ -6,7 +6,7 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 23:01:41 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/27 15:57:30 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/29 09:02:49 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,14 @@ void	ft_open_close(t_sh *sh, t_rdr *rdrs, t_parms *param, int flg);
 void	ft_close_ppchain(t_parms *param, t_sh *sh);
 void	ft_redirs_bad_inf(t_rdr * rdrs, t_sh *sh, t_parms *param, int err);
 void	ft_sngl_cmd_rdr_strms(t_sh *sh);
-int	ft_handle_built_redirs(t_sh *sh, t_parms *param);
+int		ft_handle_built_redirs(t_sh *sh, t_parms *param);
+int		ft_norm_err_msgg(t_sh *sh, t_parms *param);
 
 //!just for interactive testing
 t_sh	*ft_exec_parser(char *line);
 void	p2d(char **var);
 int		ft_pp_chain_len(t_sh *sh);
 void	prnt_env(t_env *head);
-void 	ft_handler(int sig);
-
+void	ft_handler(int sig);
+void	ft_handler_redirect(int sig);
 #endif

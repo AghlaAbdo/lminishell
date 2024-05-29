@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parser.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:54:38 by thedon            #+#    #+#             */
-/*   Updated: 2024/05/28 19:27:59 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/29 08:47:26 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,7 +220,8 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 	// print_tkn_exp(tkn, 0);
 	// exp = *tkn;
 	ft_expand(&tkn, prms);
-	here_doc(tkn, prms);
+	if (here_doc(tkn, prms))
+		return (NULL);
 	// rmv_quotes(tkn);
 	// print_tkn_exp(tkn, 1);
 	res = ft_tokenization(NULL, tkn, NULL, 0);

@@ -3,14 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 19:11:49 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/27 21:53:32 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/29 08:50:00 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
+#include <signal.h>
+#include <sys/fcntl.h>
+#include <unistd.h>
 
 void	rmv_char(char *token)
 {
@@ -66,7 +69,13 @@ char	*get_fl_name(t_parms *prm, int *fd)
 	
 // }
 
-void	read_heredoc(t_token *tkn, t_parms *prm, char *limit, int quots)
+void	h3(int s)
+{
+	if (s == SIGINT)
+		close(0);
+}
+
+int	read_heredoc(t_token *tkn, t_parms *prm, char *limit, int quots)
 {
 	char	*line;
 	char	*res;
@@ -74,6 +83,8 @@ void	read_heredoc(t_token *tkn, t_parms *prm, char *limit, int quots)
 	int		fd;
 	int		tmp;
 
+	signal(SIGINT, SIG_DFL);
+	signal(SIGINT, h3);
 	fl_name = get_fl_name(prm, &fd);
 	prm->n_file++;
 	if (ft_strchr(limit, '"') || ft_strchr(limit, '\''))
@@ -91,6 +102,12 @@ void	read_heredoc(t_token *tkn, t_parms *prm, char *limit, int quots)
 		// 	g_inchild = tmp;
 		// 	break ;
 		// }
+		if (!ttyname(0))
+		{
+			open(ttyname(2), O_RDWR);
+			prm->ext_stts = 1;
+			return 1;
+		}
 		if (!line || !ft_strcmp(line, limit))
 			break ;
 		res = line;
@@ -101,18 +118,21 @@ void	read_heredoc(t_token *tkn, t_parms *prm, char *limit, int quots)
 		free(line);
 	}
 	close(fd);
-	// free(line);
+	free(line);
 	tkn->next->token = fl_name;
+	return (0);
 }
 
-void	here_doc(t_token *tkn, t_parms *prm)
+int	here_doc(t_token *tkn, t_parms *prm)
 {
 	while (tkn)
 	{
 		if (tkn->type == '<' && ft_len(tkn->token) > 1)
 		{
-			read_heredoc(tkn, prm, tkn->next->token, 0);
+			if (read_heredoc(tkn, prm, tkn->next->token, 0))
+				return (1);
 		}
 		tkn = tkn->next;
 	}
+	return (0);
 }

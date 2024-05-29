@@ -3,19 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   other_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 22:05:37 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/28 18:56:59 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/29 09:03:31 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../execution.h"
-#include <signal.h>
-#include <stdio.h>
+#include <sys/termios.h>
 
-
-// int	g_signal = 0;
 void	ft_sngl_cmd_rdr_strms(t_sh *sh)
 {
 	if (sh->in_fd != -1)
@@ -50,40 +47,24 @@ static void	ft_handle_redirs(t_sh *sh, t_parms *param)
 		}
 		else
 		{
+			if (!ft_len(sh->rdr->fl_name))
+			{
+				write(2, "lminishell", 11);
+				write(2, rdrs->fl_name, ft_len(rdrs->fl_name));
+				write(2, ": No such file or directory\n", 29);
+			}
+			else
+			{
+				write(2, "lminishell", 11);
+				write(2, rdrs->fl_name, ft_len(rdrs->fl_name));
+				write(2, ": ambiguous redirect\n", 22);
+			}
 			param->ext_stts = 1;
-			write(2, rdrs->fl_name, ft_len(rdrs->fl_name));
-			write(2, ": ambiguous redirect\n", 22);
 			exit (param->ext_stts);
 		}
 		rdrs = rdrs->next;
 	}
 	ft_sngl_cmd_rdr_strms(sh);
-}
-// void 	ft_handler2(int sig)//!signal
-// {
-// 	if (sig == SIGINT)
-// 	{
-// 		write(1, "\n", 1);
-// 		g_signal = 1;
-// 		//exit(1);
-// 		//rl_replace_line("", 0);
-// 		//rl_on_new_line();
-// 		// rl_redisplay();
-// 	}
-// 	else if (sig == SIGQUIT){
-// 		printf("Quit: 3\n");
-// 	}
-// }
-
-static void ft_handler_redirect(int sig)
-{
-	if (g_inchild)
-	{
-		printf("\n");
-		g_inchild = 0;
-		return ;
-	}
-	ft_handler(sig);
 }
 
 int	ft_other_cmd(t_sh *sh, t_parms *param)
@@ -91,16 +72,18 @@ int	ft_other_cmd(t_sh *sh, t_parms *param)
 	char	*bin_file;
 	pid_t	pid;
 	int		ex_sts;
-
-	signal(SIGINT, ft_handler_redirect);
+	struct termios	state;
+	
+	if (sh->value[0] != NULL && ft_len(sh->value[0]) == 0)
+		return (ft_norm_err_msgg(sh, param));
 	g_inchild = 1;
 	pid = fork();
 	ex_sts = 0;
+	tcgetattr(STDOUT_FILENO, &state);
 	if (pid == -1)
 		perror("lminishell ");
 	if (pid == 0)
 	{
-		// signal(SIGINT, ft_handler2);//!signal
 		if (ft_len(sh->value[0]) == 0)
 			exit(0);
 		if (!ft_is_there_slash(sh->value[0]))
@@ -119,15 +102,10 @@ int	ft_other_cmd(t_sh *sh, t_parms *param)
 		if (sh->rdr != NULL)
 			ft_handle_redirs(sh, param);
 		execve(bin_file, sh->value, ft_env_to_dp(&param->env));
-		write(2, "lminishell ", 12);
-		write(2, sh->value[0], ft_len(sh->value[0]));
-		write(2, ": command not found\n", 21);
-		exit(127);
+		exit(ft_norm_err_msgg(sh, param));
 	}
-	// signal(SIGINT, ft_handler);//!signal
 	wait(&ex_sts);
 	g_inchild = 0;
-	if (WIFEXITED(ex_sts))
-		param->ext_stts = WEXITSTATUS(ex_sts);
+	ft_updt_stts(ex_sts, param, state);
 	return (param->ext_stts);
 }

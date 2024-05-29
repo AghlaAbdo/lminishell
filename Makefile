@@ -6,7 +6,7 @@
 #    By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/26 14:32:42 by srachidi          #+#    #+#              #
-#    Updated: 2024/05/26 14:32:54 by srachidi         ###   ########.fr        #
+#    Updated: 2024/05/28 15:26:36 by srachidi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,15 +25,15 @@ O_DR = objs/
 SRC := 	main/main.c \
 		main/ft_parstester.c \
 		main/grbg_cllctor.c \
-		env/env_tools1.c \
-		env/env_tools2.c \
-		env/env_tools3.c \
-		env/env_tools4.c \
-		env/fcts_tools1.c \
-		env/fcts_tools2.c \
-		env/fcts_tools3.c \
-		env/rdr_tools/rdr_tools1.c \
-		env/sh_tools/sh_tools1.c \
+		env_tools/env_tools1.c \
+		env_tools/env_tools2.c \
+		env_tools/env_tools3.c \
+		env_tools/env_tools4.c \
+		env_tools/fcts_tools1.c \
+		env_tools/fcts_tools2.c \
+		env_tools/fcts_tools3.c \
+		env_tools/rdr_tools/rdr_tools1.c \
+		env_tools/sh_tools/sh_tools1.c \
 		parsing/ft_parser.c					\
 		parsing/my_split.c					\
 		parsing/tools.c						\
@@ -67,6 +67,7 @@ SRC := 	main/main.c \
 		execution/pipelining/pipe_tools4.c \
 		execution/pipelining/pipe_tools5.c \
 		execution/pipelining/pipe_tools6.c \
+		signals/signals.c \
 		# parsing/test.c #!te9der tzid file dyalk haka !!!!
 
 CLR_RMV		:= \033[0m

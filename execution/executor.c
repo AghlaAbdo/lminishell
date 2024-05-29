@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 09:53:35 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/28 19:26:47 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/28 21:15:39 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
-#include <stdio.h>
-#include <unistd.h>
 
 static int	ft_blt_rdrs_bad_inf(t_rdr * rdrs, t_sh *sh, t_parms *param, int err)
 {
@@ -47,10 +45,10 @@ static int	ft_blt_opn_cls(t_sh *sh, t_rdr *rdrs, t_parms *param, int flg)
 				param->ext_stts = 1;
 				return (-2);
 			}
+			if (access(rdrs->fl_name, F_OK) != 0)
+				return (ft_blt_rdrs_bad_inf(rdrs, sh, param, errno));
 			if (access(rdrs->fl_name, W_OK) == -1)
 				return (ft_blt_rdrs_bad_inf(rdrs, sh, param, 3));
-			else
-				return (ft_blt_rdrs_bad_inf(rdrs, sh, param, errno));
 		}
 	}
 	else if (flg == 1)
@@ -63,10 +61,10 @@ static int	ft_blt_opn_cls(t_sh *sh, t_rdr *rdrs, t_parms *param, int flg)
 				param->ext_stts = 1;
 				return (-2);
 			}
+			if (access(rdrs->fl_name, F_OK) != 0)
+				return (ft_blt_rdrs_bad_inf(rdrs, sh, param, errno));
 			if (access(rdrs->fl_name, R_OK) == -1)
 				return (ft_blt_rdrs_bad_inf(rdrs, sh, param, 3));
-			else
-				return (ft_blt_rdrs_bad_inf(rdrs, sh, param, errno));
 		}
 	}
 	else if (flg == 2)
@@ -81,10 +79,10 @@ static int	ft_blt_opn_cls(t_sh *sh, t_rdr *rdrs, t_parms *param, int flg)
 				param->ext_stts = 1;
 				return (-2);
 			}
+			if (access(rdrs->fl_name, F_OK) != 0)
+				return (ft_blt_rdrs_bad_inf(rdrs, sh, param, errno));
 			if (access(rdrs->fl_name, R_OK) == -1)
 				return (ft_blt_rdrs_bad_inf(rdrs, sh, param, 3));
-			else
-				return (ft_blt_rdrs_bad_inf(rdrs, sh, param, errno));
 		}
 	}
 	return (0);
@@ -93,6 +91,7 @@ static int	ft_blt_opn_cls(t_sh *sh, t_rdr *rdrs, t_parms *param, int flg)
 int	ft_handle_built_redirs(t_sh *sh, t_parms *param)
 {
 	t_rdr	*rdrs;
+
 	if (sh->rdr == NULL)
 		return (0);
 	rdrs = sh->rdr;
@@ -175,6 +174,7 @@ void	ft_exec(t_sh *sh, t_parms *param)
 	int	sv_out;
 	int	ambgs_rdr;
 	int	sp_fd;
+	
 
 	ambgs_rdr = -1;
 	if (!sh || !param)
@@ -197,17 +197,39 @@ void	ft_exec(t_sh *sh, t_parms *param)
 			{
 				if (!ft_strcmp(sh->rdr->mode, ">"))
 				{
-					sp_fd = open(sh->rdr->fl_name, O_WRONLY | O_TRUNC | O_CREAT, 0644);
-					if (sp_fd == -1)
-						perror("sp_fd");
-					close(sp_fd);
+					if (!sh->rdr->flag)
+					{
+						sp_fd = open(sh->rdr->fl_name, O_WRONLY | O_TRUNC | O_CREAT, 0644);
+						if (sp_fd == -1)
+							perror("sp_fd");
+						close(sp_fd);
+					}
+					else
+					{
+						param->ext_stts = 1;
+						write(2, "lminishell :", 13);
+						write(2, sh->rdr->fl_name, ft_len(sh->rdr->fl_name));
+						write(2, ": ambiguous redirect\n", 22);
+						return ;
+					}
 				}
 				else if (!ft_strcmp(sh->rdr->mode, ">>"))
 				{
-					sp_fd = open(sh->rdr->fl_name, O_WRONLY | O_APPEND | O_CREAT, 0644);
-					if (sp_fd == -1)
-						perror("sp_fd");
-					close(sp_fd);
+					if (!sh->rdr->flag)
+					{
+						sp_fd = open(sh->rdr->fl_name, O_WRONLY | O_APPEND | O_CREAT, 0644);
+						if (sp_fd == -1)
+							perror("sp_fd");
+						close(sp_fd);
+					}
+					else
+					{
+						param->ext_stts = 1;
+						write(2, "lminishell :", 13);
+						write(2, sh->rdr->fl_name, ft_len(sh->rdr->fl_name));
+						write(2, ": ambiguous redirect\n", 22);
+						return ;
+					}
 				}
 				if (!access(sh->rdr->fl_name, F_OK))
 				{

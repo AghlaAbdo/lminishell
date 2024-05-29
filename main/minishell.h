@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 19:53:21 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/27 21:42:37 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/29 09:03:17 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,9 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 #include <sys/param.h>
+#include <termios.h>
 
-extern int g_inchild;
+int g_inchild;
 
 typedef struct	s_rdr
 {
@@ -122,10 +123,13 @@ t_sh	*ft_sh_new(t_rdr *rdr, char **value, char *type);
 void	ft_sh_addb(t_sh **sh, t_sh *new_sh);
 void	ft_sh_rmv(t_sh **sh, char *value);
 
+// SIGNALS
+void	ft_updt_stts(int status, t_parms *param, struct termios state);
+
 // Rdr tools
 t_rdr	*ft_rdr_new(char *fl_name, char *mode, int flag);
 void	ft_rdr_addb(t_rdr **rdr, t_rdr *n_node);
 void	prnt_rdr(t_rdr *head);//!exists in main file
 void	prnt_sh(t_sh *head);
-// extern int		g_InChild;
+
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:40:41 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/28 15:44:32 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/29 08:47:46 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ char	*expand_heredoc(char *token, t_parms *prms);
 void	rmv_char(char *token);
 
 // Here_doc
-void	here_doc(t_token *tkn, t_parms *prm);
+int	here_doc(t_token *tkn, t_parms *prm);
 
 // Tokenization
 t_sh	*ft_tokenization(t_sh *sh, t_token *tkn, char **cmd, int i);

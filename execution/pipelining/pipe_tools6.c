@@ -6,7 +6,7 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 18:29:07 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/26 19:22:20 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/28 15:35:01 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,13 @@ int ft_is_dir(char *path)
 	}
 	else
 		return 0;
+}
+
+int ft_norm_err_msgg(t_sh *sh, t_parms *param)
+{
+	write(2, "lminishell ", 12);
+	write(2, sh->value[0], ft_len(sh->value[0]));
+	write(2, ": command not found\n", 21);
+	param->ext_stts = 127;
+	return (param->ext_stts);
 }

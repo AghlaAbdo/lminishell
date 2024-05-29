@@ -6,14 +6,14 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 00:28:47 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/25 18:15:42 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/28 20:34:20 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../execution.h"
 
 
-int	ft_env(t_sh *sh, t_parms *param)
+int	ft_env (t_sh *sh, t_parms *param)
 {
 	t_sh	*head;
 	t_env	*phead;
@@ -21,10 +21,12 @@ int	ft_env(t_sh *sh, t_parms *param)
 	if (!sh || !param)
 		return (0);
 	head = sh;
+	phead = NULL;
 	if (!param->env)
 	{
-		write(2, "env: No such file or directory\n", 32);
-		param->ext_stts = 127;
+		ft_env_addb(&phead, ft_env_lstnew("_", "env", 1));
+		ft_env_prnt(&phead);
+		param->ext_stts = 0;
 	}
 	phead = param->env;
 	if (ft_tlen(head->value) == 1)
