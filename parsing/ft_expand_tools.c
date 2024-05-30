@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 21:07:30 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/30 19:44:36 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/30 20:29:50 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char	*dollar_var(t_parms *prm, char *wd, int *i)
 	if (!wd[j] && j == 1 && (!var->next || var->next->is_f))
 	{
 		if (var->next)
-		prm->len = j +1;
+			prm->len = j +1;
 		return ("$");
 	}
 	if (!wd[j])
@@ -75,36 +75,6 @@ void	skip_var_name(char *wd, int *j)
 			|| (wd[*j] >= 'A' && wd[*j] <= 'Z')
 			|| (wd[*j] >= '0' && wd[*j] <= '9')))
 		(*j)++;
-}
-
-char	*check_vlid_var(t_parms *prm, char *wd, int i, int *j)
-{
-	char	*var;
-	char	*res;
-
-	res = dollar_var(prm, wd + i, &i);
-	if (res)
-	{
-		return (res);
-	}
-	var = ft_trim(wd, i +1);
-	skip_var_name(wd, j);
-	if (!ft_strcmp(var, "$?"))
-	{
-		prm->len = 2;
-		return (ft_pstrjoin(ft_itoa(prm->ext_stts), wd + i + 2));
-	}
-	if (wd[i +1] >= '0' && wd[i +1] <= '9')
-		return (get_n_var(prm, wd, var, i));
-	if (wd[i +1] != '_' && !((wd[i +1] >= 'a' && wd[i +1] <= 'z')
-			|| (wd[i +1] >= 'A' && wd[i +1] <= 'Z')))
-	{
-		prm->len = 2;
-		return (wd + i);
-	}
-	if (!*var || *(wd + i + 1) == '"')
-		return (wd + i +1);
-	return (NULL);
 }
 
 int	check_splt(t_token *tkn, char *value)

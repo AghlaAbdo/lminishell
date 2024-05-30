@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+         #
+#    By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/26 14:32:42 by srachidi          #+#    #+#              #
-#    Updated: 2024/05/28 15:26:36 by srachidi         ###   ########.fr        #
+#    Updated: 2024/05/30 21:46:25 by aaghla           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,6 +46,7 @@ SRC := 	main/main.c \
 		parsing/ft_rdr_tools.c				\
 		parsing/ft_expand_tools.c			\
 		parsing/ft_expand_tools2.c			\
+		parsing/expand_tools3.c				\
 		parsing/ft_itoa.c					\
 		parsing/ft_expand_heredoc.c			\
 		parsing/t_var_tools.c				\

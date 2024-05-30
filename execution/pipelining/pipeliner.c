@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeliner.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 07:28:47 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/29 09:03:57 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/30 21:56:01 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,15 @@ void	ft_close_ppchain(t_parms *param, t_sh *sh)
 	int	i;
 	int	sz;
 
-	i = -1;
+	i = 1;
 	sz = ft_pp_chain_len(sh);
 	pp_chain = param->pp_chain;
 	if (sz == 1)
 		ft_norm_dclose(pp_chain[0][0], pp_chain[0][1]);
 	else
 	{
-		while (++i < sz)
-			ft_norm_sclose(pp_chain, i);
+		while (i < sz)
+			ft_norm_sclose(pp_chain, i++);
 	}
 	return;
 }

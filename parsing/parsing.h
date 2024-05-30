@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:40:41 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/30 19:40:32 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/30 21:48:23 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,10 @@ void	ft_var_insrt(t_var **head, t_var *new);
 void	ft_var_rmv(t_var **head);
 
 //	Expanding
-void	ft_expand(t_token **head, t_parms *prm, t_var *var);
+void	ft_expand(t_token **head, t_parms *prm, t_var *var, t_token *tkn);
 char	*expand_var(t_var **var_t, t_parms *prm, char *token, char *res);
 char	*expand_it(char *wd, t_parms *prm, int i);
-void	join_vars(t_token **head, t_token **curr, t_var **var, t_parms *prm, int *flag);
+void	join_vars(t_token **head, t_token **curr, t_var **var, t_parms *prm);
 char	*get_prev(char *word, int i);
 char	*ft_trim(char *word, int j);
 char	*get_n_var(t_parms *prm, char *word, char *var, int i);
@@ -78,6 +78,9 @@ char	*splt_var(t_parms *prm, char **arr, char *bef, char *aft);
 int		check_splt(t_token *tkn, char *value);
 char	*check_vlid_var(t_parms *prm, char *wd, int i, int *j);
 char	*expand_heredoc(char *token, t_parms *prms);
+char	*check_n_file(t_parms *prm, char *wd, int i, int j);
+char	*dollar_var(t_parms *prm, char *wd, int *i);
+void	skip_var_name(char *wd, int *j);
 
 //	Handle_quotes
 void	rmv_char(char *token);

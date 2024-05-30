@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:54:38 by thedon            #+#    #+#             */
-/*   Updated: 2024/05/30 16:42:45 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/30 21:57:55 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,12 @@ int	check_syntax(t_parms *prm, t_token *tkn)
 	}
 	while (tkn)
 	{
-		if (!tkn->type
-			|| (tkn->next && *tkn->next->token == '|' && (*tkn->token == '>'
-			|| *tkn->token == '<' || *tkn->token == '|'))
-			|| ((tkn->type == '>' || tkn->type == '<') && (!tkn->next || (tkn->next
-			&& (tkn->next->type == '<' || tkn->next->type == '>'))))
+		if (!tkn->type || (tkn->next && *tkn->next->token == '|'
+				&& (*tkn->token == '>'
+					|| *tkn->token == '<' || *tkn->token == '|'))
+			|| ((tkn->type == '>' || tkn->type == '<') && (!tkn->next
+					|| (tkn->next
+						&& (tkn->next->type == '<' || tkn->next->type == '>'))))
 			|| (tkn->type == '|' && !tkn->next))
 		{
 			prm->ext_stts = 258;
@@ -65,111 +66,28 @@ int	check_syntax(t_parms *prm, t_token *tkn)
 	return (0);
 }
 
-// Used just to print result, will be deleted
-// void	print_tkn_exp(t_token *tkn, int i)
-// {
-// 	if (i == 0)
-// 	{
-// 		printf("\n\t----Tokens result before expanding-----\n");
-// 		while (tkn)
-// 		{
-// 			printf("\ttoken: [%s]\ttype: %c%%\n", tkn->token, tkn->type);
-// 			tkn = tkn->next;
-// 		}
-// 		printf("\n\t---------------------------------------\n\n");
-// 	}
-// 	else
-// 	{
-// 		printf("\n\t----- Tokens result after expanding -----\n");
-// 		while (tkn)
-// 		{
-// 			printf("\ttoken: [%s]\ttype: %c%%\n", tkn->token, tkn->type);
-// 			tkn = tkn->next;
-// 		}
-// 		printf("\n\t-----------------------------------------\n\n");
-// 	}
-	
-// }
-
-// Used just to print result, will be deleted
-void	print_sh_token(t_sh *res, char *line, char *here, int fd)
-{	
-	int		i;
-
-	(void)line;
-	(void)here;
-	(void)fd;
-	t_rdr	*rdr_head;//!by_sala7
-
-	if (res)
-		rdr_head = res->rdr;//!by_sala7 hint kenti kat incremente l head  o kiwsalni NULL 
-	printf("\n\t-------- SH Token result --------\n\n");
-	while (res)
+int	is_too_long(t_parms *prm, int count)
+{
+	if (count > 500)
 	{
-		if (res->rdr)
-			prnt_rdr(res->rdr);
-		// {
-		// 	while (rdr_head)
-		// 	{
-		// 		if (!ft_strcmp(rdr_head->mode, "<<"))
-		// 		{
-		// 			fd = open(rdr_head->fl_name, O_RDONLY);
-		// 			// here = "";
-		// 			// line = get_next_line(fd);
-		// 			// while (line)
-		// 			// {
-		// 			// 	here = ft_pstrjoin(here, line);
-		// 			// 	free(line);
-		// 			// 	line = get_next_line(fd);
-		// 			// }
-		// 			printf("fl_name: [%s]\tmode: [%s]\tcontent: [in file]\n", rdr_head->fl_name, rdr_head->mode);
-					
-		// 		}
-		// 		else
-		// 			printf("fl_name: [%s]\tmode: [%s]\n", rdr_head->fl_name, rdr_head->mode);
-		// 		rdr_head = rdr_head->next;
-		// 	}
-		// }
-		if (res->value)
-		{
-			if (!ft_strcmp(res->type, "CMD"))
-			{
-				i = 0;
-				printf("value = [%s]\t| type = [%s]\n", res->value[i++], res->type);
-				while (res->value[i])
-					printf("\tvalue = [%s]\n", res->value[i++]);
-				printf("\n");
-			}
-			else
-			{
-				printf("value = [%s]\t| type = [%s]\n", res->value[0], res->type);
-				if (!ft_strcmp(res->type, "PIPE"))
-					printf("\n");
-			}
-			
-		}
-		res = res->next;
+		printf("lminishell: Resource temporarily unavailable\n");
+		prm->ext_stts = 1;
+		return (1);
 	}
-	printf("\n\t-------------------------------\n\n");
-	
+	return (0);
 }
 
-int	check_for_resources(char *input, t_parms *prm)
+int	check_for_resources(char *input, t_parms *prm, int count, int i)
 {
 	char	c;
-	int		count;
-	int		i;
 
-	i = 0;
-	count = 0;
 	while (input[i])
 	{
 		c = input[i];
 		if (c == '"' || c == '\'')
 		{
-			i++;
-			while (input[i] && input[i] != c)
-				i++;
+			while (input[++i] && input[i] != c)
+				;
 			i++;
 		}
 		if (input[i] == '|' && input[i +1] == '|')
@@ -182,12 +100,8 @@ int	check_for_resources(char *input, t_parms *prm)
 			count++;
 		i++;
 	}
-	if (count > 500)
-	{
-		printf("lminishell: Resource temporarily unavailable\n");
-		prm->ext_stts = 1;
+	if (is_too_long(prm, count))
 		return (1);
-	}
 	return (0);
 }
 
@@ -198,26 +112,17 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 
 	if (!input || !*input || is_quote_closed(prms, input))
 		return (NULL);
-	if (check_for_resources(input, prms))
+	if (check_for_resources(input, prms, 0, 0))
 		return (NULL);
 	input = ft_strtrim(input, " \t");
 	if (!input || !*input)
 		return (NULL);
-	// tkn = (t_token **)ft_malloc(sizeof(t_token), 0);
 	tkn = parse_input(NULL, input, NULL, 0);
 	if (check_syntax(prms, tkn))
 		return (NULL);
-	// print_tkn_exp(tkn, 0);
-	// exp = *tkn;
-	ft_expand(&tkn, prms, NULL);
+	ft_expand(&tkn, prms, NULL, tkn);
 	if (here_doc(tkn, prms))
 		return (NULL);
-	// rmv_quotes(tkn);
-	// print_tkn_exp(tkn, 1);
 	res = ft_tokenization(NULL, tkn, NULL, 0);
-	// if (!ft_strcmp(input, "exit"))
-	// 	clean_exit();
-	// printf("size is: [%d]\n", ft_sh_sz(&res));
-	print_sh_token(res, NULL, NULL, 0);
 	return (res);
 }

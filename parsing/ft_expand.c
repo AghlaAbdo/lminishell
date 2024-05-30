@@ -6,12 +6,11 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:29:54 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/30 19:43:22 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/30 20:29:19 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
-
 
 //	add vars to t_token
 // flag is to check and replace the first node in t_token
@@ -21,20 +20,20 @@ static void	add_vars(t_token **head, t_parms *prm, t_var *var)
 	t_token	*curr;
 	int		flag;
 
-	flag = 0;
+	prm->flag = 0;
 	res = "";
 	curr = (t_token *)prm->tkn;
 	prm->t_len = 0;
 	while (var)
 	{
-		join_vars(head, &curr, &var, prm, &flag);
+		join_vars(head, &curr, &var, prm);
 		while (var && var->type == 'N')
 		{
 			ft_token_insrt(&curr, ft_token_new(var->wrd, 'V'));
 			curr = curr->next;
 			prm->t_len++;
 			var = var->next;
-			flag = 1;
+			prm->flag = 1;
 		}
 	}
 }
@@ -107,12 +106,10 @@ static void	split_tkn(t_token **tkn, t_parms *prm, t_var *var, char *token)
 	}
 }
 
-void	ft_expand(t_token **head, t_parms *prm, t_var *var)
+void	ft_expand(t_token **head, t_parms *prm, t_var *var, t_token *tkn)
 {
-	t_token	*tkn;
 	int		i;
 
-	tkn = *head;
 	while (tkn)
 	{
 		prm->tkn = (t_token *)(tkn);
