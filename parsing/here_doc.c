@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 19:11:49 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/29 08:50:00 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/29 15:22:12 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,11 @@ char	*get_fl_name(t_parms *prm, int *fd)
 	char	*fl_name;
 
 	fl_name = ft_pstrjoin("/tmp/.hr_fl_", ft_itoa(prm->n_file));
+	prm->n_file++;
 	while (!access(fl_name, F_OK))
 	{
-		prm->n_file++;
 		fl_name = ft_pstrjoin("/tmp/.hr_fl_", ft_itoa(prm->n_file));
+		prm->n_file++;
 	}
 	*fd = open(fl_name, O_CREAT | O_RDWR, 0600);
 	if (fd < 0)
@@ -61,15 +62,7 @@ char	*get_fl_name(t_parms *prm, int *fd)
 	return (fl_name);
 }
 
-// void	my_handler(int sig)
-// {
-// 	// if ()
-// 	g_inchild = sig;
-// 	printf("sig = [%d]\n", sig);
-	
-// }
-
-void	h3(int s)
+void	pr_handler(int s)
 {
 	if (s == SIGINT)
 		close(0);
@@ -79,35 +72,17 @@ int	read_heredoc(t_token *tkn, t_parms *prm, char *limit, int quots)
 {
 	char	*line;
 	char	*res;
-	char	*fl_name;
 	int		fd;
-	int		tmp;
 
-	signal(SIGINT, SIG_DFL);
-	signal(SIGINT, h3);
-	fl_name = get_fl_name(prm, &fd);
-	prm->n_file++;
+	tkn->next->token = get_fl_name(prm, &fd);
 	if (ft_strchr(limit, '"') || ft_strchr(limit, '\''))
 		quots = 1;
 	rmv_char(limit);
 	while (1)
 	{
 		line = readline("> ");
-		tmp = g_inchild;
-		// signal(SIGINT, my_handler);
-		// printf("g_inchild: [%d]\n", g_inchild);
-		// 	printf("SIGINT: [%d]\n", SIGINT);
-		// if (g_inchild == SIGINT)
-		// {
-		// 	g_inchild = tmp;
-		// 	break ;
-		// }
 		if (!ttyname(0))
-		{
-			open(ttyname(2), O_RDWR);
-			prm->ext_stts = 1;
-			return 1;
-		}
+			return (open(ttyname(2), O_RDWR), close(fd), 1);
 		if (!line || !ft_strcmp(line, limit))
 			break ;
 		res = line;
@@ -117,10 +92,7 @@ int	read_heredoc(t_token *tkn, t_parms *prm, char *limit, int quots)
 		write(fd, "\n", 1);
 		free(line);
 	}
-	close(fd);
-	free(line);
-	tkn->next->token = fl_name;
-	return (0);
+	return (close(fd), free(line), 0);
 }
 
 int	here_doc(t_token *tkn, t_parms *prm)
@@ -129,8 +101,13 @@ int	here_doc(t_token *tkn, t_parms *prm)
 	{
 		if (tkn->type == '<' && ft_len(tkn->token) > 1)
 		{
+			signal(SIGINT, SIG_DFL);
+			signal(SIGINT, pr_handler);
 			if (read_heredoc(tkn, prm, tkn->next->token, 0))
+			{
+				prm->ext_stts = 1;
 				return (1);
+			}
 		}
 		tkn = tkn->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 16:22:36 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/28 19:29:50 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/30 15:19:42 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ t_rdr	*add_in(t_sh **sh, t_token *tkn)
 		flag = 0;
 		if (tkn->type == '<' || tkn->type == '>')
 		{
-			// printf("next type: [%c]\n", tkn->next->type);
 			if (tkn->next->type == 'N' || !*(tkn->next->token))
 				flag = 1;
 			ft_rdr_addb(&rdr, ft_rdr_new(tkn->next->token, tkn->token, flag));

@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 21:07:30 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/27 18:11:51 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/30 19:44:36 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*get_prev(char *word, int i)
 char	*dollar_var(t_parms *prm, char *wd, int *i)
 {
 	t_var	*var;
-	int	j;
+	int		j;
 
 	var = (t_var *)prm->var;
 	j = 0;
@@ -56,6 +56,7 @@ char	*dollar_var(t_parms *prm, char *wd, int *i)
 	}
 	if (!wd[j] && j == 1 && (!var->next || var->next->is_f))
 	{
+		if (var->next)
 		prm->len = j +1;
 		return ("$");
 	}
@@ -68,6 +69,14 @@ char	*dollar_var(t_parms *prm, char *wd, int *i)
 	return (NULL);
 }
 
+void	skip_var_name(char *wd, int *j)
+{
+	while (wd[*j] && ((wd[*j] == '_' || (wd[*j] >= 'a' && wd[*j] <= 'z'))
+			|| (wd[*j] >= 'A' && wd[*j] <= 'Z')
+			|| (wd[*j] >= '0' && wd[*j] <= '9')))
+		(*j)++;
+}
+
 char	*check_vlid_var(t_parms *prm, char *wd, int i, int *j)
 {
 	char	*var;
@@ -75,12 +84,11 @@ char	*check_vlid_var(t_parms *prm, char *wd, int i, int *j)
 
 	res = dollar_var(prm, wd + i, &i);
 	if (res)
+	{
 		return (res);
+	}
 	var = ft_trim(wd, i +1);
-	while (wd[*j] && ((wd[*j] == '_' || (wd[*j] >= 'a' && wd[*j] <= 'z'))
-			|| (wd[*j] >= 'A' && wd[*j] <= 'Z')
-			|| (wd[*j] >= '0' && wd[*j] <= '9')))
-		(*j)++;
+	skip_var_name(wd, j);
 	if (!ft_strcmp(var, "$?"))
 	{
 		prm->len = 2;

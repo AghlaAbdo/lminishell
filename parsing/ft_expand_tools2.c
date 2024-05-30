@@ -6,66 +6,58 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 13:06:27 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/29 22:00:35 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/30 19:43:04 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-char	*splt_var(t_parms *prm, char **arr, char *bef, char *aft)
+void	insrt_v_last(t_parms *prm, t_var *var, char *lst, char *aft)
 {
-	t_var	*var_t;
-	int		i;
-
-	var_t = (t_var *)prm->var;
-	i = 0;
-	var_t->type = 'N';
-	prm->v_len = 0;
-	if (prm->v_bef)
-	{
-		var_t->wrd = bef;
-		ft_var_insrt(&var_t, ft_var_new(arr[i], 'N', 0));
-		prm->v_len++;
-		var_t = var_t->next;
-	}
-	else
-		var_t->wrd = ft_pstrjoin(bef, arr[i]);
-	while (arr[++i +1])
-	{
-		prm->v_len++;
-		ft_var_insrt(&var_t, ft_var_new(arr[i], 'N', 0));
-		var_t = var_t->next;
-	}
-	if (prm->v_aft)
+	if (prm->v_aft && *aft)
 	{
 		prm->v_len++;
 		prm->l_len = 0;
-		ft_var_insrt(&var_t, ft_var_new(arr[i], 'N', 0));
-		var_t = var_t->next;
-		ft_var_insrt(&var_t, ft_var_new(aft, 'L', 0));
+		ft_var_insrt(&var, ft_var_new(lst, 'N', 0));
+		var = var->next;
+		ft_var_insrt(&var, ft_var_new(aft, 'L', 0));
 	}
 	else
 	{
-		prm->l_len = ft_len(arr[i]);
-		aft = ft_pstrjoin(arr[i], aft);
-		ft_var_insrt(&var_t, ft_var_new(aft, 'L', 0));
+		prm->l_len = ft_len(lst);
+		aft = ft_pstrjoin(lst, aft);
+		ft_var_insrt(&var, ft_var_new(aft, 'L', 0));
 	}
+}
+
+char	*splt_var(t_parms *prm, char **arr, char *bef, char *aft)
+{
+	t_var	*var;
+	int		i;
+
+	var = (t_var *)prm->var;
+	i = 0;
+	var->type = 'N';
+	prm->v_len = 0;
+	if (prm->v_bef && *bef)
+	{
+		var->wrd = bef;
+		ft_var_insrt(&var, ft_var_new(arr[i], 'N', 0));
+		prm->v_len++;
+		var = var->next;
+	}
+	else
+		var->wrd = ft_pstrjoin(bef, arr[i]);
+	while (arr[++i +1])
+	{
+		prm->v_len++;
+		ft_var_insrt(&var, ft_var_new(arr[i], 'N', 0));
+		var = var->next;
+	}
+	insrt_v_last(prm, var, arr[i], aft);
 	prm->v_len++;
 	return (NULL);
 }
-
-// char	*check_vars(t_parms *prm, char *wd, int i, int j)
-// {
-// 	t_token	*tkn;
-// 	char	*value;
-// 	char	*var;
-
-// 	i = 0;
-// 	while (wd[i])
-// 	{
-// 		if (wd[i] == '$')
-// 	}
-// }
 
 char	*check_n_file(t_parms *prm, char *wd, int i, int j)
 {
@@ -96,6 +88,26 @@ char	*check_n_file(t_parms *prm, char *wd, int i, int j)
 		return (wd + j);
 }
 
+int	check_space(t_parms *prm, char **var, char *wd, int i)
+{
+	int	j;
+
+	j = 0;
+	if (*var && ((*var)[0] == ' ' || (*var)[0] == 9))
+		prm->v_bef = 1;
+	if (*var && ((*var)[ft_len(*var) - 1] == ' ' || (*var)[ft_len(*var) - 1] == 9))
+		prm->v_aft = 1;
+	if (*var && prm->c != 'D')
+	{
+		while ((*var)[j] && ((*var)[j] == ' ' || (*var)[i] == 9))
+			j++;
+		if (!(*var)[j] && j && (i || *wd))
+			return (1);
+		*var = ft_strtrim(*var, " \t");
+	}
+	return (0);
+}
+
 char	*expand_it(char *wd, t_parms *prm, int i)
 {
 	t_token	*tkn;
@@ -110,12 +122,8 @@ char	*expand_it(char *wd, t_parms *prm, int i)
 	if (res)
 		return (res);
 	var = ft_env_srch(var, &prm->env);
-	if (var && (var[0] == ' ' || var[0] == 9))
-		prm->v_bef = 1;
-	if (var && (var[ft_len(var) -1] == ' ' || var[ft_len(var) -1] == 9))
-		prm->v_aft = 1;
-	if (var && prm->c != 'D')
-		var = ft_strtrim(var, " \t");
+	if (check_space(prm, &var, wd, i))
+		return (ft_pstrjoin(" ", wd + j));
 	if (tkn->prev && (tkn->prev->type == '>' || tkn->prev->type == '<'))
 		return (check_n_file(prm, wd, i, j));
 	if (var && (prm->c == 'V' || prm->c == 'N' || prm->c == 'L')
@@ -161,7 +169,7 @@ char	*expand_var(t_var **var_t, t_parms *prm, char *token, char *res)
 //		the last word with the rest after it.
 //	'flag' is to check wether there have been a var splited to replace the first part /
 //		with the current token, then insert the rest in sep
-void	join_vars(t_token **tkn, t_token **curr, t_var **var, t_parms *prm, int *flag)
+void	join_vars(t_token **head, t_token **curr, t_var **var, t_parms *prm, int *flag)
 {
 	char	*res;
 	t_token	*rmv;
@@ -191,23 +199,20 @@ void	join_vars(t_token **tkn, t_token **curr, t_var **var, t_parms *prm, int *fl
 			prm->t_len++;
 		}
 		else if (rmv->prev && rmv->prev->type != '>' && rmv->prev->type != '<')
-			ft_token_rmv(tkn, rmv);
+			ft_token_rmv(head, rmv);
 		*flag = 1;
 	}
 	else
 	{
-		if ((res && *res )|| var_t->type != 'V')
+		if ((res && *res) || var_t->type != 'V')
 		{
 			(*curr)->token = res;
 			prm->t_len++;
 		}
 		else if (rmv->prev && rmv->prev->type != '>' && rmv->prev->type != '<')
-			ft_token_rmv(tkn, rmv);
+			ft_token_rmv(head, rmv);
 		else
-		{
 			rmv->type = 'N';
-			// printf("rmv->type: [%c]\n", rmv->type);
-		}
 		*flag = 1;
 	}
 }

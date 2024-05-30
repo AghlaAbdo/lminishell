@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:29:54 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/28 19:27:46 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/30 19:43:22 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,19 @@
 
 //	add vars to t_token
 // flag is to check and replace the first node in t_token
-static void	add_vars(t_token **tkn, t_parms *prm, t_var *var)
+static void	add_vars(t_token **head, t_parms *prm, t_var *var)
 {
 	char	*res;
 	t_token	*curr;
 	int		flag;
 
-	// printf("add_vars called?\n");
 	flag = 0;
 	res = "";
 	curr = (t_token *)prm->tkn;
 	prm->t_len = 0;
 	while (var)
 	{
-		join_vars(tkn, &curr, &var, prm, &flag);
+		join_vars(head, &curr, &var, prm, &flag);
 		while (var && var->type == 'N')
 		{
 			ft_token_insrt(&curr, ft_token_new(var->wrd, 'V'));
@@ -69,8 +68,6 @@ static void	add_quote(t_var **var, char *token, int *i, char c)
 	if (c != '\'' && c != '"')
 		return ;
 	is_f = 0;
-	// if (!*i)
-	// 	printf("\ttoken[%d]: [%c]\n", *i -1, token[*i -1]);
 	if (*i == 0)
 		is_f = 1;
 	(*i)++;
@@ -88,25 +85,10 @@ static void	add_quote(t_var **var, char *token, int *i, char c)
 
 static void	split_tkn(t_token **tkn, t_parms *prm, t_var *var, char *token)
 {
-	t_var	*tmp;
+	t_var	*head;
 	char	*res;
-	int		i;
 
-	i = 0;
-	while (token[i])
-	{
-		add_word(&var, token, &i);
-		add_quote(&var, token, &i, token[i]);
-	}
-	tmp = var;
-	// printf("\n--------------- After Split ---------------\n");
-	// while (tmp)
-	// {
-	// 	printf("tmp value: [%s]\ttype: [%c]\n", tmp->wrd, tmp->type);
-	// 	tmp = tmp->next;
-	// }
-	// printf("\n-------------------------------------------\n");
-	tmp = var;
+	head = var;
 	while (var)
 	{
 		prm->var = (t_var *)var;
@@ -123,23 +105,30 @@ static void	split_tkn(t_token **tkn, t_parms *prm, t_var *var, char *token)
 		}
 		var = var->next;
 	}
-	add_vars(tkn, prm, tmp);
 }
 
-void	ft_expand(t_token **token, t_parms *prm)
+void	ft_expand(t_token **head, t_parms *prm, t_var *var)
 {
-	char	*res;
 	t_token	*tkn;
+	int		i;
 
-	tkn = *token;
+	tkn = *head;
 	while (tkn)
 	{
 		prm->tkn = (t_token *)(tkn);
-		if (tkn->type != '>' && tkn->type != '<' && tkn->type != '|')
+		if (tkn->type != '>' && tkn->type != '<' && tkn->type != '|'
+			&& (!(tkn)->prev || ft_strcmp((tkn)->prev->token, "<<")))
 		{
-			res = tkn->token;
 			prm->t_len = 0;
-			split_tkn(token, prm, NULL, res);
+			i = 0;
+			var = NULL;
+			while (tkn->token[i])
+			{
+				add_word(&var, tkn->token, &i);
+				add_quote(&var, tkn->token, &i, tkn->token[i]);
+			}
+			split_tkn(head, prm, var, tkn->token);
+			add_vars(head, prm, var);
 			while (tkn && prm->t_len-- > 1)
 				tkn = tkn->next;
 		}

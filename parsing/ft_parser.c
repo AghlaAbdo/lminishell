@@ -3,28 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parser.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:54:38 by thedon            #+#    #+#             */
-/*   Updated: 2024/05/29 08:47:26 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/30 16:42:45 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-// void	clean_exit(void)
-// {
-// 	ft_malloc(0, 1);
-// 	printf("\n\t-------------------------------------------------\n");
-// 	// system("leaks minishell");
-// 	// sleep(3);
-// 	exit(0);
-// }
-
 int	is_quote_closed(t_parms *prm, char *input)
 {
 	char	c;
-	int	i;
+	int		i;
 
 	i = 0;
 	while (input[i])
@@ -75,36 +66,36 @@ int	check_syntax(t_parms *prm, t_token *tkn)
 }
 
 // Used just to print result, will be deleted
-void	print_tkn_exp(t_token *tkn, int i)
-{
-	if (i == 0)
-	{
-		printf("\n\t----Tokens result before expanding-----\n");
-		while (tkn)
-		{
-			printf("\ttoken: [%s]\ttype: %c%%\n", tkn->token, tkn->type);
-			tkn = tkn->next;
-		}
-		printf("\n\t---------------------------------------\n\n");
-	}
-	else
-	{
-		printf("\n\t----- Tokens result after expanding -----\n");
-		while (tkn)
-		{
-			printf("\ttoken: [%s]\ttype: %c%%\n", tkn->token, tkn->type);
-			tkn = tkn->next;
-		}
-		printf("\n\t-----------------------------------------\n\n");
-	}
+// void	print_tkn_exp(t_token *tkn, int i)
+// {
+// 	if (i == 0)
+// 	{
+// 		printf("\n\t----Tokens result before expanding-----\n");
+// 		while (tkn)
+// 		{
+// 			printf("\ttoken: [%s]\ttype: %c%%\n", tkn->token, tkn->type);
+// 			tkn = tkn->next;
+// 		}
+// 		printf("\n\t---------------------------------------\n\n");
+// 	}
+// 	else
+// 	{
+// 		printf("\n\t----- Tokens result after expanding -----\n");
+// 		while (tkn)
+// 		{
+// 			printf("\ttoken: [%s]\ttype: %c%%\n", tkn->token, tkn->type);
+// 			tkn = tkn->next;
+// 		}
+// 		printf("\n\t-----------------------------------------\n\n");
+// 	}
 	
-}
+// }
 
 // Used just to print result, will be deleted
 void	print_sh_token(t_sh *res, char *line, char *here, int fd)
 {	
 	int		i;
-	
+
 	(void)line;
 	(void)here;
 	(void)fd;
@@ -166,8 +157,8 @@ void	print_sh_token(t_sh *res, char *line, char *here, int fd)
 int	check_for_resources(char *input, t_parms *prm)
 {
 	char	c;
-	int	count;
-	int	i;
+	int		count;
+	int		i;
 
 	i = 0;
 	count = 0;
@@ -184,14 +175,14 @@ int	check_for_resources(char *input, t_parms *prm)
 		if (input[i] == '|' && input[i +1] == '|')
 		{
 			prm->ext_stts = 258;
-			printf("lminishell: syntax error near unexpected tokennnn\n");
+			printf("lminishell: syntax error near unexpected token\n");
 			return (1);
 		}
 		else if (input[i] == '|')
 			count++;
 		i++;
 	}
-	if (count > 600)
+	if (count > 500)
 	{
 		printf("lminishell: Resource temporarily unavailable\n");
 		prm->ext_stts = 1;
@@ -204,12 +195,11 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 {
 	t_sh	*res;
 	t_token	*tkn;
-	// t_token	*exp;
 
 	if (!input || !*input || is_quote_closed(prms, input))
 		return (NULL);
-	// if (check_for_resources(input, prms))
-	// 	return (NULL);
+	if (check_for_resources(input, prms))
+		return (NULL);
 	input = ft_strtrim(input, " \t");
 	if (!input || !*input)
 		return (NULL);
@@ -219,7 +209,7 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 		return (NULL);
 	// print_tkn_exp(tkn, 0);
 	// exp = *tkn;
-	ft_expand(&tkn, prms);
+	ft_expand(&tkn, prms, NULL);
 	if (here_doc(tkn, prms))
 		return (NULL);
 	// rmv_quotes(tkn);
@@ -228,6 +218,6 @@ t_sh	*ft_parser(char *input, t_parms *prms)
 	// if (!ft_strcmp(input, "exit"))
 	// 	clean_exit();
 	// printf("size is: [%d]\n", ft_sh_sz(&res));
-	// print_sh_token(res, NULL, NULL, 0);
+	print_sh_token(res, NULL, NULL, 0);
 	return (res);
 }
