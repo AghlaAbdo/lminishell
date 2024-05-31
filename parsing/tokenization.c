@@ -6,13 +6,13 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 16:22:36 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/30 15:19:42 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/31 08:17:07 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-t_rdr	*add_in(t_sh **sh, t_token *tkn)
+static t_rdr	*add_in(t_sh **sh, t_token *tkn)
 {
 	t_rdr	*rdr;
 	int		count;
@@ -36,7 +36,7 @@ t_rdr	*add_in(t_sh **sh, t_token *tkn)
 	return (rdr);
 }
 
-int	count_cmd(t_token *tkn)
+static int	count_cmd(t_token *tkn)
 {
 	int	count;
 
@@ -50,6 +50,21 @@ int	count_cmd(t_token *tkn)
 		tkn = tkn->next;
 	}
 	return (count);
+}
+
+static void	add_cmd(t_token *tkn, t_rdr *rdr, t_sh **sh, char **cmd)
+{
+	if ((!tkn || tkn->type == '|'))
+	{
+		if (!cmd[0])
+			ft_sh_addb(sh, ft_sh_new(rdr, NULL, "CMD"));
+		else
+			ft_sh_addb(sh, ft_sh_new(rdr, cmd, "CMD"));
+	}
+	if (tkn && tkn->type == '|')
+		ft_sh_addb(sh, ft_sh_new(NULL, &tkn->token, "PIPE"));
+	if (tkn)
+		tkn = tkn->next;
 }
 
 t_sh	*ft_tokenization(t_sh *sh, t_token *tkn, char **cmd, int i)
@@ -69,19 +84,9 @@ t_sh	*ft_tokenization(t_sh *sh, t_token *tkn, char **cmd, int i)
 					&& tkn->type != '<' && tkn->type != '>'))
 				cmd[i++] = tkn->token;
 			tkn = tkn->next;
-			cmd[i] = NULL;
-			if ((!tkn || tkn->type == '|'))
-			{
-				if (!cmd[0])
-					ft_sh_addb(&sh, ft_sh_new(rdr, NULL, "CMD"));
-				else
-					ft_sh_addb(&sh, ft_sh_new(rdr, cmd, "CMD"));
-			}
 		}
-		if (tkn && tkn->type == '|')
-			ft_sh_addb(&sh, ft_sh_new(NULL, &tkn->token, "PIPE"));
-		if (tkn)
-			tkn = tkn->next;
+		cmd[i] = NULL;
+		add_cmd(tkn, rdr, &sh, cmd);
 	}
 	return (sh);
 }

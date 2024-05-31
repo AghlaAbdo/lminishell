@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   other_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 22:05:37 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/29 09:03:31 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/31 08:41:41 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ static void	ft_handle_redirs(t_sh *sh, t_parms *param)
 				ft_open_close(sh, rdrs, param, 1);
 			else if (!ft_strcmp(rdrs->mode, ">>"))
 				ft_open_close(sh, rdrs, param, 2);
+			else if (!ft_strcmp(rdrs->mode, "<<"))
+				ft_open_close(sh, rdrs, param, 3);
 		}
 		else
 		{

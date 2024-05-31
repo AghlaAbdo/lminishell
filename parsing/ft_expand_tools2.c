@@ -6,13 +6,13 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 13:06:27 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/30 20:33:01 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/31 08:51:03 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-int	check_space(t_parms *prm, char **var, char *wd, int i)
+static int	check_space(t_parms *prm, char **var, char *wd, int i)
 {
 	int	j;
 
@@ -54,7 +54,6 @@ char	*expand_it(char *wd, t_parms *prm, int i)
 	if (var && (prm->c == 'V' || prm->c == 'N' || prm->c == 'L')
 		&& !check_splt(prm->tkn, var))
 		return (splt_var(prm, my_split(var, ' '), get_prev(wd, i), wd + j));
-	printf("in here?\n");
 	if (var)
 		prm->len = ft_len(var);
 	if (var)
@@ -62,7 +61,7 @@ char	*expand_it(char *wd, t_parms *prm, int i)
 	return (wd + j);
 }
 
-void	join_vars_normf(t_var **var, char **res)
+static void	join_vars_normf(t_var **var, char **res)
 {
 	while ((*var) && (*var)->type != 'N')
 	{
@@ -76,7 +75,7 @@ void	join_vars_normf(t_var **var, char **res)
 	}
 }
 
-void	join_vars_norms(t_parms *prm, t_token **head, t_token **curr, char *res)
+static void	join_vars_norms(t_parms *prm, t_token **head, t_token **curr, char *res)
 {
 	t_token	*rmv;
 
