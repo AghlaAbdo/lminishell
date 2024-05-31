@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeliner2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 20:16:14 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/29 21:50:33 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/31 14:20:27 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	ft_fst_pp_forker(t_sh *sh, t_parms *param, t_sh *head)
 	int		i;
 	t_rdr	*rdrs;
 
+	rdrs = NULL;
 	i = 0;
 	pid = fork();
 	if (pid == -1)
@@ -82,6 +83,7 @@ void	ft_mid_pp_forker(t_sh *sh, t_parms *param, t_sh *head)
 	int		i;
 	t_rdr	*rdrs;
 
+	rdrs = NULL;
 	i = -1;
 	pid = fork();
 	if (pid == -1)
@@ -104,6 +106,7 @@ pid_t	ft_lst_pp_forker(t_sh *sh, t_parms *param, t_sh *head)
 	int		i;
 	t_rdr	*rdrs;
 
+	rdrs = NULL;
 	i = -1;
 	pid = fork();
 	if (pid == -1)

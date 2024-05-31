@@ -6,14 +6,13 @@
 #    By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/26 14:32:42 by srachidi          #+#    #+#              #
-#    Updated: 2024/05/31 11:02:43 by aaghla           ###   ########.fr        #
+#    Updated: 2024/05/31 14:34:49 by aaghla           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 CC = cc
-FLAGS = -g -fsanitize=address -Wall -Werror -Wextra
-FLAGS = #-Wall -Werror -Wextra
+FLAGS = -Wall -Werror -Wextra
 RM = rm -rf
 LIB = -lreadline
 # ---------------------

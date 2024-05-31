@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 02:15:05 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/30 21:56:33 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/31 16:12:17 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*ft_line(t_parms *param)
 		printf("exit\n");
 		exit(param->ext_stts);
 	}
-	if (line)
+	if (line && *line)
 		add_history(line);
 	return (line);
 }
@@ -77,6 +77,7 @@ int	main(int ac, char *av[], char *ep[])
 	t_parms	holder;
 	t_sh	*sh;
 
+	sh = NULL;
 	if (!isatty(0))
 		return (1);
 	g_inchild = 0;

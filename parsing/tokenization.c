@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 16:22:36 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/31 08:17:07 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/31 14:33:36 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static int	count_cmd(t_token *tkn)
 	return (count);
 }
 
-static void	add_cmd(t_token *tkn, t_rdr *rdr, t_sh **sh, char **cmd)
+static void	token_normf(t_sh **sh, t_token *tkn, t_rdr *rdr, char **cmd)
 {
 	if ((!tkn || tkn->type == '|'))
 	{
@@ -61,10 +61,6 @@ static void	add_cmd(t_token *tkn, t_rdr *rdr, t_sh **sh, char **cmd)
 		else
 			ft_sh_addb(sh, ft_sh_new(rdr, cmd, "CMD"));
 	}
-	if (tkn && tkn->type == '|')
-		ft_sh_addb(sh, ft_sh_new(NULL, &tkn->token, "PIPE"));
-	if (tkn)
-		tkn = tkn->next;
 }
 
 t_sh	*ft_tokenization(t_sh *sh, t_token *tkn, char **cmd, int i)
@@ -84,9 +80,13 @@ t_sh	*ft_tokenization(t_sh *sh, t_token *tkn, char **cmd, int i)
 					&& tkn->type != '<' && tkn->type != '>'))
 				cmd[i++] = tkn->token;
 			tkn = tkn->next;
+			cmd[i] = NULL;
+			token_normf(&sh, tkn, rdr, cmd);
 		}
-		cmd[i] = NULL;
-		add_cmd(tkn, rdr, &sh, cmd);
+		if (tkn && tkn->type == '|')
+			ft_sh_addb(&sh, ft_sh_new(NULL, &tkn->token, "PIPE"));
+		if (tkn)
+			tkn = tkn->next;
 	}
 	return (sh);
 }

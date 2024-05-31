@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 06:33:02 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/31 08:00:26 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/31 14:20:04 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	ft_token_insrt(t_token **head, t_token *new)
 	new->prev = *head;
 }
 
-void	ft_rmv_last(t_token **head, t_token *curr)
+void	ft_rmv_last(t_token *curr)
 {
 	t_token	*next;
 	t_token	*prev;
@@ -110,5 +110,5 @@ void	ft_token_rmv(t_token **head, t_token *rmv)
 	while (curr && curr != rmv)
 		curr = curr->next;
 	if (curr == rmv)
-		ft_rmv_last(head, curr);
+		ft_rmv_last(curr);
 }

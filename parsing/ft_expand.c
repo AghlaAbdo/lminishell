@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:29:54 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/30 20:29:19 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/31 14:19:47 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ static void	add_vars(t_token **head, t_parms *prm, t_var *var)
 {
 	char	*res;
 	t_token	*curr;
-	int		flag;
 
 	prm->flag = 0;
 	res = "";
@@ -82,7 +81,7 @@ static void	add_quote(t_var **var, char *token, int *i, char c)
 	(*i)++;
 }
 
-static void	split_tkn(t_token **tkn, t_parms *prm, t_var *var, char *token)
+static void	split_tkn(t_parms *prm, t_var *var)
 {
 	t_var	*head;
 	char	*res;
@@ -124,7 +123,7 @@ void	ft_expand(t_token **head, t_parms *prm, t_var *var, t_token *tkn)
 				add_word(&var, tkn->token, &i);
 				add_quote(&var, tkn->token, &i, tkn->token[i]);
 			}
-			split_tkn(head, prm, var, tkn->token);
+			split_tkn(prm, var);
 			add_vars(head, prm, var);
 			while (tkn && prm->t_len-- > 1)
 				tkn = tkn->next;
