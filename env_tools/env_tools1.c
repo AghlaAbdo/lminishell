@@ -6,12 +6,11 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 23:52:07 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/24 21:20:08 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/29 11:19:45 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../main/minishell.h"
-#include <stdio.h>
 
 void	ft_env_addb(t_env **lst, t_env *newn)
 {
@@ -75,35 +74,20 @@ char	*ft_env_eqls(char *res[])
 t_env	*ft_env_crt(char *ep[], int flg)
 {
 	int		i;
-	int		j;
-	t_env	*head = NULL;
+	t_env	*head;
 	char	**res;
 
+	head = NULL;
 	if (!(*ep))
 	{
-		if (!flg)
-		{
-			ft_env_addb(&head, ft_env_lstnew("PWD", getcwd(NULL, MAXPATHLEN), 1));
-			ft_env_addb(&head, ft_env_lstnew("SHLVL", "1", 1));
-			ft_env_addb(&head, ft_env_lstnew("_", "/usr/bin/env", 1));
-			ft_env_addb(&head, ft_env_lstnew("PATH", "/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.", 0));
-		}
-		else
-		{
-			ft_env_addb(&head, ft_env_lstnew("OLDPWD", NULL, 1));
-			ft_env_addb(&head, ft_env_lstnew("PWD", getcwd(NULL, MAXPATHLEN), 1));
-			ft_env_addb(&head, ft_env_lstnew("PATH", "/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.", 0));
-			ft_env_addb(&head, ft_env_lstnew("SHLVL", "1", 1));
-		}
+		ft_norm_env_pre_add(&head, flg);
 		return (head);
 	}
 	i = -1;
-	j = 2;
 	head = NULL;
 	while (ep[++i])
 	{
 		res = ft_splt(ep[i], '=');
-		
 		if (ft_tlen(res) == 2)
 			ft_env_addb(&head, ft_env_lstnew(res[0], res[1], 1));
 		else if (ft_tlen(res) == 1)

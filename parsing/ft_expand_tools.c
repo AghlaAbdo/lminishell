@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 21:07:30 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/30 20:29:50 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/31 11:01:35 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ char	*dollar_var(t_parms *prm, char *wd, int *i)
 
 	var = (t_var *)prm->var;
 	j = 0;
-	(void)prm;
 	while (wd[j] && wd[j] == '$')
 	{
 		j++;
@@ -56,8 +55,7 @@ char	*dollar_var(t_parms *prm, char *wd, int *i)
 	}
 	if (!wd[j] && j == 1 && (!var->next || var->next->is_f))
 	{
-		if (var->next)
-			prm->len = j +1;
+		prm->len = j +1;
 		return ("$");
 	}
 	if (!wd[j])

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_tools1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 21:32:49 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/14 20:09:52 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/29 10:29:21 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	ft_sh_sz(t_sh **sh)
 	return (i);
 }
 
-t_sh	*ft_sh_new(t_rdr *rdr, char **value, char *type)//!y9adro yezado members so aydar hadchi fstruct
+t_sh	*ft_sh_new(t_rdr *rdr, char **value, char *type)
 {
 	t_sh	*new_node;
 

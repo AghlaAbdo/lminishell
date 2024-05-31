@@ -6,7 +6,7 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 11:32:45 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/25 18:54:28 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/29 11:23:48 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,27 +25,28 @@ char	*ft_gt_pth(char *tojoin, int doit)
 			if (errno == ENOENT)
 			{
 				printf("cd: error retrieving current directory: getcwd:");
-				printf(" cannot access parent directories: No such file or directory\n");
+				printf(" cannot access parent directories");
+				printf(": No such file or directory\n");
 			}
 			ft_strlcat(sv_pwd, "/", MAXPATHLEN);
-			ft_strlcat(sv_pwd, tojoin  , MAXPATHLEN);
+			ft_strlcat(sv_pwd, tojoin, MAXPATHLEN);
 		}
 	}
 	else
-		ft_strlcpy(sv_pwd, cwd, MAXPATHLEN); 
+		ft_strlcpy(sv_pwd, cwd, MAXPATHLEN);
 	return (ft_sdup(sv_pwd));
 }
 
 static void	ft_cd_no_params(t_sh *sh, t_parms *param)
 {
 	char	*path;
+	char	*ppp;
 
 	if (!sh || !param)
 		return ;
 	param->ext_stts = 1;
 	path = ft_env_srch("HOME", &param->env);
 	param->oldpwd = ft_gt_pth(NULL, 0);
-
 	if (!ft_env_srch("OLDPWD", &param->env))
 		ft_env_new(&param->env, "OLDPWD", param->oldpwd);
 	else
@@ -58,7 +59,7 @@ static void	ft_cd_no_params(t_sh *sh, t_parms *param)
 		write(2, "cd: HOME not set\n", 18);
 	else
 	{
-		char *ppp = ft_gt_pth(NULL,0);
+		ppp = ft_gt_pth(NULL, 0);
 		ft_env_updt(&param->env, "PWD", ppp);
 		ft_env_updt(&param->exprt_env, "PWD", ppp);
 		param->ext_stts = 0;
@@ -71,7 +72,7 @@ static void	ft_previous_location(void)
 	write(2, "a relative or absolute path !\033[0m\n", 35);
 }
 
-static void	ft_new_path(t_sh *sh, t_parms *param)//!checked
+static void	ft_new_path(t_sh *sh, t_parms *param)
 {
 	if (!sh || !param)
 		return ;
@@ -84,7 +85,6 @@ static void	ft_new_path(t_sh *sh, t_parms *param)//!checked
 		ft_env_insrt(&param->exprt_env, "OLDPWD", param->oldpwd);
 	else
 		ft_env_updt(&param->exprt_env, "OLDPWD", param->oldpwd);
-
 	if (chdir(sh->value[1]) == -1)
 		perror(ft_strjoin("cd: ", sh->value[1]));
 	else

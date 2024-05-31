@@ -6,7 +6,7 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 11:51:41 by srachidi          #+#    #+#             */
-/*   Updated: 2024/04/23 18:37:56 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/29 16:04:43 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,36 +46,33 @@ void	ft_error(char *s)
 	exit (255);
 }
 
-int is_whitespace(char c)
+int	is_whitespace(char c)
 {
-	return c == ' ' || (c >= '\t' && c <= '\r');
+	return (c == ' ' || (c >= '\t' && c <= '\r'));
 }
 
-long long ft_ext_atoi(char *s)
+long long	ft_ext_atoi(char *s, int res, int i, int digit)
 {
-	long long	res;
 	int			sign;
-	int			digit;
-	size_t		i;
 
 	if (!s)
-		return 0;
-	res = 0;
+		return (0);
 	sign = 1;
-	i = 0;
-	digit = 0;
 	while (is_whitespace(s[i]))
 		i++;
 	if (s[i] == '+' || s[i] == '-')
 	{
-		sign = (s[i] == '-') ? -1 : 1;
+		if (s[i] == '-')
+			sign = -1;
+		else
+			sign = 1;
 		i++;
 	}
 	while (s[i] >= '0' && s[i] <= '9')
 	{
 		digit = s[i] - '0';
-		if ((sign == 1 && res > (LONG_MAX - digit) / 10) ||
-			(sign == -1 && res < (LONG_MIN + digit) / 10))
+		if ((sign == 1 && res > (LONG_MAX - digit) / 10)
+			|| (sign == -1 && res < (LONG_MIN + digit) / 10))
 			ft_error(s);
 		res = res * 10 + digit;
 		i++;

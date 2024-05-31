@@ -6,7 +6,7 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 00:29:16 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/25 18:47:07 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/29 10:44:04 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ int	ft_pwd(t_sh *sh, t_parms *param)
 
 	path = NULL;
 	svpath = ft_sdup(param->pwd);
-	// path = getcwd(NULL, MAXPATHLEN);
 	path = ft_gt_pth(NULL, 0);
 	if (!path)
 		path = svpath;

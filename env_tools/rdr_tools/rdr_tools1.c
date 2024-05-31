@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rdr_tools1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:28:31 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/31 08:39:25 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/31 08:28:22 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,3 @@ void	ft_rdr_addb(t_rdr **rdr, t_rdr *n_node)
 	current->next = n_node;
 	n_node->next = NULL;
 }
-

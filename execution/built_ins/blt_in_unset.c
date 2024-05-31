@@ -6,13 +6,11 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 13:42:15 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/10 09:13:20 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/29 13:20:24 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../execution.h"
-
-//! YOU NEED TO REMOVE VALUES ALSO FROM EXPORT ENV VARS TO VERIFY
 
 static	int	ft_is_alpha(char c)
 {
@@ -39,6 +37,14 @@ int	ft_valid_identifier(char *s)
 	return (1);
 }
 
+void	ft_norm_unset(t_sh *sh, t_parms *param, int i)
+{
+	write(2, "unset: ", 8);
+	write(2, sh->value[i], ft_len(sh->value[i]));
+	write(2, ": not a valid identifier\n", 26);
+	param->ext_stts = 1;
+}
+
 int	ft_unset(t_sh *sh, t_parms *param)
 {
 	int	i;
@@ -62,12 +68,7 @@ int	ft_unset(t_sh *sh, t_parms *param)
 				param->ext_stts = 0;
 			}
 			else
-			{
-				write(2, "unset: ", 8);
-				write(2, sh->value[i], ft_len(sh->value[i]));
-				write(2, ": not a valid identifier\n", 26);
-				param->ext_stts = 1;
-			}
+				ft_norm_unset(sh, param, i);
 		}
 	}
 	return (param->ext_stts);

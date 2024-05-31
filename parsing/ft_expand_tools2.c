@@ -6,7 +6,7 @@
 /*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 13:06:27 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/31 08:51:03 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/31 11:00:21 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ static void	join_vars_normf(t_var **var, char **res)
 	}
 }
 
-static void	join_vars_norms(t_parms *prm, t_token **head, t_token **curr, char *res)
+static void	join_vars_norms(t_parms *prm, t_token **head,
+	t_token **curr, char *res)
 {
 	t_token	*rmv;
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_tools3.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 15:13:39 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/30 15:09:27 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/05/30 19:21:38 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,13 @@ void	ft_perror(char *message)
 	exit(1);
 }
 
-void	ft_norm_close(int (*pp_chain)[2] , int fd)
+void	ft_norm_close(int (*pp_chain)[2], int fd)
 {
 	close(pp_chain[fd][0]);
 	close(pp_chain[fd][1]);
 }
 
-void	ft_norm_sclose(int (*pp_chain)[2] , int fd)
+void	ft_norm_sclose(int (*pp_chain)[2], int fd)
 {
 	ft_norm_close(pp_chain, fd);
 	ft_norm_close(pp_chain, fd - 1);

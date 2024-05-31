@@ -6,7 +6,7 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 09:15:52 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/26 19:25:18 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/30 19:25:09 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,27 +31,7 @@ int	ft_pp_chain_len(t_sh *sh)
 	return (pp_nbr);
 }
 
-void	ft_norm_ext_stts(t_parms * param)
-{
-	int	ex_stts;
-	
-	close(param->child_stts[1]);
-	read(param->child_stts[0], &ex_stts, sizeof(ex_stts));
-	if (ex_stts == 127)
-		param->ext_stts = 127;
-	else if (ex_stts == 256)
-		param->ext_stts = 1;
-	else
-	{
-		if (param->ext_stts == 256)
-			param->ext_stts = 1;
-		else
-			param->ext_stts = ex_stts;
-	}
-	close(param->child_stts[0]);
-}
-
-void	ft_norm_child_stts(t_sh *curr_sh, t_parms * param, int stts)
+void	ft_norm_child_stts(t_sh *curr_sh, t_parms *param, int stts)
 {
 	(void)param;
 	(void)stts;
@@ -70,7 +50,7 @@ void	ft_norm_err_msg(char **cmd, int errno_nbr, char *msg)
 	exit(errno_nbr);
 }
 
-int	(*ft_pp_chain_creator(t_sh *sh))[2]
+int	**ft_pp_chain_creator(t_sh *sh)
 {
 	int		(*pp_chain)[2];
 	int		pp_nbr;
@@ -93,5 +73,5 @@ int	(*ft_pp_chain_creator(t_sh *sh))[2]
 			perror("muli-pipe creation failed");
 		}
 	}
-	return (pp_chain);
+	return ((int **)pp_chain);
 }
