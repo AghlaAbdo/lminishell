@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_tools4.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 09:15:52 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/30 19:25:09 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/31 16:37:04 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../execution.h"
-#include <stdio.h>
 
 int	ft_pp_chain_len(t_sh *sh)
 {

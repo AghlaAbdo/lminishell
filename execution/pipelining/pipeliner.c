@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   pipeliner.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 07:28:47 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/31 08:35:21 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/05/31 16:37:08 by aaghla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../execution.h"
-#include <stdio.h>
-#include <unistd.h>
 
 static void	ft_norm_piperf(t_sh *sh, t_rdr *rdrs, t_parms *param)
 {

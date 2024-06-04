@@ -6,7 +6,7 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 18:29:07 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/29 15:19:19 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/06/01 11:03:15 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	ft_is_dir(char *path)
 	if (S_ISDIR(statbuf.st_mode))
 	{
 		write(2, path, ft_len(path));
-		write(2, ": is a directory\n", 28);
+		write(2, ": is a directory\n", 18);
 		return (1);
 	}
 	else

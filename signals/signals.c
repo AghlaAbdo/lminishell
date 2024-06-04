@@ -6,7 +6,7 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 13:05:39 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/29 21:41:55 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/06/01 11:09:03 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,13 @@ void	ft_handler(int sig)
 {
 	if (sig == SIGINT && !g_inchild)
 	{
-		write(1, "\n", 1);
+		write(1, "\n", 2);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
 	}
 	else if (sig != SIGQUIT)
-		write(1, "\n", 1);
+		write(1, "\n", 2);
 }
 
 void	ft_handler_redirect(int sig)
@@ -64,7 +64,7 @@ void	fthandlert(int s)
 {
 	if (s == SIGINT)
 	{
-		write(1, "\n", 1);
+		write(1, "\n", 2);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();

@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaghla <aaghla@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 19:11:49 by aaghla            #+#    #+#             */
-/*   Updated: 2024/05/31 08:50:30 by aaghla           ###   ########.fr       */
+/*   Updated: 2024/06/01 11:08:44 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
-#include <signal.h>
-#include <sys/fcntl.h>
-#include <unistd.h>
 
 void	rmv_char(char *token)
 {
@@ -89,7 +86,7 @@ int	read_heredoc(t_token *tkn, t_parms *prm, char *limit, int quots)
 		if (!quots)
 			res = expand_heredoc(res, prm);
 		write(fd, res, ft_len(res));
-		write(fd, "\n", 1);
+		write(fd, "\n", 2);
 		free(line);
 	}
 	return (close(fd), free(line), 0);

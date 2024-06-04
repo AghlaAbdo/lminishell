@@ -6,7 +6,7 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 18:37:29 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/29 10:47:15 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/06/01 11:07:02 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	ft_exprt_error(t_parms *param, char *s)
 {
-	write(2, "export: `", 9);
+	write(2, "export: `", 10);
 	write(2, s, ft_len(s));
-	write(2, "': not a valid identifier\n", 26);
+	write(2, "': not a valid identifier\n", 27);
 	param->ext_stts = 1;
 }
 

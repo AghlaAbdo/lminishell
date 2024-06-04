@@ -6,7 +6,7 @@
 /*   By: srachidi <srachidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 17:51:20 by srachidi          #+#    #+#             */
-/*   Updated: 2024/05/31 10:35:08 by srachidi         ###   ########.fr       */
+/*   Updated: 2024/06/01 11:06:05 by srachidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	ft_norm_fexit(char **cmd)
 {
 	write(2, cmd[1], ft_len(cmd[1]));
-	write(2, " : numeric argument required\n", 29);
+	write(2, " : numeric argument required\n", 30);
 	exit(255);
 }
 
@@ -23,7 +23,7 @@ void	ft_norm_sexit(t_parms *param, char **cmd)
 {
 	write(2, "exit: ", 7);
 	write(2, cmd[1], ft_len(cmd[1]));
-	write(2, " : numeric argument required\n", 29);
+	write(2, " : numeric argument required\n", 30);
 	param->ext_stts = 255;
 	exit (param->ext_stts);
 }
@@ -32,7 +32,7 @@ void	ft_norm_texit(char **cmd)
 {
 	write(2, "exit: ", 7);
 	write(2, cmd[1], ft_len(cmd[1]));
-	write(2, " : numeric argument required\n", 29);
+	write(2, " : numeric argument required\n", 30);
 	exit (255);
 }
 
